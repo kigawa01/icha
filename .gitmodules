@@ -1,0 +1,3 @@
+[submodule "icha-document"]
+	path = icha-document
+	url = https://github.com/kigawa01/icha-document.git
