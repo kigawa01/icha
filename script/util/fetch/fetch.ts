@@ -1,12 +1,9 @@
-import {ApiError, JsonError, UrlError} from "./error.ts";
-import {HttpMethod} from "./object.ts";
-import {TokenManager} from "../TokenManager.ts";
-import {ErrorIds} from "../../error.ts";
-import {Auth} from "../../user/auth.ts";
+import {HttpMethod} from "./object";
+import {ApiError, JsonError, UrlError} from "./error";
+import {createURL, getDefault} from "../util";
 
 
 const Access_Control_Allow_Origin = import.meta.env.VITE_CORS
-const BASE_URL = import.meta.env.VITE_BASE;
 
 // const Access_Control_Allow_Origin = "127.0.0.1:5000"
 // const BASE_URL = "http://127.0.0.1:5000/"
@@ -18,13 +15,14 @@ export async function fetchRest<RESULT = never, BODY = never>(
   body: BODY | undefined,
   isAuthenticate: boolean,
   defaultToken: string | undefined
-): Promise<RESULT> {
+): Promise<unknown> {
   if (!isAuthenticate) return fetchJson(
     url,
     method,
     body,
     defaultToken
   )
+  let TokenManager;
   const token = defaultToken || TokenManager.instance.accessToken()
   if (token == undefined) return fetchRestSecond(
     url, method, body
@@ -72,7 +70,6 @@ export async function fetchJson<RESULT = never, BODY = never>(
   const initObj = createInit(body, method, token);
 
   const res = await fetch(urlObj, initObj);
-  console.debug(urlObj, initObj, res)
 
   if (res == undefined) {
     throw new JsonError(urlObj, initObj, res, undefined);
@@ -124,25 +121,4 @@ function createInit<BODY = never>(
   if (body != null) init.body = JSON.stringify(body);
   if (method != null) init.method = method;
   return init;
-}
-
-export function createURL(url: URL | string): URL | undefined {
-  try {
-    return new URL(url, BASE_URL);
-  } catch (e) {
-    console.error(e);
-    console.error(BASE_URL);
-    return undefined;
-  }
-}
-
-export function getDefault<T>(value: T | undefined, defaultValue: T): T {
-  if (value == undefined) {
-    return defaultValue;
-  }
-  return value;
-}
-
-export function getValue<T>(value: T | (() => T)) {
-  return value instanceof Function ? value() : value
 }
