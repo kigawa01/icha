@@ -33,12 +33,12 @@ def init_database(password: Optional[str], email: str | None):
 
 
 def create_user(user_name: str, password: Optional[str], email: str | None):
-    mdl = db.session.query(model.UserModel).filter(
-        model.UserModel.name == user_name
+    mdl = db.session.query(model.UserTable).filter(
+        model.UserTable.name == user_name
     ).first()
     if mdl is not None:
         return mdl
-    mdl = model.UserModel()
+    mdl = model.UserTable()
     mdl.name = user_name
     mdl.name_mei = "admin"
     mdl.name_sei = "admin"

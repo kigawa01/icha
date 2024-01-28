@@ -4,7 +4,7 @@ from sqlalchemy.orm import Mapped
 from icha.table.table import BaseTable
 
 
-class UserModel(BaseTable):
+class UserTable(BaseTable):
     __tablename__ = "user"
     uid: Mapped[int] = Column(Integer, primary_key=True, name="id", autoincrement=True)
     name: Mapped[str] = Column(String(32), nullable=False)

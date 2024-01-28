@@ -2,6 +2,7 @@ from dataclasses import asdict
 
 from app import app
 from icha import request
+from icha.repository.user_repository import UserRepository
 
 
 @app.get("/api/login/refresh")
@@ -16,4 +17,5 @@ def refresh_token():
 
 @app.get("/api/login")
 def login(req: request.LoginReq):
+    UserRepository
     return asdict()
