@@ -1,11 +1,17 @@
-import {FetchGetBuilder} from "./util/fetch/builder";
+import {FetchBuilder} from "./util/http/httpBuilder";
+import {TokenRes} from "./response/response";
+import {httpClient} from "./Main";
 
 class Login {
-  get() {
-    return new FetchGetBuilder("");
+  refresh(refreshToken: string) {
+    return new FetchBuilder<TokenRes>(httpClient, `/api/login/refresh`)
+      .token(refreshToken)
+      .fetcher();
   }
 }
 
 class Api {
   login = new Login();
 }
+
+export const api = new Api();

@@ -2,8 +2,8 @@ import {HttpStatusCodeError} from "./httpError";
 import {HttpClientBase} from "./HttpClientBase";
 import {HttpStatusCodeErrorEvent} from "./httpEvent";
 
-export class HttpJsonClient<ERROR = any> extends HttpClientBase {
-  statusCodeErrorHandler: (event: HttpStatusCodeErrorEvent<ERROR>) => void = undefined;
+export class HttpClient<ERROR = any> extends HttpClientBase {
+  statusCodeErrorHandler: (event: HttpStatusCodeErrorEvent<ERROR>) => Promise<any> = undefined;
 
   async fetchJson<RESULT>(url: URL, init: RequestInit) {
     return this._fetchJson<RESULT>(url, init);

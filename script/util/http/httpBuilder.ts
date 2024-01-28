@@ -1,11 +1,11 @@
 import {HttpMethod} from "../fetch/object";
-import {HttpJsonClient} from "./httpJsonClient";
+import {HttpClient} from "./httpClient";
 import {HttpRequest} from "./httpRequest";
 
 export class FetchBuilder<RESULT, BODY = undefined> extends HttpRequest<BODY> {
 
-  protected constructor(url: string | URL, body: BODY = undefined) {
-    super(body);
+  constructor(httpClient: HttpClient, url: string | URL, body: BODY = undefined) {
+    super(httpClient, body);
     this._url = url;
   }
 
@@ -35,8 +35,12 @@ export class FetchBuilder<RESULT, BODY = undefined> extends HttpRequest<BODY> {
     return this;
   }
 
-  fetch(httpClient: HttpJsonClient): Promise<RESULT> {
-    return;
+  fetchJson(): Promise<RESULT> {
+    return this.httpClient.fetchJson(this.createUrl(), this.createInit());
+  }
+
+  fetcher(): ()=>Promise<RESULT> {
+    return () => this.fetchJson();
   }
 
   body(body: BODY) {

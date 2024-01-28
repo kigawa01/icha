@@ -1,8 +1,14 @@
+import {TokenManager} from "../token/tokenManager";
+
 export class HttpClientBase {
   readonly baseUrl: string;
+  readonly corsHost: string;
+  readonly tokenManager: TokenManager;
 
-  constructor(baseUrl: string) {
+  constructor(baseUrl: string, corsHost: string, tokenManager: TokenManager) {
     this.baseUrl = baseUrl;
+    this.corsHost = corsHost;
+    this.tokenManager = tokenManager;
   }
 
   createURL(url: URL | string): URL {
