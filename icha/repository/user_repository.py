@@ -1,7 +1,10 @@
+from icha.tble.user_model import UserModel
+
+
 class UserRepository:
 
     @staticmethod
-    def current_user_or_none() -> Optional[UserModel]:
+    def current_user_or_none() -> UserModel | None:
         user_id = get_jwt_identity()
         if user_id is None:
             return None
