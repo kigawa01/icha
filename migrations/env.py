@@ -4,8 +4,6 @@ from alembic import context
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
-# noinspection PyUnresolvedReferences
-import icha.table.user_table
 from icha.table.table import BaseTable, db_url
 
 # this is the Alembic Config object, which provides
