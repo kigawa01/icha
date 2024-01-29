@@ -1,34 +1,26 @@
 import {createRoot} from "react-dom/client";
 import {StyleProvider} from "./util/style/styleHook";
-import {HttpClient} from "./util/http/httpClient";
-import {ErrorRes} from "./response/response";
-import {ErrorIds} from "./error";
 import {TokenManager} from "./util/token/tokenManager";
 import {Localstorage} from "./util/localstorage/localstorage";
-import {api} from "./api";
+import {Configuration, DefaultApi} from "./api_clients";
 
+import.meta.env.VITE_CORS;
+export const clientConfig = new Configuration({
+  basePath: import.meta.env.VITE_BASE,
+});
+export const defaultApi = new DefaultApi(clientConfig);
 export const localStorage = new Localstorage();
 export const tokenManager = new TokenManager(localStorage);
-export const httpClient = new HttpClient<ErrorRes>(
-  import.meta.env.VITE_BASE,
-  import.meta.env.VITE_CORS,
-  tokenManager,
-);
-tokenManager.refreshFetcher = async refreshToken => {
-  const value = await api.login.refresh(refreshToken)();
-  return {
-    accessToken: value.access_token,
-    refreshToken: value.refresh_token,
-  };
-};
-httpClient.statusCodeErrorHandler = async event => {
-  if (event.result.error_id !== ErrorIds.ACCESS_TOKEN_EXPIRED.name) return;
 
-  await tokenManager.fetchRefresh();
-
-  if (event.retry > 10) return;
-  event.setRetry(event.retry + 1);
+tokenManager.refreshFetcher = async _ => {
+  // const value = await api.login.refresh(refreshToken)();
+  // return {
+  //   accessToken: value.access_token,
+  //   refreshToken: value.refresh_token,
+  // };
+  return {accessToken: "", refreshToken: ""};
 };
+
 
 export function Main() {
   return <StyleProvider></StyleProvider>;

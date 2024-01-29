@@ -1,5 +1,5 @@
 import {useEffect, useMemo, useState} from "react";
-import {getValue} from "../fetch/fetch.ts";
+import {getValue} from "../util.ts";
 
 export class GlobalState<T> {
   private readonly setters: ((value: T) => void)[] = [];

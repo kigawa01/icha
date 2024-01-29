@@ -8,7 +8,7 @@ from icha.table.table import get_session
 
 
 @app.get("/api/health")
-async def login():
+async def health():
     return {"ok": True}
 
 
@@ -28,7 +28,7 @@ async def login(req: data.LoginReq):
 
 
 @app.post("/api/user")
-async def post_user(req: data.PostUserBody, session: AsyncSession = Depends(get_session)):
+async def create_user(req: data.PostUserBody, session: AsyncSession = Depends(get_session)):
     user = user_repo.create(session, req)
     await session.commit()
     await session.refresh(user)

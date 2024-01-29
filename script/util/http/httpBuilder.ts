@@ -4,7 +4,7 @@ import {HttpRequest} from "./httpRequest";
 
 export class FetchBuilder<RESULT, BODY = undefined> extends HttpRequest<BODY> {
 
-  constructor(httpClient: HttpClient, url: string | URL, body: BODY = undefined) {
+  constructor(httpClient: HttpClient, url: string | URL, body: BODY) {
     super(httpClient, body);
     this._url = url;
   }

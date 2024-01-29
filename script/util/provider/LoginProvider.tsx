@@ -4,7 +4,7 @@ export class LoginState {
 
 }
 
-const Context = createContext<LoginState>(undefined);
+const Context = createContext<LoginState | undefined>(undefined);
 
 export function LoginProvider() {
   const loginState = useMemo(() => {

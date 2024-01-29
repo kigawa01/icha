@@ -34,7 +34,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
 
 
 # noinspection PyUnresolvedReferences
-import icha.api
+import icha.apis
 # noinspection PyUnresolvedReferences
 # import icha.model
 

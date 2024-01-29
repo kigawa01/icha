@@ -3,15 +3,15 @@ import {getDefault} from "../util";
 import {HttpClient} from "./httpClient";
 
 export class HttpRequest<BODY = undefined> {
-  protected _method: HttpMethod;
-  protected _url: URL | string;
+  protected _method: HttpMethod = "GET";
+  protected _url: URL | string = "";
   protected _isAuthenticate: boolean = false;
   protected _token: string | undefined = undefined;
   protected _searchParams: URLSearchParams = new URLSearchParams();
   protected _body: BODY;
   protected httpClient: HttpClient;
 
-  constructor(httpClient: HttpClient, body: BODY = undefined) {
+  constructor(httpClient: HttpClient, body: BODY) {
     this._body = body;
     this.httpClient = httpClient;
   }
