@@ -3,6 +3,7 @@ import {StyleProvider} from "./util/style/styleHook";
 import {TokenManager} from "./util/token/tokenManager";
 import {Localstorage} from "./util/localstorage/localstorage";
 import {Configuration, DefaultApi} from "./api_clients";
+import {MainRouter} from "./MainRouter.tsx";
 
 import.meta.env.VITE_CORS;
 export const clientConfig = new Configuration({
@@ -23,7 +24,9 @@ tokenManager.refreshFetcher = async _ => {
 
 
 export function Main() {
-  return <StyleProvider></StyleProvider>;
+  return <StyleProvider>
+    <MainRouter/>
+  </StyleProvider>;
 }
 
 function main() {

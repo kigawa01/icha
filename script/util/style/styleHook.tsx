@@ -53,11 +53,7 @@ export function StyleProvider(props: ThemeProviderProp) {
         cursor: pointer;
       }
 
-      p {
-        font-family: ${font};
-      }
-
-      h2 {
+      p , h1 , h2 {
         font-family: ${font}
       }
       li {
