@@ -7,6 +7,11 @@ from icha.repo import user_repo
 from icha.table.table import get_session
 
 
+@app.get("/api/health")
+async def login():
+    return {"ok": True}
+
+
 @app.get("/api/login/refresh")
 async def refresh_token():
     # access_user = UserRepository.current_user_or_none()
