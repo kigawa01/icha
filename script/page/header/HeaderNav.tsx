@@ -3,12 +3,14 @@ import {FlexBox} from "../../unit/box/FlexBox.tsx";
 import {Link} from "react-router-dom";
 import {Input} from "../../unit/Input.tsx";
 import {css} from "@emotion/react";
+import {useStyle} from "../../util/style/styleHook.tsx";
 
 export interface HeaderNavProps extends HTMLAttributes<any> {
 }
 
 export function HeaderNav(props: HeaderNavProps) {
   const {...parentProps} = props;
+const style = useStyle()
 
   return <FlexBox
     {...parentProps}
@@ -20,7 +22,7 @@ export function HeaderNav(props: HeaderNavProps) {
       a {
         margin: 0 15px;
         font-weight: bold;
-        font-size: 1.3rem;
+        font-size: ${style.fontSize2};
       }
       input {
         margin: 0 25px;

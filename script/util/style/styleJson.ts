@@ -12,6 +12,7 @@ export interface StyleJson {
   fonts: Font[];
   fontSize: string;
   fontSize1: string;
+  fontSize2: string;
   fontSizeMin: string;
   hFontSize: string;
   hFontSize1: string;
@@ -35,6 +36,7 @@ export function initStyle(): StyleJson {
     fonts: [{name: "UdevGothic35", url: UdevGothicUrl}],
     fontSize: "1rem",
     fontSize1: "1.2rem",
+    fontSize2: "1.3rem",
     fontSizeMin: "0.8rem",
     hFontSize: "1.2rem",
     hFontSize1: "1.5rem",

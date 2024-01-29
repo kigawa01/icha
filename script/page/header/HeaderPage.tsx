@@ -13,6 +13,9 @@ export function HeaderPage(props: HeaderPageProps) {
   const style = useStyle();
   return <FlexBox
     flexDirection={"column"}
+    css={css`
+      min-height: 100vh;
+    `}
   >
 
     <FlexBox
@@ -22,6 +25,9 @@ export function HeaderPage(props: HeaderPageProps) {
         border-bottom: 2px solid ${style.line};
         padding: 5px 20px;
         
+        h1{
+          font-size: ${style.hFontSize2};
+        }
         nav{
           flex: 1;
         }

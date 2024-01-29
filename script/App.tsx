@@ -3,7 +3,7 @@ import {StyleProvider} from "./util/style/styleHook";
 import {TokenManager} from "./util/token/tokenManager";
 import {Localstorage} from "./util/localstorage/localstorage";
 import {Configuration, DefaultApi} from "./api_clients";
-import {MainRouter} from "./MainRouter.tsx";
+import {AppRouter} from "./AppRouter.tsx";
 
 import.meta.env.VITE_CORS;
 export const clientConfig = new Configuration({
@@ -23,9 +23,9 @@ tokenManager.refreshFetcher = async _ => {
 };
 
 
-export function Main() {
+export function App() {
   return <StyleProvider>
-    <MainRouter/>
+    <AppRouter/>
   </StyleProvider>;
 }
 
@@ -37,7 +37,7 @@ function main() {
     document.body.textContent = "初期化に失敗しました。ブラウザーをリロードしてください。";
     return;
   }
-  createRoot(element).render(<Main/>);
+  createRoot(element).render(<App/>);
 }
 
 main();
