@@ -1,6 +1,6 @@
 import {InputHTMLAttributes} from "react";
 import {css} from "@emotion/react";
-import {useStyle} from "../util/style/styleHook.tsx";
+import {useStyle} from "../../util/style/styleHook.tsx";
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   padY?: number | undefined;

@@ -3,3 +3,4 @@
 /.env
 /script/api_clients/
 /public/
+/.next/

@@ -19,8 +19,6 @@ export interface StyleJson {
   hFontSize2: string;
 }
 
-import UdevGothicUrl from "/assets/UDEVGothic_v1.3.1/UDEVGothic35-Regular.ttf?url";
-
 export function initStyle(): StyleJson {
   return {
     baseWeek: "#fefefe",

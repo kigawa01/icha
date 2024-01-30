@@ -1,6 +1,6 @@
 import {Property} from "csstype";
 import {css, SerializedStyles} from "@emotion/react";
-import {Box, BoxProps} from "./Box.tsx";
+import {Box} from "./Box";
 
 
 export interface FlexBoxProps extends BoxProps {
