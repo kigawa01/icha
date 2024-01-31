@@ -12,7 +12,7 @@ export function Header({...parentProps}: HeaderPageProps) {
   >
     <Toolbar>
       <Typography variant={"h1"}>Icha</Typography>
-      <HeaderNav flex={1}/>
+      <HeaderNav flex={1} margin={"0 10px"}/>
     </Toolbar>
   </AppBar>;
 

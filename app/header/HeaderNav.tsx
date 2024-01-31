@@ -15,6 +15,7 @@ export function HeaderNav(
     component={"nav"}
     {...props}
     alignItems={"center"}
+    fontWeight={"bold"}
   >
     <Link sx={linkSx} href={"/"}><Typography>トップ</Typography></Link>
     <Link sx={linkSx} href={"/"}><Typography>投稿</Typography></Link>

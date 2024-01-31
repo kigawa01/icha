@@ -4,6 +4,8 @@ import {AppRouterCacheProvider} from "@mui/material-nextjs/v13-appRouter";
 import {ThemeProvider} from "@mui/system";
 import {createTheme} from "@mui/material";
 import localFont from "@next/font/local";
+import {amber, grey, lime} from "@mui/material/colors";
+import {gray} from "next/dist/lib/picocolors";
 
 
 
@@ -18,9 +20,12 @@ export function Theme(
   const theme = createTheme({
     palette: {
       primary: {
-        main: "#F2E8D4",
-        contrastText: "#000",
+        main: amber[200],
+        contrastText: grey[900],
       },
+      secondary: {
+        main: lime[100]
+      }
     },
     components: {
       MuiCssBaseline: {},
@@ -29,6 +34,9 @@ export function Theme(
       fontFamily: udevFont.style.fontFamily,
       h1: {
         fontSize: "2rem"
+      },
+      h2: {
+        fontSize: "1.8rem"
       }
     }
   });
