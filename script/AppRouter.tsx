@@ -1,8 +1,8 @@
 import {HTMLAttributes} from "react";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
-import {Header} from "../app/header/Header.tsx";
+import {Header} from "../app/unit/header/Header.tsx";
 import {CreateUserPage} from "./page/create-user/CreateUserPage.tsx";
-import {Footer} from "../app/footer/Footer.tsx";
+import {Footer} from "../app/unit/footer/Footer.tsx";
 
 export interface MainRouterProps extends HTMLAttributes<any> {
 }

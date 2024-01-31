@@ -1,12 +1,13 @@
 import {Box} from "@mui/system";
-import {AppBar, SxProps, Typography} from "@mui/material";
+import {SxProps, Typography} from "@mui/material";
+import {LabeledText} from "../labeled/LabeledText";
 
 export function Footer(
   {}: {},
 ) {
   const labelStyle: SxProps = {
     width: "100px",
-    display: "inline-block"
+    display: "inline-block",
   };
   return <Box
     component={"footer"}
@@ -16,8 +17,8 @@ export function Footer(
     width={"100%"}
     sx={{
       div: {
-        margin: "0 auto"
-      }
+        margin: "0 auto",
+      },
     }}
     padding={"20px"}
     boxShadow={3}
@@ -26,12 +27,8 @@ export function Footer(
       width={"400px"}
       padding={"10px"}
     >
-      <Typography variant={"h2"} >Icha</Typography>
-      <Typography marginTop={"5px"}>
-        <Typography sx={labelStyle} component={"span"}>contact</Typography>
-        :
-        <Typography marginLeft={"5px"} component={"span"}>contact@kigawa.net</Typography>
-      </Typography>
+      <Typography variant={"h2"}>Icha</Typography>
+      <LabeledText label={"contact"} text={"contact@kigawa.net"} marginTop={"5px"}/>
     </Box>
 
     <Box
