@@ -1,6 +1,6 @@
 import {Box} from "@mui/system";
 import {SxProps, Typography} from "@mui/material";
-import {LabeledText} from "../labeled/LabeledText";
+import {LabeledText} from "../unit/labeled/LabeledText";
 
 export function Footer(
   {}: {},
@@ -12,7 +12,7 @@ export function Footer(
   return <Box
     component={"footer"}
     position={"absolute"}
-    bgcolor={"secondary.main"}
+    bgcolor={"primary.dark"}
     bottom={0}
     width={"100%"}
     sx={{
@@ -33,7 +33,7 @@ export function Footer(
 
     <Box
       borderTop={"2px solid"}
-      borderColor={"grey.600"}
+      borderColor={"grey"}
       width={"500px"}
       textAlign={"center"}
       padding={"10px"}

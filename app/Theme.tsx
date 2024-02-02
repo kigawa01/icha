@@ -4,7 +4,7 @@ import {AppRouterCacheProvider} from "@mui/material-nextjs/v13-appRouter";
 import {ThemeProvider} from "@mui/system";
 import {createTheme} from "@mui/material";
 import localFont from "next/font/local";
-import {amber, grey, lime} from "@mui/material/colors";
+import {amber, grey, lightGreen, lime} from "@mui/material/colors";
 
 
 const udevFont = localFont({src: "../assets/UDEVGothic_v1-3-1/UDEVGothic35-Regular.ttf"});
@@ -23,8 +23,10 @@ export function Theme(
         contrastText: grey[900],
       },
       secondary: {
-        main: lime[100],
+        main: lime[800],
       },
+      grey: {
+      }
     },
     components: {
       MuiCssBaseline: {},
@@ -35,7 +37,7 @@ export function Theme(
         fontSize: "2rem",
       },
       h2: {
-        fontSize: "1.8rem",
+        fontSize: "2rem",
       },
     },
   });
