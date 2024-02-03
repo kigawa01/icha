@@ -57,7 +57,7 @@ async def exception_handler(request, exc: ErrorIdException):
 
 
 @app.exception_handler(Exception)
-async def exception_handler(request, exc: ErrorIdException):
+async def exception_handler(request, exc: Exception):
     print(traceback.format_exc())
     return JSONResponse(
         content=asdict(ErrorRes(

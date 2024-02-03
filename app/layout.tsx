@@ -30,9 +30,15 @@ export default function RootLayout(
       <Theme>
 
         <Header/>
-        <Toolbar/>
-        {children}
-        <Footer/>
+        <Box
+          display={"flex"}
+          flexDirection={"column"}
+          minHeight={"100vh"}
+        >
+          <Toolbar/>
+          {children}
+          <Footer/>
+        </Box>
 
       </Theme>
     </Box>

@@ -19,7 +19,8 @@ export function Main(
       padding={"30px 50px"}
       maxWidth={"1000px"}
       margin={"0 auto"}
-    >
-    </Box>
+      boxShadow={3}
+      flex={1}
+    />
   );
 }

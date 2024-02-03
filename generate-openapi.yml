@@ -12,7 +12,7 @@ services:
       - |
         pip install --upgrade pip
         pip install -r requirements.txt
-        python -m uvicorn app:app --host 0.0.0.0
+        python -m uvicorn app:app --host 0.0.0.0 --reload
     healthcheck:
       test: [ "CMD-SHELL", "curl http://localhost:8000/health || exit 1" ] # exitコードは 0 or 1 に揃えておく。
       start_period: "10s"
@@ -22,7 +22,7 @@ services:
   openapi-generator:
     image: openapitools/openapi-generator-cli
     volumes:
-      - ./script:/src
+      - ./:/src
     command: generate -i http://back:8000/openapi.json -g typescript-axios -o /src/api_clients --skip-validate-spec
     depends_on:
       back:

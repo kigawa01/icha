@@ -3,6 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app import app
 from icha import data
+from icha.data import UserRes
 from icha.repo import user_repo
 from icha.table.table import get_session
 
@@ -28,7 +29,7 @@ async def login(req: data.LoginReq):
 
 
 @app.post("/api/user")
-async def create_user(req: data.PostUserBody, session: AsyncSession = Depends(get_session)):
+async def create_user(req: data.PostUserBody, session: AsyncSession = Depends(get_session)) -> UserRes:
     user = user_repo.create(session, req)
     await session.commit()
     await session.refresh(user)

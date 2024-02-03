@@ -3,8 +3,10 @@ annotated-types==0.6.0
 anyio==4.2.0
 asyncmy==0.2.9
 certifi==2023.11.17
+cffi==1.16.0
 click==8.1.7
 colorama==0.4.6
+cryptography==42.0.2
 ecdsa==0.18.0
 fastapi==0.109.0
 greenlet==3.0.3
@@ -19,6 +21,7 @@ packaging==23.2
 passlib==1.7.4
 pluggy==1.4.0
 pyasn1==0.5.1
+pycparser==2.21
 pydantic==2.5.3
 pydantic_core==2.14.6
 pytest==7.4.4
