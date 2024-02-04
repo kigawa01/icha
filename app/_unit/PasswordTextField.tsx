@@ -1,8 +1,9 @@
 "use client";
 
-import {IconButton, InputAdornment, TextField, TextFieldProps} from "@mui/material";
+import {IconButton, InputAdornment, TextFieldProps} from "@mui/material";
 import {useState} from "react";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
+import {TextInput} from "./TextInput";
 
 export interface PasswordTextFieldProps {
 }
@@ -15,7 +16,7 @@ export function PasswordTextField(
   const [show, setShow] = useState(false);
 
   return (
-    <TextField
+    <TextInput
       {...props}
       type={show ? "text" : "password"}
       InputProps={{

@@ -7,7 +7,8 @@ import {PasswordTextField} from "../../_unit/PasswordTextField";
 import {createUser} from "../../_client/serverActionApi";
 import {useState} from "react";
 import {ErrorMessage} from "../../_unit/ErrorMessage";
-import {redirect} from "next/navigation";
+import {loginManager} from "../../_manager/LoginManager";
+import {TextInput} from "../../_unit/TextInput";
 
 export interface LoginFormProps extends OverrideProps<BoxTypeMap, any> {
 }
@@ -38,20 +39,20 @@ export function UserCreateForm(
             setError(value.error.message);
             return;
           } else setError(undefined);
+          loginManager.setTokensRes(value.value?.tokens);
         });
     }}
   >
     <ErrorMessage error={error}/>
-    <TextField
+    <TextInput
       sx={child}
       color={"secondary"}
       label={"ユーザー名"}
       name={"username"}
       required={true}
     />
-    <TextField
+    <TextInput
       sx={child}
-      color={"secondary"}
       label={"Eメール"}
       type={"email"}
       name={"email"}
@@ -59,7 +60,6 @@ export function UserCreateForm(
     />
     <PasswordTextField
       sx={child}
-      color={"secondary"}
       label={"パスワード"}
       name={"password"}
       required={true}

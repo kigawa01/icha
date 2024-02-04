@@ -21,6 +21,7 @@ export function Main(
       margin={"0 auto"}
       boxShadow={3}
       flex={1}
+      width={"99%"}
     />
   );
 }

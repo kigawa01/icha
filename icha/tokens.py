@@ -5,7 +5,8 @@ from jose import jwt
 from pydantic import BaseModel
 
 from app import ACCESS_TOKEN_EXPIRE_MINUTES, SECRET_KEY, ALGORITHM, REFRESH_TOKEN_EXPIRE_MINUTES
-from icha.data import Token
+from icha.data import Token, TokensRes
+from icha.table.table import UserTable
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -26,6 +27,13 @@ def create_refresh_token(user_id: int):
 
 def create_access_token(user_id: int):
     return create_token(user_id, "access", timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
+
+
+def get_tokens(user: UserTable):
+    return TokensRes.from_args(
+        access_token=create_access_token(user.uid),
+        refresh_token=create_refresh_token(user.uid)
+    )
 
 
 class TokenData(BaseModel):

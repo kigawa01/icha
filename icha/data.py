@@ -40,7 +40,12 @@ class PostUserBody(BaseModel):
         return PostUserBody(name=name, email=email, password=password)
 
 
-class UserRes(BaseModel):
+class PostUserRes(BaseModel):
+    uid: int
     name: str
     email: str
-    uid: int
+    tokens: TokensRes
+
+    @staticmethod
+    def from_args(uid: int, name: str, email: str, tokens: TokensRes) -> 'PostUserRes':
+        return PostUserRes(uid=uid, name=name, email=email, tokens=tokens)

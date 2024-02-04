@@ -1,6 +1,6 @@
 import {Box} from "@mui/system";
 import {SxProps, Typography} from "@mui/material";
-import {LabeledText} from "../_unit/labeled/LabeledText";
+import {LabeledText} from "../_unit/_labeled/LabeledText";
 
 export function Footer(
   {}: {},
