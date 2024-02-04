@@ -2,8 +2,9 @@ from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app import app
-from icha import data
-from icha.data import UserRes
+from icha import data, tokens
+from icha.data import UserRes, TokensRes
+from icha.error import ErrorIdException, ErrorIds
 from icha.repo import user_repo
 from icha.table.table import get_session
 
@@ -23,9 +24,15 @@ async def refresh_token():
     return {}
 
 
-@app.get("/api/login")
-async def login(req: data.LoginReq):
-    return {}
+@app.post("/api/login")
+async def login(req: data.LoginBody, session: AsyncSession = Depends(get_session)):
+    user = await user_repo.by_email(session, req.email)
+    if not user.check_password(req.password):
+        raise ErrorIdException(ErrorIds.USER_LOGIN_FAILED)
+    return TokensRes.from_args(
+        access_token=tokens.create_access_token(user.uid),
+        refresh_token=tokens.create_refresh_token(user.uid)
+    )
 
 
 @app.post("/api/user")

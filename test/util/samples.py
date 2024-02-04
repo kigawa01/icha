@@ -1,10 +1,13 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
+import pytest
 import sqlalchemy
-from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 
-from icha.table.table import session_maker, BaseTable
+from app import app
+from icha.table.table import session_maker, BaseTable, db_url, get_session
+
 
 
 @dataclass

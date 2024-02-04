@@ -1,14 +1,10 @@
 import {Box} from "@mui/system";
 import {SxProps, Typography} from "@mui/material";
-import {LabeledText} from "../unit/labeled/LabeledText";
+import {LabeledText} from "../_unit/labeled/LabeledText";
 
 export function Footer(
   {}: {},
 ) {
-  const labelStyle: SxProps = {
-    width: "100px",
-    display: "inline-block",
-  };
   return <Box
     component={"footer"}
     position={"absolute"}
@@ -22,6 +18,7 @@ export function Footer(
     }}
     padding={"20px"}
     boxShadow={3}
+    boxSizing={"border-box"}
   >
     <Box
       width={"400px"}

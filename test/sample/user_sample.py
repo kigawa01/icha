@@ -12,7 +12,7 @@ from test.util.samples import Samples, Sample
 @dataclass
 class UserSample(Sample):
     samples: Samples
-    id_created: int
+    id_primary: int
 
     @staticmethod
     def table_class() -> type[UserTable]:
@@ -20,17 +20,17 @@ class UserSample(Sample):
 
     @staticmethod
     async def create(samples: Samples, session: Session):
-        table: UserTable = UserTable.create(UserSample.body_created())
+        table: UserTable = UserTable.create(UserSample.body_primary())
         session.add(table)
         session.commit()
         return UserSample(samples, table.uid)
 
     @staticmethod
-    def body_created():
+    def body_primary():
         return PostUserBody(
-            name="user_created",
-            password="user_created_password",
-            email="test@example.com",
+            name="user_primary",
+            password="user_primary_password",
+            email="primary@example.com",
         )
 
     @staticmethod
@@ -41,8 +41,8 @@ class UserSample(Sample):
             email="new@example.com",
         )
 
-    async def model_created(self, session: AsyncSession) -> UserTable:
+    async def model_primary(self, session: AsyncSession) -> UserTable:
         result = await session.execute(
-            sqlalchemy.select(UserTable, UserTable.uid == self.id_created)
+            sqlalchemy.select(UserTable, UserTable.uid == self.id_primary)
         )
         return await result.first()

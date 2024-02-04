@@ -51,7 +51,7 @@ class UserTable(BaseTable):
     password: Mapped[str] = Column(String(128), nullable=False)
 
     @staticmethod
-    def create(body: data.PostUserBody):
+    def create(body: data.PostUserBody) -> 'UserTable':
         table = UserTable()
         table.name = body.name
         table.email = body.email

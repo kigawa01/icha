@@ -1,5 +1,5 @@
-from test.util.samples import Samples, SampleEntry
 from test.sample.user_sample import UserSample
+from test.util.samples import Samples, SampleEntry
 
 
 async def setup():

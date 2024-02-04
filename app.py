@@ -1,10 +1,8 @@
 import logging
 import os
-from datetime import timedelta, datetime, timezone
 
 import dotenv
 from fastapi import FastAPI
-from jose import jwt
 
 from icha.util.logger_filter import ExcludeFilter
 
@@ -20,18 +18,7 @@ if cors_list is None:
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 15
-
-
-def create_access_token(data: dict, expires_delta: timedelta | None = None):
-    encode_data = data.copy()
-    if expires_delta:
-        expire = datetime.now(timezone.utc) + expires_delta
-    else:
-        expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    encode_data.update({"exp": expire})
-    encoded_jwt = jwt.encode(encode_data, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
-
+REFRESH_TOKEN_EXPIRE_MINUTES = 60 * 24 * 14
 
 # noinspection PyUnresolvedReferences
 import icha.apis

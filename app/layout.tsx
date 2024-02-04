@@ -1,7 +1,7 @@
 import {ReactNode} from "react";
-import {Header} from "./header/Header";
+import {Header} from "./_header/Header";
 import {Theme} from "./Theme";
-import {Footer} from "./footer/Footer";
+import {Footer} from "./_footer/Footer";
 import {Toolbar} from "@mui/material";
 import {Box} from "@mui/system";
 
