@@ -1,7 +1,7 @@
 import {createRoot} from "react-dom/client";
 import {StyleProvider} from "./util/style/styleHook";
 import {TokenManager} from "./util/token/tokenManager";
-import {Localstorage} from "./util/localstorage/localstorage";
+import {Localstorage} from "../app/_manager/localStorageManager";
 import {Configuration, DefaultApi} from "./api_clients";
 import {AppRouter} from "./AppRouter.tsx";
 

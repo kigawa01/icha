@@ -2,13 +2,15 @@
 import {Box} from "@mui/system";
 import {BoxTypeMap} from "@mui/system/Box/Box";
 import {OverrideProps} from "@mui/types";
-import {Button, SxProps, TextField} from "@mui/material";
+import {Button, SxProps} from "@mui/material";
 import {PasswordTextField} from "../../_unit/PasswordTextField";
 import {createUser} from "../../_client/serverActionApi";
 import {useState} from "react";
 import {ErrorMessage} from "../../_unit/ErrorMessage";
-import {loginManager} from "../../_manager/LoginManager";
+import {loginManager} from "../../_manager/loginManager";
 import {TextInput} from "../../_unit/TextInput";
+import {userManager} from "../../_manager/userManager";
+import {redirect} from "next/navigation";
 
 export interface LoginFormProps extends OverrideProps<BoxTypeMap, any> {
 }
@@ -40,6 +42,8 @@ export function UserCreateForm(
             return;
           } else setError(undefined);
           loginManager.setTokensRes(value.value?.tokens);
+          userManager.setPostUserRes(value.value);
+          redirect("/");
         });
     }}
   >

@@ -1,4 +1,6 @@
-export class Localstorage {
+"use client";
+
+export class LocalStorageManager {
   private readonly storage = window.localStorage;
 
   get(key: string) {
@@ -12,3 +14,4 @@ export class Localstorage {
 
 }
 
+export const localStorageManager = new LocalStorageManager();

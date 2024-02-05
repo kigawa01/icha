@@ -7,6 +7,7 @@ from icha.data import PostUserRes, TokensRes
 from icha.error import ErrorIdException, ErrorIds
 from icha.repo import user_repo
 from icha.table.table import get_session
+from icha.tokens import TokenData, get_token
 
 
 @app.get("/api/health")
@@ -14,14 +15,13 @@ async def health():
     return {"ok": True}
 
 
-@app.get("/api/login/refresh")
-async def refresh_token():
-    # access_user = UserRepository.current_user_or_none()
-    # if access_user is None:
-    #     raise ErrorIdException(ErrorIds.USER_NOT_FOUND)
-    # tokens = TokenManager.create_tokens(access_user)
-    # return GetRefreshRes.by_tokens(tokens)
-    return {}
+@app.post("/api/login/refresh")
+async def refresh_token(
+        session: AsyncSession = Depends(get_session),
+        token: TokenData = Depends(get_token)
+) -> TokensRes:
+    user = await user_repo.by_token(session, token)
+    return tokens.create_tokens(user)
 
 
 @app.post("/api/login")
@@ -29,7 +29,7 @@ async def login(req: data.LoginBody, session: AsyncSession = Depends(get_session
     user = await user_repo.by_email(session, req.email)
     if not user.check_password(req.password):
         raise ErrorIdException(ErrorIds.USER_LOGIN_FAILED)
-    return tokens.get_tokens(user)
+    return tokens.create_tokens(user)
 
 
 @app.post("/api/user")

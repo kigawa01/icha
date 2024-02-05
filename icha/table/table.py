@@ -70,6 +70,6 @@ class UserTable(BaseTable):
             uid=self.uid,
             name=self.name,
             email=self.email,
-            tokens=tokens.get_tokens(self)
+            tokens=tokens.create_tokens(self)
         )
         return res

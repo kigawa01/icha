@@ -4,24 +4,22 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from icha import data
 from icha.error import ErrorIdException, ErrorIds
 from icha.table.table import UserTable
+from icha.tokens import TokenData
 
 
-def current_user_or_none(self) -> UserTable | None:
-    # user_id = get_jwt_identity()
-    # if user_id is None:
-    #     return None
-    # return db.session.query(UserModel).filter(
-    #     UserModel.id == user_id
-    # ).first()
-    pass
+async def by_uid(session: AsyncSession, uid: int) -> UserTable:
+    result = await session.execute(
+        select(UserTable)
+        .where(UserTable.uid == uid)
+    )
+    result = result.scalar_one_or_none()
+    if result is None:
+        raise ErrorIdException(ErrorIds.USER_NOT_FOUND)
+    return result
 
 
-def current_user(self) -> UserTable:
-    # user_model = UserRepository.current_user_or_none()
-    # if user_model is None:
-    #     raise ErrorIdException(ErrorIds.USER_NOT_FOUND)
-    # return user_model
-    pass
+async def by_token(session: AsyncSession, token: TokenData) -> UserTable:
+    return await by_uid(session, token.user_id)
 
 
 async def by_email(session: AsyncSession, email: str) -> UserTable:

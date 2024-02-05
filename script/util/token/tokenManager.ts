@@ -1,4 +1,4 @@
-import {Localstorage} from "../localstorage/localstorage";
+import {Localstorage} from "../../../app/_manager/localStorageManager";
 
 export class TokenManager {
   static readonly STORAGE_KEY = "refresh_token";
