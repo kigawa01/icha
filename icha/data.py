@@ -49,3 +49,13 @@ class PostUserRes(BaseModel):
     @staticmethod
     def from_args(uid: int, name: str, email: str, tokens: TokensRes) -> 'PostUserRes':
         return PostUserRes(uid=uid, name=name, email=email, tokens=tokens)
+
+
+class UserRes(BaseModel):
+    uid: int
+    name: str
+    email: str
+
+    @staticmethod
+    def from_args(uid: int, name: str, email: str):
+        return UserRes(uid=uid, name=name, email=email)

@@ -7,7 +7,7 @@ from icha.data import PostUserRes, TokensRes
 from icha.error import ErrorIdException, ErrorIds
 from icha.repo import user_repo
 from icha.table.table import get_session
-from icha.tokens import TokenData, get_token
+from icha.tokens import TokenData, get_token, access_token
 
 
 @app.get("/api/health")
@@ -37,4 +37,13 @@ async def create_user(req: data.PostUserBody, session: AsyncSession = Depends(ge
     user = user_repo.create(session, req)
     await session.commit()
     await session.refresh(user)
+    return user.to_post_user_res()
+
+
+@app.get("/api/user/self")
+async def get_self_user(
+        session: AsyncSession = Depends(get_session),
+        token: TokenData = Depends(access_token)
+) -> data.UserRes:
+    user = await user_repo.by_token(session, token)
     return user.to_user_res()
