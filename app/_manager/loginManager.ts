@@ -1,42 +1,109 @@
-"use client";
-
 import {GlobalState} from "../../script/util/hook/globalState";
 import {TokensRes} from "../../api_clients";
-import {localStorageManager, LocalStorageManager} from "./localStorageManager";
+import {LocalStorageManager, useLocalStorageManager} from "./localStorageManager";
+import {clientConfig} from "../_client/api";
+import {useMemo} from "react";
+import {refresh} from "../_client/serverActionApi";
 
-export interface Token {
+export interface TokenState {
   token: string,
   expire: Date
 }
 
+const STORAGE_TOKEN_KEY = "token";
+const STORAGE_EXPIRE_KEY = "expire";
+
+const accessState = new GlobalState<TokenState | undefined>(undefined);
+const refreshState = new GlobalState<TokenState | undefined>(undefined);
+const readyState = new GlobalState(false);
+
 export class LoginManager {
-  private readonly accessState = new GlobalState<Token | undefined>(undefined);
-  private readonly refreshState = new GlobalState<Token | undefined>(undefined);
-  private readonly ready = new GlobalState(false);
-  private readonly STORAGE_TOKEN_KEY = "token";
-  private readonly STORAGE_EXPIRE_KEY = "expire";
-  private readonly localStorageManager: LocalStorageManager;
+  readonly localStorageManager: LocalStorageManager;
+  private taskId: any | undefined = undefined;
 
   constructor(localStorageManager: LocalStorageManager) {
     this.localStorageManager = localStorageManager;
-    const expire = localStorageManager.get(this.STORAGE_EXPIRE_KEY);
-    if (expire == undefined) {
-      this.ready.set(true);
-      return;
-    }
+
+    this.refresh()
+      .then(_ => readyState.set(true))
+      .catch(reason => {
+        console.error(reason);
+        readyState.set(true);
+      });
+  }
+
+  async refresh() {
+    return await refresh().then(value => {
+      if (value.value) {
+        this.setTokensRes(value.value);
+        return;
+      }
+      if (value.error) console.error(value.error);
+    });
   }
 
   setTokensRes(tokens: TokensRes | undefined) {
     if (tokens == undefined) {
-      this.accessState.set(undefined);
-      this.refreshState.set(undefined);
+      refreshState.set(undefined);
+      accessState.set(undefined);
+      clientConfig.accessToken = undefined;
       return;
     }
-    this.accessState.set({expire: new Date(tokens.access_token.expires_in), token: tokens.access_token.token});
-    this.refreshState.set({expire: new Date(tokens.refresh_token.expires_in), token: tokens.refresh_token.token});
-    this.localStorageManager.set(this.STORAGE_TOKEN_KEY, tokens.refresh_token.token);
-    this.localStorageManager.set(this.STORAGE_EXPIRE_KEY, tokens.refresh_token.expires_in);
+    clientConfig.accessToken = tokens.access_token.token;
+    const accessTokenState = {
+      expire: new Date(tokens.access_token.expires_in),
+      token: tokens.access_token.token,
+    };
+    accessState.set(accessTokenState);
+    refreshState.set({expire: new Date(tokens.refresh_token.expires_in), token: tokens.refresh_token.token});
+    this.localStorageManager.set(STORAGE_TOKEN_KEY, tokens.refresh_token.token);
+    this.localStorageManager.set(STORAGE_EXPIRE_KEY, tokens.refresh_token.expires_in);
+
+    this.refreshTask(accessTokenState);
+  }
+
+  private refreshTask(accessToken: TokenState) {
+    if (this.taskId != undefined) {
+      clearTimeout(this.taskId);
+    }
+    const current = new Date();
+    const ms = accessToken.expire.getTime() - current.getTime();
+    if (ms <= 0) {
+      this.setTokensRes(undefined);
+      return;
+    }
+
+    this.taskId = setTimeout(() => {
+      this.taskId = undefined;
+      this.refresh().catch(reason => console.error(reason));
+    }, ms);
   }
 }
 
-export const loginManager = new LoginManager(localStorageManager);
+let loginManager: LoginManager | undefined = undefined;
+
+export interface LoginState {
+  loginManager: LoginManager;
+  ready: boolean;
+}
+
+export function useLoginState(): LoginState | undefined {
+  const localStorageManager = useLocalStorageManager();
+
+  const manager = useMemo(() => {
+    if (localStorageManager == undefined) return undefined;
+    if (loginManager != undefined) return loginManager;
+    loginManager = new LoginManager(localStorageManager);
+    return loginManager;
+  }, [localStorageManager]);
+  const ready = readyState.use();
+
+  return useMemo(() => {
+    if (manager == undefined) return undefined;
+    return {
+      loginManager: manager,
+      ready: ready,
+    };
+  }, [manager, ready]);
+}
+

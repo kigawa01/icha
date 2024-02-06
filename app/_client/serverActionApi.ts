@@ -24,6 +24,14 @@ export async function login(email: string, password: string): Promise<Result<Tok
   });
 }
 
+export async function refresh(): Promise<Result<TokensRes>> {
+  return await api.defaultApi.refreshTokenApiLoginRefreshPost().then(value => {
+    return {value: value.data};
+  }).catch((reason: AxiosError<ErrorRes>) => {
+    return {error: reason.response?.data};
+  });
+}
+
 interface Result<T> {
   error?: ErrorRes | undefined;
   value?: T | undefined;

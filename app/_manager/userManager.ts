@@ -1,6 +1,6 @@
 "use client";
-import {GlobalState} from "../../script/util/hook/globalState";
-import {PostUserRes} from "../../api_clients";
+import {useMemo} from "react";
+import {useLoginState} from "./loginManager";
 
 export interface User {
   name: string;
@@ -8,16 +8,10 @@ export interface User {
   uid: number;
 }
 
-export class UserManager {
-  private userState = new GlobalState<User | undefined>(undefined);
+export function useUserState() {
+  const loginState = useLoginState();
 
-  setPostUserRes(postUserRes: PostUserRes | undefined) {
-    if (postUserRes == undefined) {
-      this.userState.set(undefined);
-      return;
-    }
-    this.userState.set({email: postUserRes.email, name: postUserRes.name, uid: postUserRes.uid});
-  }
+  return useMemo(() => {
+    if (loginState == undefined) return undefined;
+  }, []);
 }
-
-export const userManager = new UserManager();

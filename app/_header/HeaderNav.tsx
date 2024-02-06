@@ -2,6 +2,8 @@ import {Input, Link, SxProps, Typography} from "@mui/material";
 import {Box} from "@mui/system";
 import {OverrideProps} from "@mui/types";
 import {BoxTypeMap} from "@mui/system/Box/Box";
+import {useUserState} from "../_manager/userManager";
+import {UserNav} from "./UserNav";
 
 export function HeaderNav(
   {...props}: {} & OverrideProps<BoxTypeMap, any>,
@@ -23,7 +25,6 @@ export function HeaderNav(
       margin: "0 25px",
       flex: 1,
     }} placeholder={"検索"}/>
-    <Link sx={linkSx} href={"/login"}><Typography>ログイン</Typography></Link>
-    <Link sx={linkSx} href={"/user/create"}><Typography>新規登録</Typography></Link>
+    <UserNav/>
   </Box>;
 }

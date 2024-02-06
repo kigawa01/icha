@@ -1,7 +1,11 @@
-"use client";
+import {useEffect, useState} from "react";
 
 export class LocalStorageManager {
-  private readonly storage = window.localStorage;
+  private readonly storage;
+
+  constructor(storage: Storage) {
+    this.storage = storage;
+  }
 
   get(key: string) {
     return this.storage.getItem(key);
@@ -14,4 +18,17 @@ export class LocalStorageManager {
 
 }
 
-export const localStorageManager = new LocalStorageManager();
+
+let localStorageManager: LocalStorageManager | undefined = undefined;
+
+export function useLocalStorageManager(): LocalStorageManager | undefined {
+  const [storage, setStorage] =
+    useState<LocalStorageManager | undefined>(localStorageManager);
+  useEffect(() => {
+    if (storage != undefined) return;
+    if (localStorageManager != undefined) return;
+    localStorageManager = new LocalStorageManager(window.localStorage);
+    setStorage(localStorageManager);
+  }, []);
+  return storage;
+}
