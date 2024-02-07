@@ -1,29 +1,29 @@
-"use client";
 import {Box} from "@mui/system";
 import {BoxTypeMap} from "@mui/system/Box/Box";
 import {OverrideProps} from "@mui/types";
-import {Link, SxProps, Typography} from "@mui/material";
-import {useUserState} from "../_manager/userManager";
+import {SxProps} from "@mui/material";
+import {LoginButton} from "./LoginButton";
+import {RegisterUserButton} from "./RegisterUserButton";
+import {UserMenuButton} from "./UserMenuButton";
 
 export function UserNav(
   {
     ...props
   }: UserButtonProps,
 ) {
-  const userManager = useUserState();
   const linkSx: SxProps = {
     color: "text.primary",
     margin: "0 15px",
   };
 
-  if (userManager == undefined) return undefined;
   return (
     <Box
       {...props}
       display={"flex"}
     >
-      <Link sx={linkSx} href={"/login"}><Typography>ログイン</Typography></Link>
-      <Link sx={linkSx} href={"/user/create"}><Typography>新規登録</Typography></Link>
+      <LoginButton sx={linkSx}/>
+      <RegisterUserButton sx={linkSx}/>
+      <UserMenuButton sx={linkSx}/>
     </Box>
   );
 }

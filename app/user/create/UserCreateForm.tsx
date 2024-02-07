@@ -7,9 +7,8 @@ import {PasswordTextField} from "../../_unit/PasswordTextField";
 import {createUser} from "../../_client/serverActionApi";
 import {useState} from "react";
 import {ErrorMessage} from "../../_unit/ErrorMessage";
-import {useLoginState} from "../../_manager/loginManager";
 import {TextInput} from "../../_unit/TextInput";
-import {userManager} from "../../_manager/userManager";
+import {useUserState} from "../../_manager/userManager";
 import {redirect} from "next/navigation";
 
 export interface LoginFormProps extends OverrideProps<BoxTypeMap, any> {
@@ -24,9 +23,9 @@ export function UserCreateForm(
     width: "100%", margin: "10px 0",
   };
   const [error, setError] = useState<string>();
-  const loginManager = useLoginState();
+  const userState = useUserState();
 
-  if (loginManager == undefined) return undefined;
+  if (userState == undefined) return undefined;
   return (<Box
     {...props}
     component={"form"}
@@ -44,8 +43,8 @@ export function UserCreateForm(
             setError(value.error.message);
             return;
           } else setError(undefined);
-          loginManager.setTokensRes(value.value?.tokens);
-          userManager.setPostUserRes(value.value);
+          userState.loginManager.setTokensRes(value.value?.tokens);
+          userState.userManager.setPostUserRes(value.value);
           redirect("/");
         });
     }}

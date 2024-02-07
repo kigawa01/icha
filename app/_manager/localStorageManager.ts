@@ -26,8 +26,7 @@ export function useLocalStorageManager(): LocalStorageManager | undefined {
     useState<LocalStorageManager | undefined>(localStorageManager);
   useEffect(() => {
     if (storage != undefined) return;
-    if (localStorageManager != undefined) return;
-    localStorageManager = new LocalStorageManager(window.localStorage);
+    if (localStorageManager == undefined) localStorageManager = new LocalStorageManager(window.localStorage);
     setStorage(localStorageManager);
   }, []);
   return storage;

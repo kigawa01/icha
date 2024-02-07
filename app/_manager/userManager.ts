@@ -1,7 +1,8 @@
-import {useMemo} from "react";
-import {useLoginState} from "./loginManager";
+import {useEffect, useMemo, useState} from "react";
+import {LoginState, useLoginState} from "./loginManager";
 import {GlobalState} from "../../script/util/hook/globalState";
 import {getSelfUser} from "../_client/serverActionApi";
+import {PostUserRes} from "../../api_clients";
 
 export interface User {
   name: string;
@@ -28,37 +29,47 @@ export class UserManager {
     });
   }
 
+  setPostUserRes(postUserRes: PostUserRes | undefined) {
+    if (postUserRes == undefined) {
+      userState.set(undefined);
+      return;
+    }
+    userState.set({email: postUserRes.email, name: postUserRes.name, uid: postUserRes.uid});
+  }
 }
 
-export interface UserState {
+export interface UserState extends LoginState {
   userManager: UserManager;
   user: User | undefined;
-  ready: boolean;
+  readyUser: boolean;
 }
 
-let usermanager: UserManager | undefined = undefined;
+let userManager: UserManager | undefined = undefined;
 
 export function useUserState(): UserState | undefined {
   const loginState = useLoginState();
   const user = userState.use();
   const ready = readyState.use();
+  const [manager, setManager] = useState(userManager);
 
-  const userManager = useMemo(() => {
-    if (loginState == undefined) return undefined;
-    if (!loginState.ready) return undefined;
-    if (usermanager != undefined) return usermanager;
-    usermanager = new UserManager();
+  useEffect(() => {
+    if (manager != undefined) return;
+    if (loginState == undefined) return;
+    if (!loginState.readyLogin) return;
 
-    return usermanager;
+    if (userManager == undefined) userManager = new UserManager();
+    setManager(userManager);
   }, [loginState]);
 
   return useMemo(() => {
+    if (loginState == undefined) return undefined;
     if (userManager == undefined) return undefined;
 
     return {
-      ready: ready,
+      readyUser: ready,
       userManager: userManager,
       user: user,
+      ...loginState,
     };
-  }, [userManager, user]);
+  }, [userManager, user, ready]);
 }

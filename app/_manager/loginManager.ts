@@ -2,7 +2,7 @@ import {GlobalState} from "../../script/util/hook/globalState";
 import {TokensRes} from "../../api_clients";
 import {LocalStorageManager, useLocalStorageManager} from "./localStorageManager";
 import {clientConfig} from "../_client/api";
-import {useMemo} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {refresh} from "../_client/serverActionApi";
 
 export interface TokenState {
@@ -84,25 +84,27 @@ let loginManager: LoginManager | undefined = undefined;
 
 export interface LoginState {
   loginManager: LoginManager;
-  ready: boolean;
+  readyLogin: boolean;
 }
 
 export function useLoginState(): LoginState | undefined {
   const localStorageManager = useLocalStorageManager();
-
-  const manager = useMemo(() => {
-    if (localStorageManager == undefined) return undefined;
-    if (loginManager != undefined) return loginManager;
-    loginManager = new LoginManager(localStorageManager);
-    return loginManager;
-  }, [localStorageManager]);
+  const [manager, setManager] = useState(loginManager);
   const ready = readyState.use();
+
+  useEffect(() => {
+    if (manager != undefined) return;
+    if (localStorageManager == undefined) return;
+    if (loginManager == undefined) loginManager = new LoginManager(localStorageManager);
+
+    setManager(loginManager);
+  }, [localStorageManager]);
 
   return useMemo(() => {
     if (manager == undefined) return undefined;
     return {
       loginManager: manager,
-      ready: ready,
+      readyLogin: ready,
     };
   }, [manager, ready]);
 }
