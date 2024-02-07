@@ -1,6 +1,5 @@
 import {TokensRes} from "../../api_clients";
 import {LocalStorageManager, useLocalStorageManager} from "./localStorageManager";
-import {clientConfig} from "../_client/api";
 import {useEffect, useMemo, useState} from "react";
 import {refresh} from "../_client/serverActionApi";
 import {GlobalState} from "../_hook/globalState";
@@ -46,10 +45,8 @@ export class LoginManager {
     if (tokens == undefined) {
       refreshState.set(undefined);
       accessState.set(undefined);
-      clientConfig.accessToken = undefined;
       return;
     }
-    clientConfig.accessToken = tokens.access_token.token;
     const accessTokenState = {
       expire: new Date(tokens.access_token.expires_in),
       token: tokens.access_token.token,

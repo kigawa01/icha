@@ -2,7 +2,7 @@
 import {api} from "./api";
 import {AxiosError, AxiosResponse} from "axios";
 import {LoginRes, TokensRes, UserRes} from "../../api_clients";
-import {ErrorRes} from "./_error";
+import {ErrorIds, ErrorRes} from "./_error";
 
 export async function createUser(email: string, password: string, username: string): Promise<Result<LoginRes>> {
   return await fetch(api.defaultApi.createUserApiUserPost({
@@ -13,7 +13,7 @@ export async function createUser(email: string, password: string, username: stri
 export async function login(email: string, password: string): Promise<Result<LoginRes>> {
   return await fetch(api.defaultApi.loginApiLoginPost({
     email: email, password: password,
-  }));
+  }, {}));
 }
 
 export async function refresh(): Promise<Result<TokensRes>> {
@@ -27,8 +27,17 @@ export async function getSelfUser(): Promise<Result<UserRes>> {
 async function fetch<R>(res: Promise<AxiosResponse<R>>): Promise<Result<R>> {
   return res.then(value => {
     return {value: value.data};
-  }).catch((reason: AxiosError<ErrorRes>) => {
-    return {error: reason.response?.data};
+  }).catch((reason: AxiosError<ErrorRes | string>) => {
+    const response = reason.response;
+    if (response == undefined) {
+      console.error(reason.message);
+      return {error: ErrorIds.createResponse(ErrorIds.UnknownError, reason.message)};
+    }
+    if (typeof response.data == "string") {
+      console.error(response.data);
+      return {error: ErrorIds.createResponse(ErrorIds.UnknownError, response.data)};
+    }
+    return {error: response.data};
   });
 }
 

@@ -10,7 +10,6 @@ export function UserMenuButton(
   }: UserMenuButtonProps,
 ) {
   const userState = useUserState();
-  console.debug(userState)
   if (userState == undefined) return undefined;
   if (!userState.readyUser) return undefined;
   if (userState.user == undefined) return undefined;
