@@ -1,8 +1,8 @@
 import {useEffect, useMemo, useState} from "react";
 import {LoginState, useLoginState} from "./loginManager";
-import {GlobalState} from "../../script/util/hook/globalState";
 import {getSelfUser} from "../_client/serverActionApi";
-import {PostUserRes} from "../../api_clients";
+import {LoginRes} from "../../api_clients";
+import {GlobalState} from "../_hook/globalState";
 
 export interface User {
   name: string;
@@ -29,7 +29,7 @@ export class UserManager {
     });
   }
 
-  setPostUserRes(postUserRes: PostUserRes | undefined) {
+  setLoginRes(postUserRes: LoginRes | undefined) {
     if (postUserRes == undefined) {
       userState.set(undefined);
       return;

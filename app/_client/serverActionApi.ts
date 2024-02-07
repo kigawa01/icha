@@ -1,16 +1,16 @@
 "use server";
 import {api} from "./api";
 import {AxiosError, AxiosResponse} from "axios";
-import {ErrorRes} from "../../script/response/response";
-import {PostUserRes, TokensRes, UserRes} from "../../api_clients";
+import {LoginRes, TokensRes, UserRes} from "../../api_clients";
+import {ErrorRes} from "./_error";
 
-export async function createUser(email: string, password: string, username: string): Promise<Result<PostUserRes>> {
+export async function createUser(email: string, password: string, username: string): Promise<Result<LoginRes>> {
   return await fetch(api.defaultApi.createUserApiUserPost({
     email: email, name: username, password: password,
   }));
 }
 
-export async function login(email: string, password: string): Promise<Result<TokensRes>> {
+export async function login(email: string, password: string): Promise<Result<LoginRes>> {
   return await fetch(api.defaultApi.loginApiLoginPost({
     email: email, password: password,
   }));

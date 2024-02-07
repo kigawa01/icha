@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/icha-backend.iml" filepath="$PROJECT_DIR$/icha-backend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/icha.iml" filepath="$PROJECT_DIR$/icha.iml" />
     </modules>
   </component>
 </project>

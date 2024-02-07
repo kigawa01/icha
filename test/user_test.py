@@ -2,7 +2,7 @@ import pytest
 from sqlalchemy import select, func
 
 from icha import data
-from icha.data import PostUserRes, PostUserBody
+from icha.data import LoginRes, PostUserBody
 from icha.table.table import UserTable
 
 
@@ -24,7 +24,7 @@ async def test_create_user(session_maker, new_post_user_body, client):
     assert result.status_code == 200, f"invalid status code {result.data}"
     body = result.json()
     assert body is not None
-    body = data.PostUserRes(**body)
+    body = data.LoginRes(**body)
     async with session_maker() as session:
         result = await session.execute(
             select(func.count())

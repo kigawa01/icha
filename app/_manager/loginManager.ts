@@ -1,9 +1,9 @@
-import {GlobalState} from "../../script/util/hook/globalState";
 import {TokensRes} from "../../api_clients";
 import {LocalStorageManager, useLocalStorageManager} from "./localStorageManager";
 import {clientConfig} from "../_client/api";
 import {useEffect, useMemo, useState} from "react";
 import {refresh} from "../_client/serverActionApi";
+import {GlobalState} from "../_hook/globalState";
 
 export interface TokenState {
   token: string,

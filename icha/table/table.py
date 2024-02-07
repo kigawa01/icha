@@ -64,9 +64,9 @@ class UserTable(BaseTable):
     def check_password(self, password: str):
         return passwd.verify_password(password, self.password)
 
-    def to_post_user_res(self):
+    def to_login_res(self):
         from icha import tokens
-        res = data.PostUserRes.from_args(
+        res = data.LoginRes.from_args(
             uid=self.uid,
             name=self.name,
             email=self.email,

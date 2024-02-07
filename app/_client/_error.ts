@@ -12,3 +12,8 @@ function createErrorId(name: string): ErrorId {
 interface ErrorId {
   name: string;
 }
+
+export interface ErrorRes {
+  error_id: string;
+  message: string;
+}

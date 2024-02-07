@@ -4,6 +4,7 @@ import {TextFieldProps} from "@mui/material/TextField/TextField";
 export function TextInput(
   {
     color,
+    margin,
     ...props
   }: TextInputProps & TextFieldProps,
 ) {
@@ -11,8 +12,11 @@ export function TextInput(
     <TextField
       {...props}
       color={color || "secondary"}
-    >
-    </TextField>
+      sx={{
+        width: "100%",
+        margin: margin || "10px 0",
+      }}
+    />
   );
 }
 

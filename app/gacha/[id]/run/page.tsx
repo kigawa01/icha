@@ -1,10 +1,8 @@
-import {BoxTypeMap} from "@mui/system/Box/Box";
-import {OverrideProps} from "@mui/types";
 import {Main} from "../../../_unit/Main";
 import {Button, Typography} from "@mui/material";
 
 export default function Page(
-  {}: PageProps,
+  {}: {},
 ) {
 
 
@@ -17,5 +15,3 @@ export default function Page(
   );
 }
 
-export interface PageProps extends OverrideProps<BoxTypeMap, any> {
-}

@@ -2,7 +2,7 @@
 import {Box} from "@mui/system";
 import {BoxTypeMap} from "@mui/system/Box/Box";
 import {OverrideProps} from "@mui/types";
-import {Button, SxProps} from "@mui/material";
+import {Button} from "@mui/material";
 import {PasswordTextField} from "../../_unit/PasswordTextField";
 import {createUser} from "../../_client/serverActionApi";
 import {useState} from "react";
@@ -19,9 +19,6 @@ export function UserCreateForm(
     ...props
   }: LoginFormProps,
 ) {
-  const child: SxProps = {
-    width: "100%", margin: "10px 0",
-  };
   const [error, setError] = useState<string>();
   const userState = useUserState();
 
@@ -44,28 +41,25 @@ export function UserCreateForm(
             return;
           } else setError(undefined);
           userState.loginManager.setTokensRes(value.value?.tokens);
-          userState.userManager.setPostUserRes(value.value);
+          userState.userManager.setLoginRes(value.value);
           redirect("/");
         });
     }}
   >
     <ErrorMessage error={error}/>
     <TextInput
-      sx={child}
       color={"secondary"}
       label={"ユーザー名"}
       name={"username"}
       required={true}
     />
     <TextInput
-      sx={child}
       label={"Eメール"}
       type={"email"}
       name={"email"}
       required={true}
     />
     <PasswordTextField
-      sx={child}
       label={"パスワード"}
       name={"password"}
       required={true}
