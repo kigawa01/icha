@@ -5,41 +5,41 @@ import {OverrideProps} from "@mui/types";
 import {TextInput} from "../_unit/TextInput";
 import {PasswordTextField} from "../_unit/PasswordTextField";
 import {Button} from "@mui/material";
-import {login} from "../_client/serverActionApi";
-import {redirect} from "next/navigation";
-import {useUserState} from "../_manager/userManager";
-import {useState} from "react";
 import {ErrorMessage} from "../_unit/ErrorMessage";
+
+import {useFormState} from "react-dom";
+import {apiClient} from "../_client/api";
+import {redirect} from "next/navigation";
+import {setTokensState} from "../_manager/TokenProvider";
+import {useUser} from "../_manager/UserProvider";
 
 export function LoginForm(
   {
     ...props
   }: LoginFormProps,
 ) {
-  const userState = useUserState();
-  const [error, setError] = useState<string>();
+  const userState = useUser();
+  const [error, action] = useFormState(async (_: string | undefined, data: FormData) => {
+    const email = data.get("email");
+    const password = data.get("password");
+    if (typeof email !== "string") return "Eメールを入力してください";
+    if (typeof password !== "string") return "パスワードを入力してください";
 
+    const authResponse = await apiClient.login(email, password);
+    if (authResponse.error) return authResponse.error.message;
+    if (authResponse.value == undefined) return "token is undefined";
+
+    setTokensState(authResponse.value.tokens);
+
+    redirect("/");
+  }, undefined);
   if (userState == undefined) return undefined;
+  if (userState.userRes) redirect("/");
   return (
     <Box
       {...props}
       component={"form"}
-      action={async (data: FormData) => {
-        const email = data.get("email");
-        const password = data.get("password");
-        if (typeof email !== "string") return;
-        if (typeof password !== "string") return;
-        await login(email, password)
-          .then(value => {
-            if (value.error) {
-              setError(value.error.message);
-              return;
-            } else setError(undefined);
-            userState.loginManager.setTokensRes(value.value?.tokens);
-            userState.userManager.setLoginRes(value.value);
-            redirect("/");
-          });
-      }}
+      action={action}
     >
       <ErrorMessage error={error}/>
       <TextInput

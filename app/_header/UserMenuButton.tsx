@@ -2,23 +2,22 @@
 import {OverrideProps} from "@mui/types";
 import {Button, Typography} from "@mui/material";
 import {ButtonTypeMap} from "@mui/material/Button/Button";
-import {useUserState} from "../_manager/userManager";
+import {useUser} from "../_manager/UserProvider";
 
 export function UserMenuButton(
   {
     ...props
   }: UserMenuButtonProps,
 ) {
-  const userState = useUserState();
+  const userState = useUser();
   if (userState == undefined) return undefined;
-  if (!userState.readyUser) return undefined;
-  if (userState.user == undefined) return undefined;
+  if (userState.userRes == undefined) return undefined;
 
   return (
     <Button
       {...props}
     >
-      <Typography>{userState.user.name}</Typography>
+      <Typography>{userState.userRes.name}</Typography>
     </Button>
   );
 }

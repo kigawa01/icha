@@ -2,17 +2,15 @@
 import {OverrideProps} from "@mui/types";
 import {Link, Typography} from "@mui/material";
 import {LinkTypeMap} from "@mui/material/Link/Link";
-import {useUserState} from "../_manager/userManager";
+import {useUser} from "../_manager/UserProvider";
 
 export function RegisterUserButton(
   {
     ...props
   }: RegisterUserProps,
 ) {
-  const userState = useUserState();
+  const userState = useUser();
   if (userState == undefined) return undefined;
-  if (!userState.readyUser) return undefined;
-  if (userState.user) return undefined;
 
   return (
     <Link

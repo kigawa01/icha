@@ -4,13 +4,13 @@ import {Theme} from "./_unit/Theme";
 import {Footer} from "./_footer/Footer";
 import {Toolbar} from "@mui/material";
 import {Box} from "@mui/system";
-
+import UserProvider from "./_manager/UserProvider";
 
 export default function RootLayout(
   {
     children,
   }: {
-    children: ReactNode
+    children: ReactNode,
   },
 ) {
 
@@ -27,8 +27,8 @@ export default function RootLayout(
       boxSizing={"border-box"}
       margin={0}
     >
+      <UserProvider/>
       <Theme>
-
         <Header/>
         <Box
           display={"flex"}
@@ -39,7 +39,6 @@ export default function RootLayout(
           {children}
           <Footer/>
         </Box>
-
       </Theme>
     </Box>
   </html>;

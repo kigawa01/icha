@@ -4,12 +4,13 @@ import {BoxTypeMap} from "@mui/system/Box/Box";
 import {OverrideProps} from "@mui/types";
 import {Button} from "@mui/material";
 import {PasswordTextField} from "../../_unit/PasswordTextField";
-import {createUser} from "../../_client/serverActionApi";
 import {useState} from "react";
 import {ErrorMessage} from "../../_unit/ErrorMessage";
 import {TextInput} from "../../_unit/TextInput";
-import {useUserState} from "../../_manager/userManager";
 import {redirect} from "next/navigation";
+import {useUser} from "../../_manager/UserProvider";
+import {apiClient} from "../../_client/api";
+import {setTokensState} from "../../_manager/TokenProvider";
 
 export interface LoginFormProps extends OverrideProps<BoxTypeMap, any> {
 }
@@ -20,9 +21,10 @@ export function UserCreateForm(
   }: LoginFormProps,
 ) {
   const [error, setError] = useState<string>();
-  const userState = useUserState();
-
+  const userState = useUser();
   if (userState == undefined) return undefined;
+  if (userState.userRes) redirect("/");
+
   return (<Box
     {...props}
     component={"form"}
@@ -34,14 +36,13 @@ export function UserCreateForm(
       if (typeof email !== "string") return;
       if (typeof password !== "string") return;
       if (typeof username !== "string") return;
-      await createUser(email, password, username)
+      await apiClient.createUser(email, password, username)
         .then(value => {
           if (value.error) {
             setError(value.error.message);
             return;
           } else setError(undefined);
-          userState.loginManager.setTokensRes(value.value?.tokens);
-          userState.userManager.setLoginRes(value.value);
+          setTokensState(value.value?.tokens);
           redirect("/");
         });
     }}

@@ -66,3 +66,14 @@ async def exception_handler(request, exc: Exception):
         )),
         status_code=ErrorIds.INTERNAL_ERROR.value.status_code
     )
+
+
+@app.exception_handler(401)
+async def exception_handler(request, exc: Exception):
+    return JSONResponse(
+        content=asdict(ErrorRes(
+            ErrorIds.UNAUTHORIZED.name,
+            exc.__str__()
+        )),
+        status_code=ErrorIds.UNAUTHORIZED.value.status_code
+    )

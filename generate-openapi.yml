@@ -23,7 +23,7 @@ services:
     image: openapitools/openapi-generator-cli
     volumes:
       - ./:/src
-    command: generate -i http://back:8000/openapi.json -g typescript-axios -o /src/api_clients --skip-validate-spec
+    command: generate -i http://back:8000/openapi.json -g typescript-fetch -o /src/api_clients --skip-validate-spec
     depends_on:
       back:
         condition: service_healthy

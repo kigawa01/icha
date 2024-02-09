@@ -1,7 +1,7 @@
 /venv/
 /node_modules/
-/.env
 /script/api_clients/
 /public/
 /.next/
 /api_clients/
+/.env.local
