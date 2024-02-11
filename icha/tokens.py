@@ -5,7 +5,7 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 from pydantic import BaseModel
 
-from app import ACCESS_TOKEN_EXPIRE_MINUTES, SECRET_KEY, ALGORITHM, REFRESH_TOKEN_EXPIRE_MINUTES, logger
+from app import ACCESS_TOKEN_EXPIRE_MINUTES, SECRET_KEY, ALGORITHM, REFRESH_TOKEN_EXPIRE_MINUTES
 from icha.data import Token, TokensRes
 from icha.error import ErrorIdException, ErrorIds
 from icha.table.table import UserTable
@@ -49,7 +49,6 @@ class TokenData(BaseModel):
 
 
 def get_token(token: str = Depends(oauth2_scheme)):
-    logger.info(token)
     return TokenData(**jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM]))
 
 

@@ -32,7 +32,6 @@ export function TokenProvider(
 
     const refreshToken = storage.getItem(STORAGE_TOKEN_KEY);
     if (refreshToken == undefined) setTokensState(undefined);
-
     else tokenRefresh(refreshToken).catch(reason => {
       if (reason instanceof ErrorDataException) console.error(reason.message);
       else console.error(reason);
@@ -75,17 +74,15 @@ export async function tokenRefresh(refreshToken: string) {
   const tokens = res.value;
   if (tokens == undefined)
     throw new ErrorDataException(ErrorIds.UnknownError.createData("response is undefined"));
+  setTokensState(tokens);
 
   if (taskId != undefined) {
     clearTimeout(taskId);
   }
   const current = new Date();
-  const ms = tokens.accessToken.expiresIn.getTime() - current.getTime();
-  if (ms <= 0) {
-    setTokensState(res.value);
-    return;
-  }
+  let ms = tokens.accessToken.expiresIn.getTime() - current.getTime();
 
+  if (ms <= 0) ms = 0;
   taskId = setTimeout(() => {
     tokenRefresh(tokens.refreshToken.token)
       .catch(reason => {

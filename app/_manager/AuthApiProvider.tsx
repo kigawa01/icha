@@ -7,7 +7,7 @@ export function AuthApiProvider(
   {}: {},
 ) {
   const tokens = useTokensState();
-
+  console.debug("api", tokens);
   useEffect(() => {
     if (tokens == undefined) return;
 

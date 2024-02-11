@@ -1,8 +1,11 @@
 "use client";
 import {OverrideProps} from "@mui/types";
-import {Button, Typography} from "@mui/material";
+import {Button, Menu, MenuItem, Typography} from "@mui/material";
 import {ButtonTypeMap} from "@mui/material/Button/Button";
 import {useUser} from "../_manager/UserProvider";
+import {Box} from "@mui/system";
+import {setTokensState} from "../_manager/TokenProvider";
+import {useState} from "react";
 
 export function UserMenuButton(
   {
@@ -10,15 +13,41 @@ export function UserMenuButton(
   }: UserMenuButtonProps,
 ) {
   const userState = useUser();
+  const [menuAnchorElement, setMenuAnchorElement] = useState<HTMLElement>();
   if (userState == undefined) return undefined;
   if (userState.userRes == undefined) return undefined;
 
   return (
-    <Button
+    <Box
       {...props}
+      sx={{
+        position: "relative",
+        cursor: "pointer",
+        "&:hover": {
+          textDecoration: "underline",
+        },
+      }}
     >
-      <Typography>{userState.userRes.name}</Typography>
-    </Button>
+      <Button
+        onClick={event => setMenuAnchorElement(menuAnchorElement ? undefined : event.currentTarget)}
+        aria-controls={menuAnchorElement ? "basic-menu" : undefined}
+        aria-haspopup="true"
+        aria-expanded={menuAnchorElement ? "true" : undefined}
+        sx={{color: "black"}}
+      >
+        <Typography>{userState.userRes.name}</Typography>
+      </Button>
+      <Menu
+        open={menuAnchorElement != undefined}
+        anchorEl={menuAnchorElement}
+        onClose={_ => setMenuAnchorElement(undefined)}
+      >
+        <MenuItem onClick={_ => {
+          setTokensState(undefined);
+          setMenuAnchorElement(undefined);
+        }}>ログアウト</MenuItem>
+      </Menu>
+    </Box>
   );
 }
 

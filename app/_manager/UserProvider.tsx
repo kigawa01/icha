@@ -40,6 +40,7 @@ export interface UserState {
 }
 
 const userState = new GlobalState<UserState | undefined>(undefined);
+
 export function useUser() {
-  return userState.use()
+  return userState.use();
 }

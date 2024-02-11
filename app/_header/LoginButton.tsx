@@ -11,6 +11,7 @@ export function LoginButton(
 ) {
   const userState = useUser();
   if (userState == undefined) return undefined;
+  if (userState.userRes != undefined) return undefined;
 
   return (
     <Link
