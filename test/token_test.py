@@ -5,7 +5,7 @@ from jose import jwt
 
 from app import SECRET_KEY, ALGORITHM
 from icha import data
-from icha.tokens import TokenData
+from icha.tokens import JwtTokenData
 
 
 @pytest.fixture
@@ -17,14 +17,14 @@ def login_body(post_user_body):
 
 
 @pytest.fixture
-def refresh_token(session_maker, post_user_body, user_table) -> data.Token:
+def refresh_token(session_maker, post_user_body, user_table) -> data.TokenData:
     expire = datetime.now(timezone.utc) + timedelta(minutes=1)
     encoded_jwt = jwt.encode(
-        TokenData.from_args(exp=expire, user_id=user_table, token_type="refresh").model_dump(),
+        JwtTokenData.from_args(exp=expire, user_id=user_table, token_type="refresh").model_dump(),
         SECRET_KEY,
         algorithm=ALGORITHM
     )
-    return data.Token.from_args(encoded_jwt, expire)
+    return data.TokenData.from_args(encoded_jwt, expire)
 
 
 @pytest.mark.asyncio
@@ -38,7 +38,7 @@ async def test_login(client, session_maker, login_body, user_table):
     assert body is not None
     body = data.LoginRes(**body)
 
-    assert user_table == TokenData(
+    assert user_table == JwtTokenData(
         **jwt.decode(body.tokens.access_token.token, SECRET_KEY, algorithms=[ALGORITHM])
     ).user_id
 
@@ -55,7 +55,7 @@ async def test_refresh(client, session_maker, login_body, user_table, refresh_to
     assert body is not None
     body = data.TokensRes(**body)
 
-    assert user_table == TokenData(
+    assert user_table == JwtTokenData(
         **jwt.decode(body.access_token.token, SECRET_KEY, algorithms=[ALGORITHM])
     ).user_id
     assert await client.get("/api/refresh", token=body.refresh_token.token)

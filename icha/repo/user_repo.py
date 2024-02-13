@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from icha import data
 from icha.error import ErrorIdException, ErrorIds
 from icha.table.table import UserTable
-from icha.tokens import TokenData
+from icha.tokens import JwtTokenData
 
 
 async def by_uid(session: AsyncSession, uid: int) -> UserTable:
@@ -18,7 +18,7 @@ async def by_uid(session: AsyncSession, uid: int) -> UserTable:
     return result
 
 
-async def by_token(session: AsyncSession, token: TokenData) -> UserTable:
+async def by_token(session: AsyncSession, token: JwtTokenData) -> UserTable:
     return await by_uid(session, token.user_id)
 
 

@@ -1,9 +1,9 @@
 import {Main} from "../../_unit/Main";
 import {ImageEdit} from "../../_unit/ImageEdit";
-import {Button} from "@mui/material";
 import {Section} from "../../_unit/_section/Section";
 import {Box} from "@mui/system";
 import {TextInput} from "../../_unit/TextInput";
+import {Button} from "@mui/material";
 
 export default function Page(
   {}: {},
@@ -16,7 +16,7 @@ export default function Page(
     >
 
 
-      <Section sectionTitle={"メイン"}>
+      <Section sectionTitle={"画像投稿"}>
         <ImageEdit/>
         <TextInput
           label={"ガチャ名"}

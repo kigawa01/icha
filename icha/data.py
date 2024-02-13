@@ -12,21 +12,21 @@ class LoginBody(BaseModel):
         return LoginBody(email=email, password=password)
 
 
-class Token(BaseModel):
+class TokenData(BaseModel):
     token: str
     expires_in: datetime
 
     @staticmethod
-    def from_args(token: str, expires_in: datetime) -> 'Token':
-        return Token(token=token, expires_in=expires_in)
+    def from_args(token: str, expires_in: datetime) -> 'TokenData':
+        return TokenData(token=token, expires_in=expires_in)
 
 
 class TokensRes(BaseModel):
-    access_token: Token
-    refresh_token: Token
+    access_token: TokenData
+    refresh_token: TokenData
 
     @staticmethod
-    def from_args(access_token: Token, refresh_token: Token):
+    def from_args(access_token: TokenData, refresh_token: TokenData):
         return TokensRes(access_token=access_token, refresh_token=refresh_token)
 
 
@@ -59,3 +59,32 @@ class UserRes(BaseModel):
     @staticmethod
     def from_args(uid: int, name: str, email: str):
         return UserRes(uid=uid, name=name, email=email)
+
+
+class ImageData(BaseModel):
+    image_data: str
+    name: str
+
+
+class LicenceData(BaseModel):
+    text: str
+    business: bool | str
+    post: bool | str
+    credit: bool | str
+    distribution: bool | str
+    material: bool | str
+
+
+class GachaContent(BaseModel):
+    image: ImageData
+    title: str
+    description: str
+    rate: int
+
+
+class GachaBody(BaseModel):
+    thumbnail: ImageData
+    name: str
+    description: str
+    licence: LicenceData
+    contents: list[GachaContent]

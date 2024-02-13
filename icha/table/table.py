@@ -1,7 +1,7 @@
 import os
 
 import dotenv
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Text, ForeignKey
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Mapped
@@ -45,7 +45,7 @@ async def get_session():
 
 class UserTable(BaseTable):
     __tablename__ = "user"
-    uid: Mapped[int] = Column(Integer, primary_key=True, name="id", autoincrement=True)
+    uid: Mapped[int] = Column(Integer, primary_key=True, name="uid", autoincrement=True)
     name: Mapped[str] = Column(String(32), nullable=False)
     email: Mapped[str] = Column(String(32), nullable=False, unique=True)
     password: Mapped[str] = Column(String(128), nullable=False)
@@ -81,3 +81,45 @@ class UserTable(BaseTable):
             email=self.email,
         )
         return res
+
+
+class GachaTable(BaseTable):
+    __tablename__ = "gacha"
+    uid: Mapped[int] = Column(Integer, primary_key=True, name="uid", autoincrement=True)
+    user_id: Mapped[int] = Column(ForeignKey("user.uid"))
+    name: Mapped[str] = Column(String(64), nullable=False)
+    description: Mapped[str] = Column(String(255), nullable=False)
+
+
+class ThumbnailTable(BaseTable):
+    __tablename__ = 'thumbnail'
+    gacha_id: Mapped[int] = Column(ForeignKey("gacha.uid", ondelete="CASCADE"), primary_key=True)
+    name: Mapped[str] = Column(String(64), nullable=False)
+    data: Mapped[str] = Column(Text(16_000_000), nullable=False)
+
+
+class LicenceTable(BaseTable):
+    __tablename__ = 'licence'
+    gacha_id: Mapped[int] = Column(ForeignKey("gacha.uid", ondelete="CASCADE"), primary_key=True)
+    text: Mapped[str] = Column(String(255), nullable=False)
+    business: Mapped[str] = Column(String(128), nullable=False)
+    post: Mapped[str] = Column(String(128), nullable=False)
+    credit: Mapped[str] = Column(String(128), nullable=False)
+    distribution: Mapped[str] = Column(String(128), nullable=False)
+    material: Mapped[str] = Column(String(128), nullable=False)
+
+
+class GachaContent(BaseTable):
+    __tablename__ = "content"
+    uid: Mapped[int] = Column(Integer, primary_key=True, name="uid", autoincrement=True)
+    gacha_id: Mapped[int] = Column(ForeignKey("gacha.uid", ondelete="CASCADE"))
+    title: Mapped[str] = Column(String(128), nullable=False)
+    description: Mapped[str] = Column(String(255), nullable=False)
+    rate: Mapped[int] = Column(Integer)
+
+
+class GachaContentImageTable(BaseTable):
+    __tablename__ = 'content_image'
+    content_id: Mapped[int] = Column(ForeignKey("content.uid", ondelete="CASCADE"), primary_key=True)
+    name: Mapped[str] = Column(String(64), nullable=False)
+    data: Mapped[str] = Column(Text(16_000_000), nullable=False)

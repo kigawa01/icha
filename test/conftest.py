@@ -7,10 +7,10 @@ from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 
 import app as main
 from icha import data
-from icha.data import Token
+from icha.data import TokenData
 from icha.table import table
 from icha.table.table import get_session, BaseTable
-from icha.tokens import TokenData
+from icha.tokens import JwtTokenData
 from test.base import Client
 
 
@@ -70,11 +70,11 @@ def user_table(session_maker, post_user_body) -> int:
 
 
 @pytest.fixture
-def access_token(session_maker, post_user_body, user_table) -> data.Token:
+def access_token(session_maker, post_user_body, user_table) -> data.TokenData:
     expire = datetime.now(timezone.utc) + timedelta(minutes=1)
     encoded_jwt = jwt.encode(
-        TokenData.from_args(exp=expire, user_id=user_table, token_type="access").model_dump(),
+        JwtTokenData.from_args(exp=expire, user_id=user_table, token_type="access").model_dump(),
         main.SECRET_KEY,
         algorithm=main.ALGORITHM
     )
-    return Token.from_args(encoded_jwt, expire)
+    return TokenData.from_args(encoded_jwt, expire)
