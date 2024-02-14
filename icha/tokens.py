@@ -1,14 +1,17 @@
 from datetime import timedelta, datetime, timezone
+from typing import Coroutine, Any
 
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
-from pydantic import BaseModel
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app import ACCESS_TOKEN_EXPIRE_MINUTES, SECRET_KEY, ALGORITHM, REFRESH_TOKEN_EXPIRE_MINUTES
+from icha import data
 from icha.data import TokenData, TokensRes
 from icha.error import ErrorIdException, ErrorIds
-from icha.table.table import UserTable
+from icha.repo import user_repo
+from icha.table import UserTable, get_session
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/refresh")
 
@@ -16,7 +19,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/refresh")
 def create_token(user_id: int, token_type: str = "access", expires_delta: timedelta | None = None):
     expire = datetime.now(timezone.utc) + expires_delta
     encoded_jwt = jwt.encode(
-        JwtTokenData.from_args(exp=expire, user_id=user_id, token_type=token_type).model_dump(),
+        data.JwtTokenData.from_args(exp=expire, user_id=user_id, token_type=token_type).model_dump(),
         SECRET_KEY,
         algorithm=ALGORITHM
     )
@@ -38,21 +41,18 @@ def create_tokens(user: UserTable):
     )
 
 
-class JwtTokenData(BaseModel):
-    exp: datetime
-    token_type: str
-    user_id: int
-
-    @staticmethod
-    def from_args(exp: datetime, token_type: str, user_id: int):
-        return JwtTokenData(exp=exp, token_type=token_type, user_id=user_id)
-
-
 def get_token(token: str = Depends(oauth2_scheme)):
-    return JwtTokenData(**jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM]))
+    return data.JwtTokenData(**jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM]))
 
 
-def access_token(token: JwtTokenData = Depends(get_token)):
+def access_token(token: data.JwtTokenData = Depends(get_token)):
     if token.token_type != "access":
         raise ErrorIdException(ErrorIds.INVALID_TOKEN)
     return token
+
+
+def get_user(
+        session: AsyncSession = Depends(get_session),
+        token: data.JwtTokenData = Depends(access_token)
+) -> Coroutine[Any, Any, UserTable]:
+    return user_repo.by_token(session, token)

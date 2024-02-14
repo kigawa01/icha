@@ -8,9 +8,8 @@ from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 import app as main
 from icha import data
 from icha.data import TokenData
-from icha.table import table
-from icha.table.table import get_session, BaseTable
-from icha.tokens import JwtTokenData
+from icha.repo import user_repo
+from icha.table import get_session, BaseTable
 from test.base import Client
 
 
@@ -49,7 +48,7 @@ def session_maker(app):
 
 @pytest.fixture
 def post_user_body():
-    return data.PostUserBody.from_args(
+    return data.UserBody.from_args(
         name="userName",
         email="user@example.com",
         password="password"
@@ -59,9 +58,8 @@ def post_user_body():
 @pytest.fixture
 def user_table(session_maker, post_user_body) -> int:
     async def task():
-        user = table.UserTable.create(post_user_body)
         async with session_maker() as session:
-            session.add(user)
+            user = user_repo.create_user(session, post_user_body)
             await session.commit()
             await session.refresh(user)
             return user.uid
@@ -73,7 +71,7 @@ def user_table(session_maker, post_user_body) -> int:
 def access_token(session_maker, post_user_body, user_table) -> data.TokenData:
     expire = datetime.now(timezone.utc) + timedelta(minutes=1)
     encoded_jwt = jwt.encode(
-        JwtTokenData.from_args(exp=expire, user_id=user_table, token_type="access").model_dump(),
+        data.JwtTokenData.from_args(exp=expire, user_id=user_table, token_type="access").model_dump(),
         main.SECRET_KEY,
         algorithm=main.ALGORITHM
     )

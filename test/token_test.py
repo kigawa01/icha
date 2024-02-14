@@ -5,7 +5,6 @@ from jose import jwt
 
 from app import SECRET_KEY, ALGORITHM
 from icha import data
-from icha.tokens import JwtTokenData
 
 
 @pytest.fixture
@@ -20,7 +19,7 @@ def login_body(post_user_body):
 def refresh_token(session_maker, post_user_body, user_table) -> data.TokenData:
     expire = datetime.now(timezone.utc) + timedelta(minutes=1)
     encoded_jwt = jwt.encode(
-        JwtTokenData.from_args(exp=expire, user_id=user_table, token_type="refresh").model_dump(),
+        data.JwtTokenData.from_args(exp=expire, user_id=user_table, token_type="refresh").model_dump(),
         SECRET_KEY,
         algorithm=ALGORITHM
     )
@@ -38,7 +37,7 @@ async def test_login(client, session_maker, login_body, user_table):
     assert body is not None
     body = data.LoginRes(**body)
 
-    assert user_table == JwtTokenData(
+    assert user_table == data.JwtTokenData(
         **jwt.decode(body.tokens.access_token.token, SECRET_KEY, algorithms=[ALGORITHM])
     ).user_id
 
@@ -55,7 +54,7 @@ async def test_refresh(client, session_maker, login_body, user_table, refresh_to
     assert body is not None
     body = data.TokensRes(**body)
 
-    assert user_table == JwtTokenData(
+    assert user_table == data.JwtTokenData(
         **jwt.decode(body.access_token.token, SECRET_KEY, algorithms=[ALGORITHM])
     ).user_id
     assert await client.get("/api/refresh", token=body.refresh_token.token)

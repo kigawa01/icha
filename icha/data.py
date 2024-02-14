@@ -3,13 +3,14 @@ from datetime import datetime
 from pydantic import BaseModel
 
 
-class LoginBody(BaseModel):
-    email: str
-    password: str
+class JwtTokenData(BaseModel):
+    exp: datetime
+    token_type: str
+    user_id: int
 
     @staticmethod
-    def from_args(email: str, password: str):
-        return LoginBody(email=email, password=password)
+    def from_args(exp: datetime, token_type: str, user_id: int):
+        return JwtTokenData(exp=exp, token_type=token_type, user_id=user_id)
 
 
 class TokenData(BaseModel):
@@ -30,14 +31,13 @@ class TokensRes(BaseModel):
         return TokensRes(access_token=access_token, refresh_token=refresh_token)
 
 
-class PostUserBody(BaseModel):
-    name: str
+class LoginBody(BaseModel):
     email: str
     password: str
 
     @staticmethod
-    def from_args(name: str, email: str, password: str) -> 'PostUserBody':
-        return PostUserBody(name=name, email=email, password=password)
+    def from_args(email: str, password: str):
+        return LoginBody(email=email, password=password)
 
 
 class LoginRes(BaseModel):
@@ -51,6 +51,16 @@ class LoginRes(BaseModel):
         return LoginRes(uid=uid, name=name, email=email, tokens=tokens)
 
 
+class UserBody(BaseModel):
+    name: str
+    email: str
+    password: str
+
+    @staticmethod
+    def from_args(name: str, email: str, password: str) -> 'UserBody':
+        return UserBody(name=name, email=email, password=password)
+
+
 class UserRes(BaseModel):
     uid: int
     name: str
@@ -62,8 +72,14 @@ class UserRes(BaseModel):
 
 
 class ImageData(BaseModel):
-    image_data: str
+    base64: str
     name: str
+
+    @staticmethod
+    def create(name: str, base64: str):
+        return ImageData(
+            name=name, base64=base64
+        )
 
 
 class LicenceData(BaseModel):
@@ -74,8 +90,34 @@ class LicenceData(BaseModel):
     distribution: bool | str
     material: bool | str
 
+    @staticmethod
+    def create(
+            text: str,
+            business: bool | str,
+            post: bool | str,
+            credit: bool | str,
+            distribution: bool | str,
+            material: bool | str,
+    ):
+        return LicenceData(
+            text=text,
+            business=business,
+            post=post,
+            credit=credit,
+            distribution=distribution,
+            material=material
+        )
 
-class GachaContent(BaseModel):
+
+class GachaContentBody(BaseModel):
+    image: ImageData
+    title: str
+    description: str
+    rate: int
+
+
+class GachaContentRes(BaseModel):
+    uid: int
     image: ImageData
     title: str
     description: str
@@ -87,4 +129,30 @@ class GachaBody(BaseModel):
     name: str
     description: str
     licence: LicenceData
-    contents: list[GachaContent]
+    contents: list[GachaContentBody]
+
+    @staticmethod
+    def create(
+            thumbnail: ImageData,
+            name: str,
+            description: str,
+            licence: LicenceData,
+            contents: list[GachaContentBody],
+    ):
+        print(licence)
+        return GachaBody(
+            thumbnail=thumbnail,
+            name=name,
+            description=description,
+            licence=licence.model_dump(),
+            contents=contents,
+        )
+
+
+class GachaRes(BaseModel):
+    uid: int
+    thumbnail: ImageData
+    name: str
+    description: str
+    licence: LicenceData
+    contents: list[GachaContentRes]

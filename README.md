@@ -2,40 +2,28 @@
 
 ## 使用するもの
 
-* python flask
+* python FastApi
     * SQLAlchemy
 * npm
-    * scss emotion
-    * ts react
+    * Next.js
+    * MUI
 
 ## setup
 
-1
-
-1. add document
-   ```shell
-   git submodule update --init --recursive
-   ```
-2. install python 3.11
+1. install python 3.12
     * https://www.python.org/downloads/
-3. install depends
+2. install depends
     ```shell
     pip install -r requirements.txt
     ```
-4. copy .env
-5. write .env
-6. migrate database
+3. copy .env
+4. write .env
+5. migrate database
    ```shell
-   flask db init
-   flask db migrate
-   flask db upgrade
-   flask job init-database
+   alembic revision --autogenerate
+   alembic upgrade head
    ```
    
 ## コーディング規約
 
 * データベースへのクエリはrepositoryに書く
-* apiにルート(path)を書く
-* managerに具体的な処理を書く
-* managerではmodelを使用しない
-* 権限チェックはできるだけrepositoryで書き、どうしても無理な場合managerでかく

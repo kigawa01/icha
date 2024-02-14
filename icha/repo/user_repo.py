@@ -3,8 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from icha import data
 from icha.error import ErrorIdException, ErrorIds
-from icha.table.table import UserTable
-from icha.tokens import JwtTokenData
+from icha.table import UserTable
 
 
 async def by_uid(session: AsyncSession, uid: int) -> UserTable:
@@ -18,7 +17,7 @@ async def by_uid(session: AsyncSession, uid: int) -> UserTable:
     return result
 
 
-async def by_token(session: AsyncSession, token: JwtTokenData) -> UserTable:
+async def by_token(session: AsyncSession, token: data.JwtTokenData) -> UserTable:
     return await by_uid(session, token.user_id)
 
 
@@ -33,7 +32,10 @@ async def by_email(session: AsyncSession, email: str) -> UserTable:
     return result
 
 
-def create(session: AsyncSession, post_user: data.PostUserBody) -> UserTable:
-    user = UserTable.create(post_user)
+def create_user(session: AsyncSession, post_user: data.UserBody) -> UserTable:
+    user = UserTable()
+    user.name = post_user.name
+    user.email = post_user.email
+    user.set_password(post_user.password)
     session.add(user)
     return user

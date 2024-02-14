@@ -2,13 +2,13 @@ import pytest
 from sqlalchemy import select, func
 
 from icha import data
-from icha.data import LoginRes, PostUserBody
-from icha.table.table import UserTable
+from icha.data import UserBody
+from icha.table import UserTable
 
 
 @pytest.fixture
 def new_post_user_body():
-    return PostUserBody.from_args(
+    return UserBody.from_args(
         name="newUserName",
         email="newUser@example.com",
         password="new password"
