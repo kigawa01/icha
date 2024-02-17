@@ -33,3 +33,15 @@ export interface StateObject<T> {
 
   setValue(value: T): void
 }
+
+export function fileToBase64(file: File) {
+  return new Promise<string >((resolve, reject) => {
+    const reader = new FileReader();
+    reader.addEventListener("load", ev => {
+      resolve(reader.result as string);
+    });
+    reader.addEventListener("error", reject);
+    reader.addEventListener("abort", reject);
+    reader.readAsDataURL(file)
+  });
+}

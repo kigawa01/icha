@@ -54,24 +54,30 @@ async def create_gacha(
         body: data.GachaBody,
         session: AsyncSession = Depends(get_session),
         user: Coroutine[Any, Any, UserTable] = Depends(get_user),
-):
+) -> data.GachaRes:
     gacha = gacha_repo.create_gacha(session, body, await user)
     await session.flush([gacha])
     licence = gacha_repo.create_licence(session, body.licence, gacha)
     thumbnail = gacha_repo.create_thumbnail(session, body.thumbnail, gacha)
 
-    contents = list[tuple[table.GachaContentTable, table.GachaContentImageTable]]()
+    content_tables = list[tuple[table.GachaContentTable, data.GachaContentBody]]()
     for content_data in body.contents:
-        content = gacha_repo.create_content(session, content_data, gacha)
-        content_image = gacha_repo.create_image(session, content_data.image, content)
-        contents.append((content, content_image))
+        content_table = gacha_repo.create_content(session, content_data, gacha)
+        content_tables.append((content_table, content_data))
+    contents = list[tuple[table.GachaContentTable, table.GachaContentImageTable]]()
+    for (content_table, content_data) in content_tables:
+        await session.flush([content_table])
+        content_image = gacha_repo.create_image(session, content_data.image, content_table)
+        contents.append((content_table, content_image))
+
     commit = session.commit()
     gacha_refresh = session.refresh(gacha)
     thumbnail_refresh = session.refresh(thumbnail)
     licence_refresh = session.refresh(licence)
     content_refreshes = list[Coroutine]()
-    for content in contents:
-        content_refreshes.append(session.refresh(content))
+    for (content_table, content_image) in contents:
+        content_refreshes.append(session.refresh(content_table))
+        content_refreshes.append(session.refresh(content_image))
     await commit
     await gacha_refresh
     await thumbnail_refresh

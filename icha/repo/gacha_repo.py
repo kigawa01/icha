@@ -33,7 +33,7 @@ def create_gacha(session: AsyncSession, gacha_body: data.GachaBody, user: table.
     return gacha
 
 
-def create_thumbnail(session: AsyncSession, thumbnail_data: data.ImageData, gacha: table.GachaTable):
+def create_thumbnail(session: AsyncSession, thumbnail_data: data.ImageFileData, gacha: table.GachaTable):
     thumbnail = table.ThumbnailTable()
     thumbnail.gacha_id = gacha.uid
     thumbnail.name = thumbnail_data.name
@@ -65,7 +65,7 @@ def create_content(session: AsyncSession, content_data: data.GachaContentBody, g
     return content
 
 
-def create_image(session: AsyncSession, image_data: data.ImageData, content: table.GachaContentTable):
+def create_image(session: AsyncSession, image_data: data.ImageFileData, content: table.GachaContentTable):
     image = table.GachaContentImageTable()
     image.content_id = content.uid
     image.name = image_data.name

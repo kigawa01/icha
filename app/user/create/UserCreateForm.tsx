@@ -30,7 +30,7 @@ export function UserCreateForm(
     component={"form"}
     padding={"5px"}
     action={async (data: FormData) => {
-      const email = data.get("email");
+      const email = data.get("identifier");
       const username = data.get("username");
       const password = data.get("password");
       if (typeof email !== "string") return;
@@ -57,12 +57,14 @@ export function UserCreateForm(
     <TextInput
       label={"Eメール"}
       type={"email"}
-      name={"email"}
+      autoComplete={"email"}
+      name={"identifier"}
       required={true}
     />
     <PasswordTextField
       label={"パスワード"}
       name={"password"}
+      autoComplete={"password"}
       required={true}
     />
     <Button

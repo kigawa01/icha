@@ -10,25 +10,29 @@
     "lint": "next lint"
   },
   "devDependencies": {
-    "@types/node": "^20.8.4",
-    "@types/react-dom": "^18.2.15",
-    "typescript": "^5.0.2"
+    "@types/node": "^20.11.19",
+    "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@auth/upstash-redis-adapter": "^1.3.3",
     "@emotion/cache": "^11.11.0",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
-    "@mui/icons-material": "^5.15.7",
-    "@mui/material": "^5.15.7",
-    "@mui/material-nextjs": "^5.15.6",
-    "@mui/system": "^5.15.6",
+    "@mui/icons-material": "5.15.9",
+    "@mui/material": "5.15.9",
+    "@mui/material-nextjs": "5.15.9",
+    "@mui/system": "5.15.9",
     "@types/react": "^18.2.55",
-    "@upstash/redis": "^1.28.3",
+    "@types/react-dom": "^18.2.19",
     "axios": "^1.6.7",
     "next": "^14.1.0",
-    "next-auth": "^5.0.0-beta.9",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": "^17.0.0 || ^18.0.0",
+    "react-dom": "^17.0.0 || ^18.0.0"
+  },
+  "peerDependencies": {
+    "react": "^17.0.0 || ^18.0.0",
+    "react-dom": "^17.0.0 || ^18.0.0"
+  },
+  "resolutions": {
+    "@types/react": "^17.0.0"
   }
 }

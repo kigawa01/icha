@@ -8,17 +8,17 @@ from icha import data, table
 @pytest.fixture
 def new_post_gacha_body():
     return data.GachaBody.create(
-        thumbnail=data.ImageData.create("test", "test"),
+        thumbnail=data.ImageFileData.create("test", "test"),
         contents=[],
         name="new_post_gacha_body",
         description="new_post_gacha_body_desc",
         licence=data.LicenceData.create(
             text="new_post_gacha_body_licence_text",
-            business=True,
-            post=True,
-            credit=True,
-            distribution=True,
-            material=True,
+            business="True",
+            post="True",
+            credit="True",
+            distribution="True",
+            material="True",
         ),
     )
 

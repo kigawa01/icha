@@ -71,33 +71,33 @@ class UserRes(BaseModel):
         return UserRes(uid=uid, name=name, email=email)
 
 
-class ImageData(BaseModel):
+class ImageFileData(BaseModel):
     base64: str
     name: str
 
     @staticmethod
     def create(name: str, base64: str):
-        return ImageData(
+        return ImageFileData(
             name=name, base64=base64
         )
 
 
 class LicenceData(BaseModel):
     text: str
-    business: bool | str
-    post: bool | str
-    credit: bool | str
-    distribution: bool | str
-    material: bool | str
+    business: str
+    post: str
+    credit: str
+    distribution: str
+    material: str
 
     @staticmethod
     def create(
             text: str,
-            business: bool | str,
-            post: bool | str,
-            credit: bool | str,
-            distribution: bool | str,
-            material: bool | str,
+            business: str,
+            post: str,
+            credit: str,
+            distribution: str,
+            material: str,
     ):
         return LicenceData(
             text=text,
@@ -110,7 +110,7 @@ class LicenceData(BaseModel):
 
 
 class GachaContentBody(BaseModel):
-    image: ImageData
+    image: ImageFileData
     title: str
     description: str
     rate: int
@@ -118,14 +118,14 @@ class GachaContentBody(BaseModel):
 
 class GachaContentRes(BaseModel):
     uid: int
-    image: ImageData
+    image: ImageFileData
     title: str
     description: str
     rate: int
 
 
 class GachaBody(BaseModel):
-    thumbnail: ImageData
+    thumbnail: ImageFileData
     name: str
     description: str
     licence: LicenceData
@@ -133,7 +133,7 @@ class GachaBody(BaseModel):
 
     @staticmethod
     def create(
-            thumbnail: ImageData,
+            thumbnail: ImageFileData,
             name: str,
             description: str,
             licence: LicenceData,
@@ -151,7 +151,7 @@ class GachaBody(BaseModel):
 
 class GachaRes(BaseModel):
     uid: int
-    thumbnail: ImageData
+    thumbnail: ImageFileData
     name: str
     description: str
     licence: LicenceData

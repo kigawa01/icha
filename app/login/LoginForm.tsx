@@ -20,7 +20,7 @@ export function LoginForm(
 ) {
   const userState = useUser();
   const [error, action] = useFormState(async (_: string | undefined, data: FormData) => {
-    const email = data.get("email");
+    const email = data.get("identifier");
     const password = data.get("password");
     if (typeof email !== "string") return "Eメールを入力してください";
     if (typeof password !== "string") return "パスワードを入力してください";
@@ -45,12 +45,14 @@ export function LoginForm(
       <TextInput
         label={"Eメール"}
         type={"email"}
-        name={"email"}
+        name={"identifier"}
+        autoComplete={"email"}
         required={true}
       />
       <PasswordTextField
         label={"パスワード"}
         name={"password"}
+        autoComplete={"password"}
         required={true}
       />
       <Button

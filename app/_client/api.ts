@@ -3,6 +3,7 @@ import {
   ConfigurationParameters,
   DefaultApi,
   FetchParams,
+  GachaBody,
   LoginRes,
   RequestContext,
   ResponseError,
@@ -11,6 +12,7 @@ import {
 } from "../../api_clients";
 import {ErrorData, ErrorIds} from "./_error";
 import {DEBUG} from "../util";
+import type {GachaRes} from "../../api_clients/models";
 
 
 export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -44,7 +46,7 @@ export class ApiClient {
 
   async createUser(email: string, password: string, username: string): Promise<ApiResult<LoginRes>> {
     return await fetchApi(this.api.createUserApiUserPost({
-      postUserBody: {
+      userBody: {
         email: email, name: username, password: password,
       },
     }));
@@ -62,6 +64,11 @@ export class AuthApiClient extends ApiClient {
 
   async getSelfUser(): Promise<ApiResult<UserRes>> {
     return await fetchApi(this.api.getSelfUserApiUserSelfGet());
+  }
+
+  async createGacha(gachaBody: GachaBody): Promise<ApiResult<GachaRes>> {
+    if (DEBUG) console.debug(gachaBody);
+    return await fetchApi(this.api.createGachaApiGachaPost({gachaBody}));
   }
 }
 

@@ -82,7 +82,7 @@ class ThumbnailTable(BaseTable):
     base64: Mapped[str] = Column(Text(16_000_000), nullable=False)
 
     def to_image_data(self):
-        return data.ImageData(
+        return data.ImageFileData(
             base64=self.base64,
             name=self.name,
         )
@@ -99,14 +99,13 @@ class LicenceTable(BaseTable):
     material: Mapped[str] = Column(String(128), nullable=False)
 
     def to_licence_data(self):
-        from icha.repo import gacha_repo
         return data.LicenceData(
             text=self.text,
-            business=gacha_repo.str_to_str_bool(self.business),
-            post=gacha_repo.str_to_str_bool(self.post),
-            credit=gacha_repo.str_to_str_bool(self.credit),
-            distribution=gacha_repo.str_to_str_bool(self.distribution),
-            material=gacha_repo.str_to_str_bool(self.material),
+            business=self.business,
+            post=self.post,
+            credit=self.credit,
+            distribution=self.distribution,
+            material=self.material,
         )
 
 
@@ -117,7 +116,7 @@ class GachaContentImageTable(BaseTable):
     base64: Mapped[str] = Column(Text(16_000_000), nullable=False)
 
     def to_image_data(self):
-        return data.ImageData(
+        return data.ImageFileData(
             base64=self.base64,
             name=self.name,
         )
