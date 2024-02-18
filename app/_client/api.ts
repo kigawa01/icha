@@ -67,8 +67,11 @@ export class AuthApiClient extends ApiClient {
   }
 
   async createGacha(gachaBody: GachaBody): Promise<ApiResult<GachaRes>> {
-    if (DEBUG) console.debug(gachaBody);
     return await fetchApi(this.api.createGachaApiGachaPost({gachaBody}));
+  }
+
+  async getGacha(uid: number): Promise<ApiResult<GachaRes>> {
+    return await fetchApi(this.api.getGachaApiGachaUidGet({uid}));
   }
 }
 

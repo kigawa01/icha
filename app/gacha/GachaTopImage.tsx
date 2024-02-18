@@ -18,4 +18,5 @@ export function GachaTopImage(
 }
 
 export interface GachaTopImageProps extends OverrideProps<SvgIconTypeMap, any> {
+
 }

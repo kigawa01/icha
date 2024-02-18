@@ -87,22 +87,26 @@ async def create_gacha(
     contents = list[data.GachaContentRes]()
     for (content_table, content_image) in contents_tuples:
         content_table: table.GachaContentTable
-        contents.append(content_table.to_content_res(content_image))
-    return gacha.to_gacha_res(thumbnail.to_image_data(), licence.to_licence_data(), contents_tuples)
+        content_image: table.GachaContentImageTable
+        contents.append(content_table.to_content_res(content_image.to_image_data()))
+    return gacha.to_gacha_res(thumbnail.to_image_data(), licence.to_licence_data(), contents)
 
 
 @app.get("/api/gacha/{uid}")
 async def get_gacha(
         uid: int,
         session: AsyncSession = Depends(get_session),
-) -> data.GachaContentRes:
+) -> data.GachaRes:
     gacha_coroutine = gacha_repo.by_id(session, uid)
     gacha = await gacha_coroutine
     thumbnail_coroutine = thumbnail_repo.by_gacha(session, gacha)
     licence_coroutine = licence_repo.by_gacha(session, gacha)
     content_tables_coroutine = content_repo.all_with_image_by_gacha(session, gacha)
     contents = list[data.GachaContentRes]()
+    thumbnail = await  thumbnail_coroutine
     for (content, image) in await content_tables_coroutine:
         content: table.GachaContentTable
-        contents.append(content.to_content_res(image))
-    return gacha.to_gacha_res(await thumbnail_coroutine, await licence_coroutine, contents)
+        image: table.GachaContentImageTable
+        contents.append(content.to_content_res(image.to_image_data()))
+    licence = await  licence_coroutine
+    return gacha.to_gacha_res(thumbnail.to_image_data(), licence.to_licence_data(), contents)

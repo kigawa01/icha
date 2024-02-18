@@ -123,6 +123,22 @@ class GachaContentRes(BaseModel):
     description: str
     rate: int
 
+    @staticmethod
+    def create(
+            uid: int,
+            image: ImageFileData,
+            title: str,
+            description: str,
+            rate: int,
+    ):
+        return GachaContentRes(
+            uid=uid,
+            image=image,
+            title=title,
+            description=description,
+            rate=rate,
+        )
+
 
 class GachaBody(BaseModel):
     thumbnail: ImageFileData

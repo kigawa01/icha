@@ -130,10 +130,10 @@ class GachaContentTable(BaseTable):
     description: Mapped[str] = Column(String(255), nullable=False)
     rate: Mapped[int] = Column(Integer)
 
-    def to_content_res(self, content_image: GachaContentImageTable):
-        return data.GachaContentRes(
+    def to_content_res(self, content_image: data.ImageFileData):
+        return data.GachaContentRes.create(
             uid=self.uid,
-            image=content_image.to_image_data(),
+            image=content_image,
             title=self.title,
             description=self.description,
             rate=self.rate,
