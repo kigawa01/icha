@@ -147,19 +147,25 @@ class GachaTable(BaseTable):
     name: Mapped[str] = Column(String(64), nullable=False)
     description: Mapped[str] = Column(String(255), nullable=False)
 
-    def to_gacha_res(self, thumbnail: ThumbnailTable, licence: LicenceTable,
-                     contents: list[tuple[GachaContentTable, GachaContentImageTable]]):
-        content_res = list[data.GachaContentRes]()
-        for (content, content_image) in contents:
-            content: GachaContentTable
-            content_image: GachaContentImageTable
-            content_res.append(content.to_content_res(content_image))
+    @staticmethod
+    def create(user_id: int, name: str, description: str):
+        return GachaTable(
+            user_id=user_id,
+            name=name,
+            description=description
+        )
 
+    def to_gacha_res(
+            self,
+            thumbnail: data.ImageFileData,
+            licence: data.LicenceData,
+            contents: list[data.GachaContentRes]
+    ):
         return data.GachaRes(
             uid=self.uid,
             name=self.name,
             description=self.description,
-            thumbnail=thumbnail.to_image_data(),
-            licence=licence.to_licence_data(),
-            contents=content_res,
+            thumbnail=thumbnail,
+            licence=licence,
+            contents=contents,
         )
