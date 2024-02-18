@@ -56,7 +56,7 @@ def post_user_body():
 
 
 @pytest.fixture
-def user_table(session_maker, post_user_body) -> int:
+def user_table_id(session_maker, post_user_body) -> int:
     async def task():
         async with session_maker() as session:
             user = user_repo.create_user(session, post_user_body)
@@ -68,10 +68,10 @@ def user_table(session_maker, post_user_body) -> int:
 
 
 @pytest.fixture
-def access_token(session_maker, post_user_body, user_table) -> data.TokenData:
+def access_token(session_maker, post_user_body, user_table_id) -> data.TokenData:
     expire = datetime.now(timezone.utc) + timedelta(minutes=1)
     encoded_jwt = jwt.encode(
-        data.JwtTokenData.from_args(exp=expire, user_id=user_table, token_type="access").model_dump(),
+        data.JwtTokenData.from_args(exp=expire, user_id=user_table_id, token_type="access").model_dump(),
         main.SECRET_KEY,
         algorithm=main.ALGORITHM
     )
