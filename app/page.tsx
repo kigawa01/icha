@@ -9,7 +9,7 @@ export interface PageProps extends HTMLAttributes<any> {
 export default function Page() {
   return <Main>
 
-    <GachaCarousel/>
+    <GachaCarousel width={"100%"} height={"300px"}/>
 
     <TextSection
       sectionTitle={"Ichaとは？"}

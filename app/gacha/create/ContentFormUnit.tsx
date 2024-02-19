@@ -27,7 +27,7 @@ export function ContentFormUnit(
         name={`content-description-${index}`}
       />
       <TextInput
-        label={"確率"}
+        label={"比率"}
         name={`content-rate-${index}`}
       />
     </Box>

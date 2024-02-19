@@ -24,7 +24,7 @@ export function UserMenu(
     >
       <Button
         sx={{
-          color: "black",
+          color: "text.primary",
           textAlign: "center",
           width: "100%",
           "&:hover": {
