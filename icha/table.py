@@ -30,7 +30,7 @@ if db_name is None:
 if db_url is None:
     db_url = f"mysql+asyncmy://{db_user}:{db_pass}@{db_host}/{db_name}"
 
-engine = create_async_engine(db_url, echo=False)
+engine = create_async_engine(db_url, echo=False, pool_pre_ping=True)
 session_maker = async_sessionmaker(
     autocommit=False, autoflush=False, bind=engine, class_=AsyncSession
 )

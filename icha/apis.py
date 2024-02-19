@@ -67,8 +67,10 @@ async def create_gacha(
     contents_tuples = list[tuple[table.GachaContentTable, table.GachaContentImageTable]]()
     for (content_table, content_data) in content_tables:
         await session.flush([content_table])
+        await session.refresh(content_table)
         content_image = gacha_repo.create_image(session, content_data.image, content_table)
         contents_tuples.append((content_table, content_image))
+        await session.flush([content_image])
 
     commit = session.commit()
     gacha_refresh = session.refresh(gacha)
