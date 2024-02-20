@@ -9,6 +9,7 @@ import {ErrorMessage} from "../../_unit/ErrorMessage";
 import {Main} from "../../_unit/Main";
 import {LicenceSection} from "./LicenceSection";
 import {GachaContents} from "./GachaContents";
+import {apiClient} from "../../_client/api";
 
 export default function Page(
   {params}: { params: { id: string } },
@@ -16,13 +17,8 @@ export default function Page(
   const uid = parseInt(params.id);
   if (isNaN(uid)) redirect("/notfound");
   const clientState = useAuthClient();
-  const client = clientState?.client;
-  const gachaRes = useFetch(
-    client && (() => client.getGacha(uid)),
-    [client, uid],
-  );
+  const gachaRes = useFetch((() => apiClient.getGacha(uid)), [uid]);
   if (clientState == undefined) return undefined;
-  if (client == undefined) redirect("/login");
   if (gachaRes == undefined) return undefined;
 
   if (gachaRes.error != undefined) return <ErrorMessage error={gachaRes.error || "Error"}/>;

@@ -51,6 +51,10 @@ export class ApiClient {
       },
     }));
   }
+
+  async getGacha(uid: number): Promise<ApiResult<GachaRes>> {
+    return await fetchApi(this.api.getGachaApiGachaUidGet({uid}));
+  }
 }
 
 export class AuthApiClient extends ApiClient {
@@ -70,9 +74,6 @@ export class AuthApiClient extends ApiClient {
     return await fetchApi(this.api.createGachaApiGachaPost({gachaBody}));
   }
 
-  async getGacha(uid: number): Promise<ApiResult<GachaRes>> {
-    return await fetchApi(this.api.getGachaApiGachaUidGet({uid}));
-  }
 }
 
 export async function fetchApi<R>(res: Promise<R>): Promise<ApiResult<R>> {

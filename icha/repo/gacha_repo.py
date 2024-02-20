@@ -1,8 +1,11 @@
+from typing import Sequence
+
 import sqlalchemy
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from icha import data, table
 from icha.error import ErrorIdException, ErrorIds
+from icha.table import GachaTable
 
 
 def create_gacha(session: AsyncSession, gacha_body: data.GachaBody, user: table.UserTable):
@@ -30,4 +33,19 @@ async def by_id(session: AsyncSession, uid: int) -> table.GachaTable:
     result = result.scalar_one_or_none()
     if result is None:
         raise ErrorIdException(ErrorIds.GACHA_NOT_FOUND, f"gacha is not found: {uid}")
+    return result
+
+
+async def all_by_id(
+        session: AsyncSession,
+        order: str = "new",
+        size: int = 16,
+        page: int = 0,
+) -> Sequence[GachaTable]:
+    query = sqlalchemy.select(table.GachaTable)
+    if order == "new":
+        query = query.order_by(sqlalchemy.asc(table.GachaTable.create_at))
+    query.offset(page * size).limit(size)
+    result = await session.execute(query)
+    result = result.scalars().all()
     return result

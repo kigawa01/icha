@@ -155,7 +155,6 @@ class GachaBody(BaseModel):
             licence: LicenceData,
             contents: list[GachaContentBody],
     ):
-        print(licence)
         return GachaBody(
             thumbnail=thumbnail,
             name=name,
@@ -172,3 +171,27 @@ class GachaRes(BaseModel):
     description: str
     licence: LicenceData
     contents: list[GachaContentRes]
+
+
+class GachaListRes(BaseModel):
+    uid: int
+    thumbnail: ImageFileData
+    name: str
+    description: str
+    licence: LicenceData
+
+    @staticmethod
+    def create(
+            uid: int,
+            thumbnail: ImageFileData,
+            name: str,
+            description: str,
+            licence: LicenceData,
+    ):
+        return GachaListRes(
+            uid=uid,
+            thumbnail=thumbnail,
+            name=name,
+            description=description,
+            licence=licence,
+        )

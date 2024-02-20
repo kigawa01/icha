@@ -1,7 +1,8 @@
 import os
+from datetime import datetime
 
 import dotenv
-from sqlalchemy import Column, Integer, String, Text, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Mapped
@@ -146,6 +147,7 @@ class GachaTable(BaseTable):
     user_id: Mapped[int] = Column(ForeignKey("user.uid"))
     name: Mapped[str] = Column(String(64), nullable=False)
     description: Mapped[str] = Column(String(255), nullable=False)
+    create_at: Mapped[datetime] = Column(DateTime, default=datetime.now)
 
     @staticmethod
     def create(user_id: int, name: str, description: str):
@@ -168,4 +170,17 @@ class GachaTable(BaseTable):
             thumbnail=thumbnail,
             licence=licence,
             contents=contents,
+        )
+
+    def to_gacha_list_res(
+            self,
+            thumbnail: data.ImageFileData,
+            licence: data.LicenceData,
+    ):
+        return data.GachaListRes.create(
+            uid=self.uid,
+            name=self.name,
+            description=self.description,
+            thumbnail=thumbnail,
+            licence=licence
         )

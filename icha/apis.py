@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app import app
 from icha import data, tokens, table
-from icha.data import LoginRes, TokensRes
+from icha.data import LoginRes, TokensRes, GachaListRes
 from icha.error import ErrorIdException, ErrorIds
 from icha.repo import user_repo, gacha_repo, thumbnail_repo, licence_repo, content_repo
 from icha.table import get_session, UserTable
@@ -105,10 +105,35 @@ async def get_gacha(
     licence_coroutine = licence_repo.by_gacha(session, gacha)
     content_tables_coroutine = content_repo.all_with_image_by_gacha(session, gacha)
     contents = list[data.GachaContentRes]()
-    thumbnail = await  thumbnail_coroutine
+    thumbnail = await thumbnail_coroutine
     for (content, image) in await content_tables_coroutine:
         content: table.GachaContentTable
         image: table.GachaContentImageTable
         contents.append(content.to_content_res(image.to_image_data()))
-    licence = await  licence_coroutine
+    licence = await licence_coroutine
     return gacha.to_gacha_res(thumbnail.to_image_data(), licence.to_licence_data(), contents)
+
+
+@app.get("/api/gacha")
+async def get_gacha_list(
+        order: str = "new",
+        size: int = 16,
+        page: int = 0,
+        session: AsyncSession = Depends(get_session),
+) -> list[GachaListRes]:
+    gacha_list_coroutine = gacha_repo.all_by_id(session, order, size, page)
+    table_temp = list[tuple[
+        table.GachaTable,
+        Coroutine[Any, Any, table.ThumbnailTable],
+        Coroutine[Any, Any, table.LicenceTable]
+    ]]()
+    for gacha_table in await gacha_list_coroutine:
+        table_temp.append((
+            gacha_table,
+            thumbnail_repo.by_gacha(session, gacha_table),
+            licence_repo.by_gacha(session, gacha_table),
+        ))
+    gacha_list = list[data.GachaListRes]()
+    for (gacha_table, thumbnail_coroutine, licence_coroutine) in table_temp:
+        gacha_list.append(gacha_table.to_gacha_list_res(await thumbnail_coroutine, await licence_coroutine))
+    return gacha_list
