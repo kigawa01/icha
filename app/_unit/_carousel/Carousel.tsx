@@ -42,7 +42,7 @@ export function Carousel(
 
       <CarouselMain
         buttonProps={buttonProps} flex={1} nodes={nodes} progressState={progressState} zIndex={zIndexUse}
-        next={() => setNextPage()} period={period} page={pageState.value}
+        next={() => setNextPage()} period={period} page={pageState.value} minWidth={0}
       />
 
       <CarouselButton

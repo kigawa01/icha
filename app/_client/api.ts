@@ -4,6 +4,7 @@ import {
   DefaultApi,
   FetchParams,
   GachaBody,
+  GachaListRes,
   LoginRes,
   RequestContext,
   ResponseError,
@@ -54,6 +55,9 @@ export class ApiClient {
 
   async getGacha(uid: number): Promise<ApiResult<GachaRes>> {
     return await fetchApi(this.api.getGachaApiGachaUidGet({uid}));
+  }
+  async getGachaList(): Promise<ApiResult<GachaListRes[]>> {
+    return await fetchApi(this.api.getGachaListApiGachaGet({}));
   }
 }
 

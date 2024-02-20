@@ -22,17 +22,14 @@ export function CarouselButton(
     justifyContent: "center",
     flexDirection: "column",
   };
-  const buttonSx: SxProps = {
-    fontWeight: "bold",
-    fontSize: "2rem",
-    height: height || "100%",
-    color: "text.primary",
-  };
   const zIndexUse = zIndex || 1;
 
   return (
     <Box {...props} sx={buttonBoxSx} zIndex={zIndexUse + 1}>
-      <Button variant={"outlined"} sx={buttonSx} onClick={onClick}>
+      <Button variant={"outlined"} sx={{
+        fontWeight: "bold", fontSize: "2rem", height: height || "100%", color: "text.primary",
+        bgcolor: "#fff6", "&:hover": {bgcolor: "#ccc9"},
+      }} onClick={onClick}>
         {buttonPosition == "left" ? "<" : ">"}
       </Button>
     </Box>

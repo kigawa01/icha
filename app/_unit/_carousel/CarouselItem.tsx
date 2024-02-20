@@ -15,6 +15,7 @@ export function CarouselItem(
     <Box
       {...props}
       width={"100%"}
+      minWidth={0}
       flex={"none"}
       boxSizing={"border-box"}
       padding={"10px"}

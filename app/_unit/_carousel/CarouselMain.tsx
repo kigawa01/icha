@@ -23,8 +23,11 @@ export function CarouselMain(
       flexDirection={"column"}
     >
 
-      <Box flex={"auto"} overflow={"visible"}>
-        <Box display={"flex"} sx={{transform: `translate3d(${-100 * (page - 1)}%, 0, 0)`, transition: "transform 1s"}}>
+      <Box flex={"auto"} overflow={"visible"} minHeight={0}>
+        <Box
+          sx={{transform: `translate3d(${-100 * (page - 1)}%, 0, 0)`, transition: "transform 1s"}}
+          height={"100%"} display={"flex"}
+        >
           {nodes.map((value, index) => <CarouselItem node={value} key={index}/>)}
         </Box>
       </Box>

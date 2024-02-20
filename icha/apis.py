@@ -135,5 +135,9 @@ async def get_gacha_list(
         ))
     gacha_list = list[data.GachaListRes]()
     for (gacha_table, thumbnail_coroutine, licence_coroutine) in table_temp:
-        gacha_list.append(gacha_table.to_gacha_list_res(await thumbnail_coroutine, await licence_coroutine))
+        thumbnail_table: table.ThumbnailTable = await thumbnail_coroutine
+        licence_table: table.LicenceTable = await licence_coroutine
+        gacha_list.append(
+            gacha_table.to_gacha_list_res(thumbnail_table.to_image_data(), licence_table.to_licence_data())
+        )
     return gacha_list

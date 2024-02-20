@@ -17,10 +17,15 @@ export function Img(
     <Box
       {...props}
       component={"figure"}
+      display={"flex"}
+      justifyContent={"center"}
+      alignItems={"center"}
       sx={{
         "img": {
           maxWidth: "100%",
           maxHeight: "100%",
+          display: "block",
+          flex: "none",
         },
       }}
     >
