@@ -5,7 +5,6 @@ export default function Page(
   {}: {},
 ) {
 
-
   return (
     <Main>
       <Typography variant={"h2"}>ガチャ名</Typography>

@@ -35,13 +35,22 @@ export interface StateObject<T> {
 }
 
 export function fileToBase64(file: File) {
-  return new Promise<string >((resolve, reject) => {
+  return new Promise<string>((resolve, reject) => {
     const reader = new FileReader();
     reader.addEventListener("load", ev => {
       resolve(reader.result as string);
     });
     reader.addEventListener("error", reject);
     reader.addEventListener("abort", reject);
-    reader.readAsDataURL(file)
+    reader.readAsDataURL(file);
   });
+}
+
+export function createURL(url: URL | string): URL  {
+  try {
+    return new URL(url, location.href);
+  } catch (e) {
+    console.error(e);
+    throw e
+  }
 }
