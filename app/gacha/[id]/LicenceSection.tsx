@@ -18,16 +18,16 @@ export function LicenceSection(
       {...props}
       sectionTitle={"ライセンス"}
     >
-      <Typography>{licence.text}</Typography>
-      <LabeledText text={licence.business} label={"商用利用"}/>
-      <LabeledText text={licence.post} label={"投稿"}/>
-      <LabeledText text={licence.credit} label={"クレジット表記なし"}/>
-      <LabeledText text={licence.distribution} label={"二次配布"}/>
-      <LabeledText text={licence.material} label={"素材"}/>
+      <Typography>{licence?.text}</Typography>
+      <LabeledText text={licence?.business} label={"商用利用"}/>
+      <LabeledText text={licence?.post} label={"投稿"}/>
+      <LabeledText text={licence?.credit} label={"クレジット表記なし"}/>
+      <LabeledText text={licence?.distribution} label={"二次配布"}/>
+      <LabeledText text={licence?.material} label={"素材"}/>
     </Section>
   );
 }
 
 export interface LicenceSectionProps extends OverrideProps<BoxTypeMap, any> {
-  licence: LicenceData;
+  licence: LicenceData | undefined;
 }

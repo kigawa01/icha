@@ -45,7 +45,7 @@ async def all_by_id(
     query = sqlalchemy.select(table.GachaTable)
     if order == "new":
         query = query.order_by(sqlalchemy.desc(table.GachaTable.create_at))
-    query.offset(page * size).limit(size)
+    query = query.offset(page * size).limit(size)
     result = await session.execute(query)
     result = result.scalars().all()
     return result

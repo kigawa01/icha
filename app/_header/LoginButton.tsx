@@ -2,14 +2,14 @@
 import {OverrideProps} from "@mui/types";
 import {Link, Typography} from "@mui/material";
 import {LinkTypeMap} from "@mui/material/Link/Link";
-import {useUser} from "../_manager/UserProvider";
+import {useUserState} from "../_manager/UserProvider";
 
 export function LoginButton(
   {
     ...props
   }: LoginButtonProps,
 ) {
-  const userState = useUser();
+  const userState = useUserState();
   if (userState == undefined) return undefined;
   if (userState.userRes != undefined) return undefined;
 

@@ -15,6 +15,7 @@ import {redirect} from "next/navigation";
 import {GachaContentBody, ImageFileData, LicenceData} from "../../../api_clients";
 import {fileToBase64} from "../../util";
 import {ErrorDataException, ErrorIds} from "../../_client/_error";
+import {redirectLogin} from "../../_unit/RedirectLogin";
 
 export function CreateGachaForm(
   {
@@ -27,7 +28,7 @@ export function CreateGachaForm(
   const [redirectPath, setRedirectPath] = useState<string>();
   if (clientState == undefined) return undefined;
   const client = clientState.client;
-  if (client == undefined) redirect("/login");
+  if (client == undefined) return  redirectLogin();
   if (redirectPath) redirect(redirectPath);
 
   return (

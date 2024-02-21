@@ -9,16 +9,17 @@ import {ErrorMessage} from "../_unit/ErrorMessage";
 
 import {useFormState} from "react-dom";
 import {apiClient} from "../_client/api";
-import {redirect} from "next/navigation";
+import {redirect, useSearchParams} from "next/navigation";
 import {setTokensState} from "../_manager/TokenProvider";
-import {useUser} from "../_manager/UserProvider";
+import {useUserState} from "../_manager/UserProvider";
 
 export function LoginForm(
   {
     ...props
   }: LoginFormProps,
 ) {
-  const userState = useUser();
+  const userState = useUserState();
+  const searchParams = useSearchParams();
   const [error, action] = useFormState(async (_: string | undefined, data: FormData) => {
     const email = data.get("identifier");
     const password = data.get("password");
@@ -31,10 +32,10 @@ export function LoginForm(
 
     setTokensState(authResponse.value.tokens);
 
-    redirect("/");
+    redirect(searchParams.get("url") || "/");
   }, undefined);
   if (userState == undefined) return undefined;
-  if (userState.userRes) redirect("/");
+  if (userState.userRes) redirect(searchParams.get("url") || "/");
   return (
     <Box
       {...props}

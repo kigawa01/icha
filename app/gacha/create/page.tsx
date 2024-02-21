@@ -1,6 +1,6 @@
 import {Main} from "../../_unit/Main";
 import {CreateGachaForm} from "./CreateGachaForm";
-import {RequireLogin} from "../../_unit/RequireLogin";
+import {RequireLogin} from "../../_unit/RedirectLogin";
 
 export default function Page(
   {}: {},

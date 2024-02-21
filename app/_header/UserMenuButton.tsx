@@ -2,7 +2,7 @@
 import {OverrideProps} from "@mui/types";
 import {Button, Menu, MenuItem, Typography} from "@mui/material";
 import {ButtonTypeMap} from "@mui/material/Button/Button";
-import {useUser} from "../_manager/UserProvider";
+import {useUserState} from "../_manager/UserProvider";
 import {Box} from "@mui/system";
 import {setTokensState} from "../_manager/TokenProvider";
 import {useState} from "react";
@@ -12,7 +12,7 @@ export function UserMenuButton(
     ...props
   }: UserMenuButtonProps,
 ) {
-  const userState = useUser();
+  const userState = useUserState();
   const [menuAnchorElement, setMenuAnchorElement] = useState<HTMLElement>();
   if (userState == undefined) return undefined;
   if (userState.userRes == undefined) return undefined;

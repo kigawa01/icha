@@ -1,11 +1,8 @@
-import {Box} from "@mui/system";
-import {BoxTypeMap} from "@mui/system/Box/Box";
-import {OverrideProps} from "@mui/types";
 import {Typography} from "@mui/material";
 import {LabeledItem, LabeledItemProps} from "./LabeledItem";
 
 export interface LabeledTextProps extends LabeledItemProps{
-  text: string
+  text: string | undefined
 }
 export function LabeledText(
   {

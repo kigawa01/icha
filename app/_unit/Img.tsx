@@ -8,6 +8,7 @@ export function Img(
     src,
     img,
     alt,
+    margin,
     ...props
   }: ImgProps,
 ) {
@@ -16,6 +17,7 @@ export function Img(
   return (
     <Box
       {...props}
+      margin={margin || 0}
       component={"figure"}
       display={"flex"}
       justifyContent={"center"}

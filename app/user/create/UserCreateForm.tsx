@@ -8,7 +8,7 @@ import {useState} from "react";
 import {ErrorMessage} from "../../_unit/ErrorMessage";
 import {TextInput} from "../../_unit/TextInput";
 import {redirect} from "next/navigation";
-import {useUser} from "../../_manager/UserProvider";
+import {useUserState} from "../../_manager/UserProvider";
 import {apiClient} from "../../_client/api";
 import {setTokensState} from "../../_manager/TokenProvider";
 
@@ -21,7 +21,7 @@ export function UserCreateForm(
   }: LoginFormProps,
 ) {
   const [error, setError] = useState<string>();
-  const userState = useUser();
+  const userState = useUserState();
   if (userState == undefined) return undefined;
   if (userState.userRes) redirect("/");
 

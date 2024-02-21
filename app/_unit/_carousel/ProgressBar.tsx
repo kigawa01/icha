@@ -15,13 +15,13 @@ export function ProgressBar(
 
   useEffect(function () {
     const id = setTimeout(function () {
-      if (progressState.value >= period * 20) {
+      if (progressState.value >= period * 40) {
         progressState.setValue(0);
         next();
         return;
       }
       progressState.setValue(progressState.value + 1);
-    }, 50);
+    }, 25);
     return function () {
       clearTimeout(id);
     };
@@ -33,8 +33,8 @@ export function ProgressBar(
       {...props}
     >
       <Box
-bgcolor={"grey"} sx={{opacity: "50%"}} borderRadius={"2px"}        height={"3px"}
-width={`${progressState.value / (period * 20) * 100}%`}
+        bgcolor={"grey"} sx={{opacity: "50%", transition: "all 25ms"}} borderRadius={"2px"} height={"3px"}
+        width={`${progressState.value / (period * 40) * 100}%`}
       />
     </Box>
   );

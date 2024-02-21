@@ -30,7 +30,7 @@ export function GachaCarousel(
             alt={value.thumbnail.name} position={"absolute"} left={0} top={0}
           />
           <Typography
-            variant={"h3"} position={"absolute"} left={"16px"} top={"7px"} bgcolor={"#ccc9"} textOverflow={"ellipsis"}
+            variant={"h3"} position={"absolute"} left={"16px"} top={"7px"} bgcolor={"#666a"} textOverflow={"ellipsis"}
             maxWidth={"50%"} overflow={"hidden"} padding={"0 10px 2px 10px"} borderRadius={"5px"}
           >
             {value.name}
