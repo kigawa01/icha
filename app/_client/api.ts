@@ -6,6 +6,7 @@ import {
   GachaBody,
   GachaListRes,
   LoginRes,
+  PullGachaRes,
   RequestContext,
   ResponseError,
   TokensRes,
@@ -56,6 +57,7 @@ export class ApiClient {
   async getGacha(uid: number): Promise<ApiResult<GachaRes>> {
     return await fetchApi(this.api.getGachaApiGachaUidGet({uid}));
   }
+
   async getGachaList(): Promise<ApiResult<GachaListRes[]>> {
     return await fetchApi(this.api.getGachaListApiGachaGet({}));
   }
@@ -78,6 +80,9 @@ export class AuthApiClient extends ApiClient {
     return await fetchApi(this.api.createGachaApiGachaPost({gachaBody}));
   }
 
+  async pullGacha(uid: number): Promise<ApiResult<PullGachaRes>> {
+    return await fetchApi(this.api.pullGachaApiGachaUidPullPost({uid}));
+  }
 }
 
 export async function fetchApi<R>(res: Promise<R>): Promise<ApiResult<R>> {

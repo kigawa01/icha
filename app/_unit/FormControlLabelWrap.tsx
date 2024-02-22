@@ -1,5 +1,5 @@
 import FormControlLabel, {FormControlLabelProps} from "@mui/material/FormControlLabel";
-import React from "preact/compat";
+import React from "react";
 
 export function FormControlLabelWrap(
   {

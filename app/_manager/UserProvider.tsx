@@ -1,5 +1,5 @@
 "use client";
-import {AuthApiProvider, useAuthClient} from "./AuthApiProvider";
+import {AuthApiProvider, useClientState} from "./AuthApiProvider";
 import {UserRes} from "../../api_clients";
 import {GlobalState} from "../_hook/globalState";
 import {useEffect} from "react";
@@ -7,7 +7,7 @@ import {useEffect} from "react";
 export default function UserProvider(
   {}: {},
 ) {
-  const client = useAuthClient();
+  const client = useClientState();
 
   useEffect(() => {
     if (client == undefined) return;

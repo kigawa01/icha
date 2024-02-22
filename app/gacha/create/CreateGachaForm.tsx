@@ -10,7 +10,7 @@ import {Button} from "@mui/material";
 import {useState} from "react";
 import {LicenceFormSection} from "./LicenceFormSection";
 import {ContentListFormSection} from "./ContentListFormSection";
-import {useAuthClient} from "../../_manager/AuthApiProvider";
+import {useClientState} from "../../_manager/AuthApiProvider";
 import {redirect} from "next/navigation";
 import {GachaContentBody, ImageFileData, LicenceData} from "../../../api_clients";
 import {fileToBase64} from "../../util";
@@ -24,7 +24,7 @@ export function CreateGachaForm(
 ) {
   const [err, setErr] = useState<string>();
   const [contentsSize, setContentsSize] = useState(0);
-  const clientState = useAuthClient();
+  const clientState = useClientState();
   const [redirectPath, setRedirectPath] = useState<string>();
   if (clientState == undefined) return undefined;
   const client = clientState.client;

@@ -7,7 +7,6 @@ export function AuthApiProvider(
   {}: {},
 ) {
   const tokens = useTokensState();
-  console.debug("api", tokens);
   useEffect(() => {
     if (tokens == undefined) return;
 
@@ -26,6 +25,6 @@ export interface AuthClientState {
 
 const authClientState = new GlobalState<AuthClientState | undefined>(undefined);
 
-export function useAuthClient() {
+export function useClientState() {
   return authClientState.use();
 }
