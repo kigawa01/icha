@@ -195,3 +195,15 @@ class GachaListRes(BaseModel):
             description=description,
             licence=licence,
         )
+
+
+class PullGachaRes(BaseModel):
+    content_id: int
+
+    @staticmethod
+    def create(
+            content_id: int
+    ):
+        return PullGachaRes(
+            content_id=content_id
+        )

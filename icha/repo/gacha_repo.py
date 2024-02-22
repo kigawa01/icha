@@ -17,7 +17,7 @@ def create_gacha(session: AsyncSession, gacha_body: data.GachaBody, user: table.
     return gacha
 
 
-def create_image(session: AsyncSession, image_data: data.ImageFileData, content: table.GachaContentTable):
+def create_image(session: AsyncSession, image_data: data.ImageFileData, content: table.ContentTable):
     image = table.GachaContentImageTable()
     image.content_id = content.uid
     image.name = image_data.name

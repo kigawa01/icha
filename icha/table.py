@@ -123,7 +123,7 @@ class GachaContentImageTable(BaseTable):
         )
 
 
-class GachaContentTable(BaseTable):
+class ContentTable(BaseTable):
     __tablename__ = "content"
     uid: Mapped[int] = Column(Integer, primary_key=True, name="uid", autoincrement=True)
     gacha_id: Mapped[int] = Column(ForeignKey("gacha.uid", ondelete="CASCADE"))
@@ -183,4 +183,26 @@ class GachaTable(BaseTable):
             description=self.description,
             thumbnail=thumbnail,
             licence=licence
+        )
+
+
+class PulledContentTable(BaseTable):
+    __tablename__ = "pulled_content"
+    uid: Mapped[int] = Column(Integer, primary_key=True, name="uid", autoincrement=True)
+    user_id: Mapped[int] = Column(ForeignKey("user.uid"))
+    content_id: Mapped[int] = Column(ForeignKey("content.uid"))
+
+    @staticmethod
+    def create(
+            user: UserTable,
+            content: ContentTable
+    ):
+        return PulledContentTable(
+            user_id=user.uid,
+            content_id=content.uid
+        )
+
+    def to_pull_gacha_res(self):
+        return data.PullGachaRes.create(
+            content_id=self.content_id
         )

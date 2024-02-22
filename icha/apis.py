@@ -1,3 +1,4 @@
+import secrets
 from typing import Any, Coroutine
 
 from fastapi import Depends
@@ -7,7 +8,7 @@ from app import app
 from icha import data, tokens, table
 from icha.data import LoginRes, TokensRes, GachaListRes
 from icha.error import ErrorIdException, ErrorIds
-from icha.repo import user_repo, gacha_repo, thumbnail_repo, licence_repo, content_repo
+from icha.repo import user_repo, gacha_repo, thumbnail_repo, licence_repo, content_repo, pulled_repo
 from icha.table import get_session, UserTable
 from icha.tokens import get_token, get_user
 
@@ -60,11 +61,11 @@ async def create_gacha(
     licence = licence_repo.create(session, body.licence, gacha)
     thumbnail = thumbnail_repo.create(session, body.thumbnail, gacha)
 
-    content_tables = list[tuple[table.GachaContentTable, data.GachaContentBody]]()
+    content_tables = list[tuple[table.ContentTable, data.GachaContentBody]]()
     for content_data in body.contents:
         content_table = content_repo.create(session, content_data, gacha)
         content_tables.append((content_table, content_data))
-    contents_tuples = list[tuple[table.GachaContentTable, table.GachaContentImageTable]]()
+    contents_tuples = list[tuple[table.ContentTable, table.GachaContentImageTable]]()
     for (content_table, content_data) in content_tables:
         await session.flush([content_table])
         await session.refresh(content_table)
@@ -88,7 +89,7 @@ async def create_gacha(
         await content_refresh
     contents = list[data.GachaContentRes]()
     for (content_table, content_image) in contents_tuples:
-        content_table: table.GachaContentTable
+        content_table: table.ContentTable
         content_image: table.GachaContentImageTable
         contents.append(content_table.to_content_res(content_image.to_image_data()))
     return gacha.to_gacha_res(thumbnail.to_image_data(), licence.to_licence_data(), contents)
@@ -107,7 +108,7 @@ async def get_gacha(
     contents = list[data.GachaContentRes]()
     thumbnail = await thumbnail_coroutine
     for (content, image) in await content_tables_coroutine:
-        content: table.GachaContentTable
+        content: table.ContentTable
         image: table.GachaContentImageTable
         contents.append(content.to_content_res(image.to_image_data()))
     licence = await licence_coroutine
@@ -141,3 +142,21 @@ async def get_gacha_list(
             gacha_table.to_gacha_list_res(thumbnail_table.to_image_data(), licence_table.to_licence_data())
         )
     return gacha_list
+
+
+@app.post("/api/gacha/{uid}/pull")
+async def pull_gacha(
+        uid: int,
+        session: AsyncSession = Depends(get_session),
+        user: Coroutine[Any, Any, UserTable] = Depends(get_user),
+) -> data.PullGachaRes:
+    user = await user
+    sources = await content_repo.all_by_non_pulled(session, uid, user)
+    root_table = list[table.ContentTable]()
+    for src in sources:
+        for _ in range(src.rate):
+            root_table.append(src)
+    content = root_table[secrets.randbelow(len(root_table))]
+    pulled = await pulled_repo.create(session, user, content, True)
+    await session.commit()
+    return pulled.to_pull_gacha_res()
