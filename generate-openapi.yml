@@ -16,7 +16,7 @@ services:
         pip install --upgrade pip
         pip install -r requirements.txt
         python -m uvicorn app:app --host 0.0.0.0 --reload
-        chmod 777 -R /src/api_clients
+        chmod 777 -R /src/icha
     healthcheck:
       test: [ "CMD-SHELL", "curl http://localhost:8000/health || exit 1" ] # exitコードは 0 or 1 に揃えておく。
       start_period: "10s"
