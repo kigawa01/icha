@@ -22,8 +22,8 @@ jobs:
       - name: BuildAndPushImageOnHarbor
         run: |
           docker compose -f generate-openapi.yml -p icha up --abort-on-container-exit
-          docker build ./ -t harbor.kigawa.net/private/icha-front:${{ github.ref_name }}-${{ github.run_number }} \
-           -f Dockerfile_front --build-arg hoge=hello baseUrl=https://icha-api.kigawa.net
+          docker build -t harbor.kigawa.net/private/icha-front:${{ github.ref_name }}-${{ github.run_number }} \
+           -f Dockerfile_front --build-arg hoge=hello baseUrl=https://icha-api.kigawa.net ./ 
           docker push harbor.kigawa.net/private/icha-front:${{ github.ref_name }}-${{ github.run_number }}
       # argo
       - name: checkout manifest repository
