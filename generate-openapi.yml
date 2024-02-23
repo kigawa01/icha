@@ -4,7 +4,9 @@ services:
   back:
     image: python:3.12
     volumes:
-      - ./:/srv
+      - ./requirements.txt:/srv/requirements.txt
+      - ./icha:/srv/icha
+      - ./app.py:/srv/app.py
     working_dir: /srv
     command:
       - bash
