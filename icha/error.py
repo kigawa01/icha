@@ -25,13 +25,13 @@ class ErrorIds(Enum):
     NOT_FOUND = ErrorId("404 not found", 404)
     GACHA_NOT_FOUND = ErrorId("gacha not found", 404)
     THUMBNAIL_NOT_FOUND = ErrorId("thumbnail not found", 404)
-    LICENCE_NOT_FOUND = ErrorId("licence not found", 404)
 
     USER_NAME_CONFLICT = ErrorId("user name conflict", 409)
     TOKEN_CONFLICT = ErrorId("token conflict", 409)
     TOKEN_EXPIRED = ErrorId("token expired", 409)
     INVALID_TOKEN = ErrorId("token invalid", 409)
     USER_LOGIN_FAILED = ErrorId("user login failed, invalid name or password", 409)
+    ALL_GACHA_PULLED = ErrorId("all gacha were pulled", 409)
 
 
 class ErrorIdException(Exception):

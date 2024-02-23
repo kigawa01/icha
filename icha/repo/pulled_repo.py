@@ -9,8 +9,8 @@ async def create(
         content: table.ContentTable,
         refresh: bool = False
 ):
-    content = table.PulledContentTable.create(user, content)
-    session.add(content)
+    pulled = table.PulledContentTable.create(user, content)
+    session.add(pulled)
     if refresh:
-        await session.refresh(content)
-    return content
+        await session.refresh(pulled)
+    return pulled

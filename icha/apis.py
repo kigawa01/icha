@@ -156,7 +156,11 @@ async def pull_gacha(
     for src in sources:
         for _ in range(src.rate):
             root_table.append(src)
+    if len(root_table) == 0:
+        raise ErrorIdException(ErrorIds.ALL_GACHA_PULLED)
     content = root_table[secrets.randbelow(len(root_table))]
-    pulled = await pulled_repo.create(session, user, content, True)
+    pulled = await pulled_repo.create(session, user, content, False)
     await session.commit()
+    await session.refresh(pulled)
+
     return pulled.to_pull_gacha_res()
