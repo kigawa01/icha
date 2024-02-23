@@ -30,8 +30,8 @@ services:
       - bash
       - -c
       - |
-        generate -i http://back:8000/openapi.json -g typescript-fetch -o /src/api_clients --skip-validate-spec
-        chmod 777 -R /src
+        docker-entrypoint.sh generate -i http://back:8000/openapi.json -g typescript-fetch -o /src/api_clients --skip-validate-spec
+        chmod 777 -R /src/api_clients
     depends_on:
       back:
         condition: service_healthy
