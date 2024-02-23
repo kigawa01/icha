@@ -10,9 +10,9 @@ import {PullGachaRes} from "../../../../api_clients";
 import {ErrorMessage} from "../../../_unit/ErrorMessage";
 
 export default function Page(
-  {params}: { params: { id: string } },
+  {params}: { params: { gacha_id: string } },
 ) {
-  const uid = parseInt(params.id);
+  const uid = parseInt(params.gacha_id);
   if (isNaN(uid)) redirect("/notfound");
   const router = useRouter();
   const clientState = useClientState();
@@ -30,7 +30,8 @@ export default function Page(
         client?.pullGacha(uid).then(value => {
           if (value.value) {
             setResult(value.value);
-            router.push("result")
+            const contentId = value.value.contentId;
+            router.push(`content/${contentId}`);
             return;
           }
           if (value.error) {
@@ -50,7 +51,11 @@ export default function Page(
       </LoadableButton>
       <LoadableButton
         loading={result == undefined} variant={"outlined"} sx={{color: "text.primary"}}
-        onClick={_ => router.push("result")} loadingLabel={"Skip"}
+        onClick={_ => {
+          if (result == undefined) return;
+          const contentId = result.contentId;
+          router.push(`content/${contentId}`);
+        }} loadingLabel={"Skip"}
       >Skip</LoadableButton>
     </Main>
   );

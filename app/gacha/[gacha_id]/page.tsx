@@ -13,9 +13,9 @@ import {redirectLoginRouter} from "../../_unit/RedirectLogin";
 import {LoadableButton} from "../../_unit/LoadableButton";
 
 export default function Page(
-  {params}: { params: { id: string } },
+  {params}: { params: { gacha_id: string } },
 ) {
-  const uid = parseInt(params.id);
+  const uid = parseInt(params.gacha_id);
   if (isNaN(uid)) redirect("/notfound");
   const userState = useUserState();
   const gachaRes = useFetch((() => apiClient.getGacha(uid)), [uid]);
