@@ -1,3 +1,4 @@
+import type {GachaRes} from "../../api_clients";
 import {
   Configuration,
   ConfigurationParameters,
@@ -14,7 +15,6 @@ import {
 } from "../../api_clients";
 import {ErrorData, ErrorIds} from "./_error";
 import {DEBUG} from "../util";
-import type {GachaRes} from "../../api_clients/models";
 
 
 export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;

@@ -6,15 +6,17 @@ RUN npm ci
 COPY api_clients ./api_clients
 COPY app ./app
 COPY assets ./assets
-COPY .env ./
 COPY next-env.d.ts ./
 COPY tsconfig.json ./
 COPY next.config.js ./
+ARG baseUrl
+
+RUN echo NEXT_PUBLIC_BASE_URL="$baseUrl" >> ./.env
 RUN npm run build
 
 
 FROM node:21 AS runner
-WORKDIR /front
+WORKDIR /app
 COPY --from=builder /app/next.config.js ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/.next/standalone ./
