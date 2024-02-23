@@ -1,4 +1,4 @@
-name: backend cd
+name: front cd
 
 on:
   push:
@@ -22,9 +22,9 @@ jobs:
       - name: BuildAndPushImageOnHarbor
         run: |
           docker compose -f generate-openapi.yml -p icha up --abort-on-container-exit
-          docker build ./ -t harbor.kigawa.net/fns/icha-front:${{ github.ref_name }}-${{ github.run_number }} \
+          docker build ./ -t harbor.kigawa.net/private/icha-front:${{ github.ref_name }}-${{ github.run_number }} \
            -f Dockerfile_front --build-arg hoge=hello baseUrl=https://icha-api.kigawa.net
-          docker push harbor.kigawa.net/fns/fns-backend:${{ github.ref_name }}-${{ github.run_number }}
+          docker push harbor.kigawa.net/private/icha-front:${{ github.ref_name }}-${{ github.run_number }}
       # argo
       - name: checkout manifest repository
         uses: actions/checkout@v3
@@ -41,7 +41,7 @@ jobs:
       - name: push
         run: |
           git config user.name githubActions
-          git config user.email bot@example.com
+          git config user.email bot@kigawa.net
           git add .
           git commit --author=. -m "update rev"
           git push
