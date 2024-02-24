@@ -122,6 +122,7 @@ class GachaContentRes(BaseModel):
     title: str
     description: str
     rate: int
+    available: bool
 
     @staticmethod
     def create(
@@ -130,6 +131,7 @@ class GachaContentRes(BaseModel):
             title: str,
             description: str,
             rate: int,
+            available: bool
     ):
         return GachaContentRes(
             uid=uid,
@@ -137,6 +139,7 @@ class GachaContentRes(BaseModel):
             title=title,
             description=description,
             rate=rate,
+            available=available
         )
 
 

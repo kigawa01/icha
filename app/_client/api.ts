@@ -83,6 +83,12 @@ export class AuthApiClient extends ApiClient {
   async pullGacha(uid: number): Promise<ApiResult<PullGachaRes>> {
     return await fetchApi(this.api.pullGachaApiGachaUidPullPost({uid}));
   }
+
+  async getContent(gachaId: number, contentId: number) {
+    return await fetchApi(
+      this.api.getContentsApiGachaGachaIdContentsContentIdGet({gachaId, contentId}),
+    );
+  }
 }
 
 export async function fetchApi<R>(res: Promise<R>): Promise<ApiResult<R>> {

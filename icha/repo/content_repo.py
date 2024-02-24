@@ -46,7 +46,7 @@ async def all_by_non_pulled(
     return res.scalars().all()
 
 
-async def by_gacha_and_uid_pulled(
+async def by_gacha_and_uid_and__pulled_or_user(
         session: AsyncSession, gacha_id: int, uid: int, user: table.UserTable
 ) -> table.ContentTable:
     res = await session.execute(
@@ -63,3 +63,27 @@ async def by_gacha_and_uid_pulled(
     if res is None:
         raise ErrorIdException(ErrorIds.GACHA_CONTENT_NOT_FOUND)
     return res
+
+
+async def is_content_available(
+        session: AsyncSession, content: table.ContentTable, gacha: table.GachaTable | None, user: table.UserTable
+) -> bool:
+    if gacha is None:
+        res = await session.execute(
+            sqlalchemy.select(table.GachaTable).where(
+                table.GachaTable.uid == content.gacha_id,
+                table.GachaTable.user_id == user.uid
+            )
+        )
+        if res.scalar_one_or_none() is not None:
+            return True
+    else:
+        if gacha.user_id == user.uid:
+            return True
+    res = await session.execute(
+        sqlalchemy.select(table.PulledContentTable).where(
+            table.PulledContentTable.content_id == content.uid,
+            table.PulledContentTable.user_id == user.uid
+        )
+    )
+    return res is not None
