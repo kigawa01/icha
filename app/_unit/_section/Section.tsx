@@ -19,7 +19,7 @@ export function Section(
       margin={"40px 10px"}
     >
       <Typography variant={"h2"}>{sectionTitle}</Typography>
-      <Box padding={"10px"}>{children}</Box>
+      <Box padding={"20px 10px"}>{children}</Box>
     </Box>
   );
 }

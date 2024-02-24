@@ -26,9 +26,8 @@ export function CreateGachaForm(
   const [contentsSize, setContentsSize] = useState(0);
   const clientState = useClientState();
   const [redirectPath, setRedirectPath] = useState<string>();
-  if (clientState == undefined) return undefined;
-  const client = clientState.client;
-  if (client == undefined) return  redirectLogin();
+  const client = clientState?.client;
+  if (clientState != undefined && client == undefined) return redirectLogin();
   if (redirectPath) redirect(redirectPath);
 
   return (
@@ -36,44 +35,10 @@ export function CreateGachaForm(
       {...props}
       component={"form"}
       action={async (data: FormData) => {
-        const licence_text = data.get("licence_text");
-        const business = data.get("business");
-        const post = data.get("post");
-        const credit = data.get("credit");
-        const distribution = data.get("distribution");
-        const material = data.get("material");
+        if (client == undefined) return;
         const thumbnailFile = data.get("thumbnail") as File;
-
-        const licence: LicenceData = {
-          business: business as string,
-          credit: credit as string,
-          distribution: distribution as string,
-          material: material as string,
-          post: post as string,
-          text: licence_text as string,
-        };
-        const contents: Promise<GachaContentBody>[] = [];
-        for (let i = 0; i < contentsSize; i++) {
-          const contentThumbnail = data.get(`content-thumbnail-${i}`) as File;
-          const contentTitle = data.get(`content-title-${i}`) as string;
-          const contentDescription = data.get(`content-description-${i}`) as string;
-          const contentRate = data.get(`content-rate-${i}`) as string;
-          contents.push(fileToBase64(contentThumbnail).then(value => {
-            const image: ImageFileData = {base64: value, name: contentThumbnail.name};
-            const rate = parseInt(contentRate);
-            if (isNaN(rate)) {
-              throw new ErrorDataException({error_id: ErrorIds.InvalidNumber.name, message: "rate is NaN"});
-            }
-            return {
-              description: contentDescription,
-              image: image,
-              rate: rate,
-              title: contentTitle,
-            };
-          }));
-        }
-        const description = data.get("description") as string;
-        const name = data.get("name") as string;
+        const licence: LicenceData = createLicence(data);
+        const contents: Promise<GachaContentBody>[] = createContents(data, contentsSize);
         Promise.all([
           fileToBase64(thumbnailFile),
           Promise.all(contents),
@@ -81,9 +46,9 @@ export function CreateGachaForm(
           const thumbnail: ImageFileData = {base64: value[0], name: thumbnailFile.name};
           return client.createGacha({
             contents: value[1],
-            description: description,
+            description: data.get("description") as string,
             licence: licence,
-            name: name,
+            name: data.get("name") as string,
             thumbnail: thumbnail,
           });
         }).then(value => {
@@ -100,8 +65,7 @@ export function CreateGachaForm(
 
       <Section sectionTitle={"画像投稿"}>
         <ImageEdit
-          textLabel={"サムネイル"}
-          name={"thumbnail"}
+          textLabel={"サムネイル"} name={"thumbnail"} height={"450px"}
         />
         <TextInput
           label={"ガチャ名"}
@@ -120,14 +84,42 @@ export function CreateGachaForm(
 
 
       <Button
-        sx={{
-          margin: "10px",
-        }}
-        variant={"contained"}
-        type={"submit"}
+        sx={{margin: "10px"}} variant={"contained"} type={"submit"} disabled={clientState == undefined}
       >投稿</Button>
     </Box>
   );
+}
+
+function createLicence(data: FormData): LicenceData {
+  return {
+    business: data.get("licence_business") as string,
+    credit: data.get("licence_credit") as string,
+    distribution: data.get("licence_text") as string,
+    material: data.get("licence_distribution") as string,
+    post: data.get("licence_post") as string,
+    text: data.get("licence_text") as string,
+  };
+}
+
+function createContents(data: FormData, contentsSize: number): Promise<GachaContentBody>[] {
+  const contents: Promise<GachaContentBody>[] = [];
+  for (let i = 0; i < contentsSize; i++) {
+    const contentThumbnail = data.get(`content-thumbnail-${i}`) as File;
+    contents.push(fileToBase64(contentThumbnail).then(value => {
+      const image: ImageFileData = {base64: value, name: contentThumbnail.name};
+      const rate = parseInt(data.get(`content-rate-${i}`) as string);
+      if (isNaN(rate)) {
+        throw new ErrorDataException({error_id: ErrorIds.InvalidNumber.name, message: "rate is NaN"});
+      }
+      return {
+        description: data.get(`content-description-${i}`) as string,
+        image: image,
+        rate: rate,
+        title: data.get(`content-title-${i}`) as string,
+      };
+    }));
+  }
+  return contents;
 }
 
 export interface CreateGachaFormProps extends OverrideProps<BoxTypeMap, any> {

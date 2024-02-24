@@ -22,24 +22,24 @@ export function LicenceFormSection(
         name={"licence_text"}
       />
       <YesNoElse
-        name={"business"}
+        name={"licence_business"}
         label={"商用利用"}
       />
       <YesNoElse
         label={"投稿"}
-        name={"post"}
+        name={"licence_post"}
       />
       <YesNoElse
         label={"クレジット"}
-        name={"credit"}
+        name={"licence_credit"}
       />
       <YesNoElse
         label={"二次配布"}
-        name={"distribution"}
+        name={"licence_distribution"}
       />
       <YesNoElse
         label={"素材"}
-        name={"material"}
+        name={"licence_material"}
       />
     </Section>
   );
