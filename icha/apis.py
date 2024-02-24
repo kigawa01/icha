@@ -10,7 +10,7 @@ from icha.data import LoginRes, TokensRes, GachaListRes
 from icha.error import ErrorIdException, ErrorIds
 from icha.repo import user_repo, gacha_repo, thumbnail_repo, licence_repo, content_repo, pulled_repo, content_image_repo
 from icha.table import get_session, UserTable
-from icha.tokens import get_token, get_user
+from icha.tokens import get_user, get_token, get_user_or_none
 
 
 @app.get("/api/health")
@@ -99,7 +99,7 @@ async def create_gacha(
 async def get_gacha(
         uid: int,
         session: AsyncSession = Depends(get_session),
-        user: Coroutine[Any, Any, UserTable] | None = Depends(get_user),
+        user: Coroutine[Any, Any, UserTable] | None = Depends(get_user_or_none),
 ) -> data.GachaRes:
     gacha_coroutine = gacha_repo.by_id(session, uid)
     gacha = await gacha_coroutine
@@ -108,11 +108,15 @@ async def get_gacha(
     content_tables_coroutine = content_repo.all_with_image_by_gacha(session, gacha)
     contents = list[data.GachaContentRes]()
     thumbnail = await thumbnail_coroutine
-    user = await user
+    if user is not None:
+        user = await user
     for (content, image) in await content_tables_coroutine:
         content: table.ContentTable
         image: table.ContentImageTable
-        is_available = await content_repo.is_content_available(session, content, gacha, user)
+        if user is None:
+            is_available = False
+        else:
+            is_available = await content_repo.is_content_available(session, content, user, gacha)
         contents.append(content.to_content_res(image.to_image_data(), is_available))
     licence = await licence_coroutine
     return gacha.to_gacha_res(thumbnail.to_image_data(), licence.to_licence_data(), contents)
@@ -179,6 +183,6 @@ async def get_contents(
     user = await user
     content = await content_repo.by_gacha_and_uid_and__pulled_or_user(session, gacha_id, content_id, user)
     image = content_image_repo.by_content(session, content)
-    is_available = await content_repo.is_content_available(session, content, None, user)
+    is_available = await content_repo.is_content_available(session, content, user)
     image = await image
-    return content.to_content_res(image, is_available)
+    return content.to_content_res(image.to_image_data(), is_available)

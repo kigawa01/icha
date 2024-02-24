@@ -11,6 +11,7 @@ import {apiClient} from "../../_client/api";
 import {useUserState} from "../../_manager/UserProvider";
 import {redirectLoginRouter} from "../../_unit/RedirectLogin";
 import {LoadableButton} from "../../_unit/LoadableButton";
+import {useClientState} from "../../_manager/AuthApiProvider";
 
 export default function Page(
   {params}: { params: { gacha_id: string } },
@@ -18,7 +19,11 @@ export default function Page(
   const uid = parseInt(params.gacha_id);
   if (isNaN(uid)) redirect("/notfound");
   const userState = useUserState();
-  const gachaRes = useFetch((() => apiClient.getGacha(uid)), [uid]);
+  const clientState = useClientState();
+  const client = clientState?.client;
+  const gachaRes = useFetch(
+    clientState && (() => (client || apiClient).getGacha(uid)), [uid, clientState],
+  );
   const router = useRouter();
 
   if (gachaRes && gachaRes.error != undefined) return <ErrorMessage error={gachaRes.error || "Error"}/>;
@@ -36,6 +41,6 @@ export default function Page(
       {userState?.userRes ? "ガチャを引く" : "ログインしてガチャを引く"}
     </LoadableButton>
     <LicenceSection licence={gacha?.licence}/>
-    <GachaContents contents={gacha?.contents || []}/>
+    <GachaContents gachaId={gacha?.uid || 0} contents={gacha?.contents || []}/>
   </Main>;
 }

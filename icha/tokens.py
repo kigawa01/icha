@@ -13,7 +13,7 @@ from icha.error import ErrorIdException, ErrorIds
 from icha.repo import user_repo
 from icha.table import UserTable, get_session
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/refresh")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/refresh", auto_error=False)
 
 
 def create_token(user_id: int, token_type: str = "access", expires_delta: timedelta | None = None):
@@ -41,18 +41,38 @@ def create_tokens(user: UserTable):
     )
 
 
-def get_token(token: str = Depends(oauth2_scheme)):
+def get_token_or_none(token: str | None = Depends(oauth2_scheme)):
+    if token is None:
+        return None
     return data.JwtTokenData(**jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM]))
 
 
-def access_token(token: data.JwtTokenData = Depends(get_token)):
+def get_token(token: data.JwtTokenData | None = Depends(get_token_or_none)):
+    if token is None:
+        raise ErrorIdException(ErrorIds.UNAUTHORIZED)
+    return token
+
+
+def access_token_or_none(token: data.JwtTokenData | None = Depends(get_token_or_none)):
+    if token is None:
+        return None
     if token.token_type != "access":
         raise ErrorIdException(ErrorIds.INVALID_TOKEN)
     return token
 
 
-def get_user(
+def get_user_or_none(
         session: AsyncSession = Depends(get_session),
-        token: data.JwtTokenData = Depends(access_token)
-) -> Coroutine[Any, Any, UserTable]:
+        token: data.JwtTokenData | None = Depends(access_token_or_none)
+):
+    if token is None:
+        return None
     return user_repo.by_token(session, token)
+
+
+def get_user(
+        user: Coroutine[Any, Any, UserTable] | None = Depends(get_user_or_none)
+) -> Coroutine[Any, Any, UserTable]:
+    if user is None:
+        raise ErrorIdException(ErrorIds.UNAUTHORIZED)
+    return user

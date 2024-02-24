@@ -1,3 +1,4 @@
+"use client";
 import {Button, Typography} from "@mui/material";
 import {TextSection} from "../../../../_unit/_section/TextSection";
 import {redirect, useRouter} from "next/navigation";
@@ -7,6 +8,7 @@ import {redirectLogin} from "../../../../_unit/RedirectLogin";
 import {useFetch} from "../../../../_hook/useFetch";
 import {Img} from "../../../../_unit/Img";
 import {ErrorMessage} from "../../../../_unit/ErrorMessage";
+import {LoadableButton} from "../../../../_unit/LoadableButton";
 
 export default function Page(
   {params}: { params: { gacha_id: string, content_id: string } },
@@ -27,9 +29,14 @@ export default function Page(
     <Typography variant={"h2"}>ガチャ結果</Typography>
     <ErrorMessage error={content?.error}/>
     <Typography variant={"h2"}>{content?.result?.title}</Typography>
-    <Img src={content?.result?.image.base64} alt={content?.result?.image.name}/>
+    <Img width={"100%"} height={"300px"} src={content?.result?.image.base64} alt={content?.result?.image.name}/>
     <Typography variant={"h2"}>{content?.result?.title}</Typography>
     <TextSection content={content?.result?.description || ""} sectionTitle={"説明"}/>
-    <Button variant={"contained"} onClick={_ => router.push("../run")}>もう一度引く</Button>
+    <LoadableButton
+      download={content?.result?.image.name} loading={content == undefined} href={content?.result?.image.base64}
+    >ダウンロード</LoadableButton>
+    <Button variant={"contained"} onClick={_ => router.push("../run")}>
+      もう一度引く
+    </Button>
   </Main>;
 }

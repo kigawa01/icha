@@ -50,12 +50,17 @@ async def by_gacha_and_uid_and__pulled_or_user(
         session: AsyncSession, gacha_id: int, uid: int, user: table.UserTable
 ) -> table.ContentTable:
     res = await session.execute(
-        sqlalchemy.select(table.ContentTable).where(
+        sqlalchemy.select(table.ContentTable).join(
+            table.GachaTable, table.GachaTable.uid == table.ContentTable.gacha_id
+        ).where(
             table.ContentTable.gacha_id == gacha_id,
             table.ContentTable.uid == uid,
-            sqlalchemy.exists(table.PulledContentTable).where(
-                table.PulledContentTable.content_id == table.ContentTable.uid,
-                table.PulledContentTable.user_id == user.uid
+            sqlalchemy.or_(
+                table.GachaTable.user_id == user.uid,
+                sqlalchemy.exists(table.PulledContentTable).where(
+                    table.PulledContentTable.content_id == table.ContentTable.uid,
+                    table.PulledContentTable.user_id == user.uid
+                )
             )
         )
     )
@@ -66,7 +71,10 @@ async def by_gacha_and_uid_and__pulled_or_user(
 
 
 async def is_content_available(
-        session: AsyncSession, content: table.ContentTable, gacha: table.GachaTable | None, user: table.UserTable
+        session: AsyncSession,
+        content: table.ContentTable,
+        user: table.UserTable,
+        gacha: table.GachaTable | None = None,
 ) -> bool:
     if gacha is None:
         res = await session.execute(
@@ -86,4 +94,4 @@ async def is_content_available(
             table.PulledContentTable.user_id == user.uid
         )
     )
-    return res is not None
+    return res.scalar_one_or_none() is not None

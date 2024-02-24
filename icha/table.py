@@ -131,14 +131,14 @@ class ContentTable(BaseTable):
     description: Mapped[str] = Column(String(255), nullable=False)
     rate: Mapped[int] = Column(Integer)
 
-    def to_content_res(self, content_image: data.ImageFileData, pulled: bool):
+    def to_content_res(self, content_image: data.ImageFileData, available: bool):
         return data.GachaContentRes.create(
             uid=self.uid,
             image=content_image,
             title=self.title,
             description=self.description,
             rate=self.rate,
-            available=pulled
+            available=available
         )
 
 

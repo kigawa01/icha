@@ -12,6 +12,6 @@ export function ErrorMessage(props: ErrorMessageProps) {
     ...parentProps
   } = props;
   return error && <Typography {...parentProps}>
-    <Box color={"error"} component={"strong"}>{error}</Box>
+    <Box color={"error"} component={"strong"}>Error: {error}</Box>
   </Typography>;
 }

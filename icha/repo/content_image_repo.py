@@ -16,7 +16,7 @@ def create(session: AsyncSession, image_data: data.ImageFileData, content: table
 
 async def by_content(
         session: AsyncSession, content: table.ContentTable
-) -> table.ContentTable:
+) -> table.ContentImageTable:
     res = await session.execute(
         sqlalchemy.select(table.ContentImageTable).where(
             table.ContentImageTable.content_id == content.uid

@@ -6,6 +6,7 @@ import {GachaContent} from "./GachaContent";
 
 export function GachaContents(
   {
+    gachaId,
     contents,
     ...props
   }: GachaContentsProps,
@@ -15,7 +16,7 @@ export function GachaContents(
   return (
     <Section {...props} sectionTitle={"内容"}>
       {contents.map(value => {
-        return <GachaContent content={value} key={value.uid}/>;
+        return <GachaContent gachaId={gachaId} content={value} key={value.uid}/>;
       })}
     </Section>
   );
@@ -23,4 +24,5 @@ export function GachaContents(
 
 export interface GachaContentsProps extends OverrideProps<BoxTypeMap, any> {
   contents: GachaContentRes[];
+  gachaId: number
 }
