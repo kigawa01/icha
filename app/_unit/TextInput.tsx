@@ -9,14 +9,14 @@ export function TextInput(
   }: TextInputProps & TextFieldProps,
 ) {
   return (
-    <div><TextField
+    <TextField
       {...props}
       color={color || "secondary"}
       sx={{
         width: "100%",
         margin: margin || "10px 0",
       }}
-    /></div>
+    />
   );
 }
 

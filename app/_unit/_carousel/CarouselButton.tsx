@@ -13,6 +13,7 @@ export function CarouselButton(
     page,
     onClick,
     buttonPosition,
+    disabled,
     ...props
   }: CarouselButtonProps,
 ) {
@@ -26,10 +27,12 @@ export function CarouselButton(
 
   return (
     <Box {...props} sx={buttonBoxSx} zIndex={zIndexUse + 1}>
-      <Button variant={"outlined"} sx={{
+      <Button
+        variant={"outlined"} sx={{
         fontWeight: "bold", fontSize: "2rem", height: height || "100%", color: "text.primary",
         bgcolor: "#fff6", "&:hover": {bgcolor: "#ccc9"},
-      }} onClick={onClick}>
+      }} onClick={onClick} disabled={disabled}
+      >
         {buttonPosition == "left" ? "<" : ">"}
       </Button>
     </Box>
@@ -42,6 +45,7 @@ export interface CarouselButtonProps extends OverrideProps<BoxTypeMap, any> {
   height?: Property.Height | undefined;
   zIndex?: number | undefined;
   buttonPosition: "left" | "right";
+  disabled?: boolean;
 
   onClick(): void;
 }

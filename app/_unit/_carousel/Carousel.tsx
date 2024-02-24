@@ -12,6 +12,7 @@ export function Carousel(
     nodes,
     zindex,
     period,
+    disabled,
     ...props
   }: CarouselProps,
 ) {
@@ -21,7 +22,7 @@ export function Carousel(
   function setNextPage() {
     pageState.setValue(pageState.value >= nodes.length ? 1 : pageState.value + 1);
   }
-  
+
   const zIndexUse = zindex || 1;
 
   return (
@@ -32,23 +33,22 @@ export function Carousel(
     >
 
       <CarouselButton
-        onClick={() => {
-          pageState.setValue(pageState.value <= 1 ? nodes.length : pageState.value - 1);
-          progressState.setValue(0);
-        }}
-        progressState={progressState} page={pageState.value} buttonPosition={"left"}
+        disabled={disabled} onClick={() => {
+        pageState.setValue(pageState.value <= 1 ? nodes.length : pageState.value - 1);
+        progressState.setValue(0);
+      }} progressState={progressState} page={pageState.value} buttonPosition={"left"}
       />
 
-      <CarouselMain flex={1} nodes={nodes} progressState={progressState} zIndex={zIndexUse}
+      <CarouselMain
+        flex={1} nodes={nodes} progressState={progressState} zIndex={zIndexUse}
         next={() => setNextPage()} period={period} page={pageState.value} minWidth={0}
       />
 
       <CarouselButton
-        onClick={() => {
-          setNextPage();
-          progressState.setValue(0);
-        }}
-        progressState={progressState} page={pageState.value} buttonPosition={"right"}
+        disabled={disabled} onClick={() => {
+        setNextPage();
+        progressState.setValue(0);
+      }} progressState={progressState} page={pageState.value} buttonPosition={"right"}
       />
 
     </Box>
@@ -59,4 +59,5 @@ export interface CarouselProps extends OverrideProps<BoxTypeMap, any> {
   nodes: ReactNode[];
   zindex?: number | undefined;
   period: number;
+  disabled?: boolean;
 }

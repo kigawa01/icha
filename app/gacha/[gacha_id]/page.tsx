@@ -10,7 +10,7 @@ import {GachaContents} from "./GachaContents";
 import {apiClient} from "../../_client/api";
 import {useUserState} from "../../_manager/UserProvider";
 import {redirectLoginRouter} from "../../_unit/RedirectLogin";
-import {LoadableButton} from "../../_unit/LoadableButton";
+import {LoadableButton} from "../../_unit/_loading/LoadableButton";
 import {useClientState} from "../../_manager/AuthApiProvider";
 
 export default function Page(

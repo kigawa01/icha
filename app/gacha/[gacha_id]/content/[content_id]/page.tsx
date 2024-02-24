@@ -8,7 +8,7 @@ import {redirectLogin} from "../../../../_unit/RedirectLogin";
 import {useFetch} from "../../../../_hook/useFetch";
 import {Img} from "../../../../_unit/Img";
 import {ErrorMessage} from "../../../../_unit/ErrorMessage";
-import {LoadableButton} from "../../../../_unit/LoadableButton";
+import {LoadableButton} from "../../../../_unit/_loading/LoadableButton";
 
 export default function Page(
   {params}: { params: { gacha_id: string, content_id: string } },

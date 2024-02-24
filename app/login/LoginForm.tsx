@@ -34,8 +34,7 @@ export function LoginForm(
 
     redirect(searchParams.get("url") || "/");
   }, undefined);
-  if (userState == undefined) return undefined;
-  if (userState.userRes) redirect(searchParams.get("url") || "/");
+  if (userState?.userRes) redirect(searchParams.get("url") || "/");
   return (
     <Box
       {...props}

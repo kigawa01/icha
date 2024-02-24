@@ -4,7 +4,7 @@ import {Typography} from "@mui/material";
 import {redirect, useRouter} from "next/navigation";
 import {redirectLogin, RequireLogin} from "../../../_unit/RedirectLogin";
 import {useClientState} from "../../../_manager/AuthApiProvider";
-import {LoadableButton} from "../../../_unit/LoadableButton";
+import {LoadableButton} from "../../../_unit/_loading/LoadableButton";
 import {useState} from "react";
 import {PullGachaRes} from "../../../../api_clients";
 import {ErrorMessage} from "../../../_unit/ErrorMessage";

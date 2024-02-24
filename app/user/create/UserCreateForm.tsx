@@ -2,7 +2,6 @@
 import {Box} from "@mui/system";
 import {BoxTypeMap} from "@mui/system/Box/Box";
 import {OverrideProps} from "@mui/types";
-import {Button} from "@mui/material";
 import {PasswordTextField} from "../../_unit/PasswordTextField";
 import {useState} from "react";
 import {ErrorMessage} from "../../_unit/ErrorMessage";
@@ -11,6 +10,7 @@ import {redirect} from "next/navigation";
 import {useUserState} from "../../_manager/UserProvider";
 import {apiClient} from "../../_client/api";
 import {setTokensState} from "../../_manager/TokenProvider";
+import {LoadableButton} from "../../_unit/_loading/LoadableButton";
 
 export interface LoginFormProps extends OverrideProps<BoxTypeMap, any> {
 }
@@ -22,8 +22,7 @@ export function UserCreateForm(
 ) {
   const [error, setError] = useState<string>();
   const userState = useUserState();
-  if (userState == undefined) return undefined;
-  if (userState.userRes) redirect("/");
+  if (userState?.userRes) redirect("/");
 
   return (<Box
     {...props}
@@ -67,12 +66,8 @@ export function UserCreateForm(
       autoComplete={"password"}
       required={true}
     />
-    <Button
-      sx={{
-        margin: "10px",
-      }}
-      variant={"contained"}
-      type={"submit"}
-    >登録</Button>
+    <LoadableButton
+      loading={userState == undefined} sx={{margin: "10px"}} variant={"contained"} type={"submit"}
+    >登録</LoadableButton>
   </Box>);
 }
