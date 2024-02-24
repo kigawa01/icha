@@ -110,7 +110,7 @@ class LicenceTable(BaseTable):
         )
 
 
-class GachaContentImageTable(BaseTable):
+class ContentImageTable(BaseTable):
     __tablename__ = 'content_image'
     content_id: Mapped[int] = Column(ForeignKey("content.uid", ondelete="CASCADE"), primary_key=True)
     name: Mapped[str] = Column(String(64), nullable=False)

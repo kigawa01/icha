@@ -24,6 +24,8 @@ class ErrorIds(Enum):
 
     NOT_FOUND = ErrorId("404 not found", 404)
     GACHA_NOT_FOUND = ErrorId("gacha not found", 404)
+    GACHA_CONTENT_NOT_FOUND = ErrorId("gacha content not found", 404)
+    CONTENT_IMAGE_NOT_FOUND = ErrorId("content image not found", 404)
     THUMBNAIL_NOT_FOUND = ErrorId("thumbnail not found", 404)
 
     USER_NAME_CONFLICT = ErrorId("user name conflict", 409)

@@ -17,15 +17,6 @@ def create_gacha(session: AsyncSession, gacha_body: data.GachaBody, user: table.
     return gacha
 
 
-def create_image(session: AsyncSession, image_data: data.ImageFileData, content: table.ContentTable):
-    image = table.GachaContentImageTable()
-    image.content_id = content.uid
-    image.name = image_data.name
-    image.base64 = image_data.base64
-    session.add(image)
-    return image
-
-
 async def by_id(session: AsyncSession, uid: int) -> table.GachaTable:
     result = await session.execute(
         sqlalchemy.select(table.GachaTable).where(table.GachaTable.uid == uid)

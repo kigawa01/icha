@@ -5,7 +5,8 @@ from sqlalchemy import Row
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from icha import data, table
-from icha.table import ContentTable, GachaContentImageTable
+from icha.error import ErrorIdException, ErrorIds
+from icha.table import ContentTable, ContentImageTable
 
 
 def create(session: AsyncSession, content_data: data.GachaContentBody, gacha: table.GachaTable):
@@ -20,10 +21,10 @@ def create(session: AsyncSession, content_data: data.GachaContentBody, gacha: ta
 
 async def all_with_image_by_gacha(
         session: AsyncSession, gacha: table.GachaTable
-) -> Sequence[Row[tuple[ContentTable, GachaContentImageTable]]]:
+) -> Sequence[Row[tuple[ContentTable, ContentImageTable]]]:
     result = await session.execute(
-        sqlalchemy.select(table.ContentTable, table.GachaContentImageTable)
-        .join(table.GachaContentImageTable, table.GachaContentImageTable.content_id == table.ContentTable.uid)
+        sqlalchemy.select(table.ContentTable, table.ContentImageTable)
+        .join(table.ContentImageTable, table.ContentImageTable.content_id == table.ContentTable.uid)
         .where(table.ContentTable.gacha_id == gacha.uid)
     )
     result = result.all()
@@ -43,3 +44,22 @@ async def all_by_non_pulled(
         )
     )
     return res.scalars().all()
+
+
+async def by_gacha_and_uid_pulled(
+        session: AsyncSession, gacha_id: int, uid: int, user: table.UserTable
+) -> table.ContentTable:
+    res = await session.execute(
+        sqlalchemy.select(table.ContentTable).where(
+            table.ContentTable.gacha_id == gacha_id,
+            table.ContentTable.uid == uid,
+            sqlalchemy.exists(table.PulledContentTable).where(
+                table.PulledContentTable.content_id == table.ContentTable.uid,
+                table.PulledContentTable.user_id == user.uid
+            )
+        )
+    )
+    res = res.scalar_one_or_none()
+    if res is None:
+        raise ErrorIdException(ErrorIds.GACHA_CONTENT_NOT_FOUND)
+    return res
