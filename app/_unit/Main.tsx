@@ -7,6 +7,7 @@ export interface MainProps extends OverrideProps<BoxTypeMap, any> {
 
 export function Main(
   {
+    paddingX,
     ...props
   }: MainProps,
 ) {
@@ -16,12 +17,12 @@ export function Main(
     <Box
       {...props}
       component={"main"}
-      padding={"30px 50px 200px 50px"}
+      padding={`30px ${paddingX || "50px"} 200px ${paddingX || "50px"}`}
       maxWidth={"1000px"}
-      margin={"0 auto"}
+      margin={"auto"}
       boxShadow={3}
       flex={1}
-      width={"99%"}
+      width={"97%"}
     />
   );
 }

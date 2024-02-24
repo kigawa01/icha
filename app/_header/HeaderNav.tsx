@@ -1,4 +1,4 @@
-import {Input, Link, SxProps, Typography} from "@mui/material";
+import {Link, SxProps, Typography} from "@mui/material";
 import {Box} from "@mui/system";
 import {OverrideProps} from "@mui/types";
 import {BoxTypeMap} from "@mui/system/Box/Box";
@@ -20,10 +20,11 @@ export function HeaderNav(
   >
     <Link sx={linkSx} href={"/"}><Typography>トップ</Typography></Link>
     <Link sx={linkSx} href={"/gacha/create"}><Typography>投稿</Typography></Link>
-    <Input sx={{
-      margin: "0 25px",
-      flex: 1,
-    }} placeholder={"検索"}/>
+    {/*<Input sx={{*/}
+    {/*  margin: "0 25px",*/}
+    {/*  flex: 1,*/}
+    {/*}} placeholder={"検索"}/>*/}
+    <Box flex={1}/>
     <UserNav/>
   </Box>;
 }

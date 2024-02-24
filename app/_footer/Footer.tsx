@@ -1,6 +1,7 @@
 import {Box} from "@mui/system";
-import {SxProps, Typography} from "@mui/material";
+import {Link, Typography} from "@mui/material";
 import {LabeledText} from "../_unit/_labeled/LabeledText";
+import {LabeledItem} from "../_unit/_labeled/LabeledItem";
 
 export function Footer(
   {}: {},
@@ -21,17 +22,20 @@ export function Footer(
     boxSizing={"border-box"}
   >
     <Box
-      width={"400px"}
+      width={"450px"}
       padding={"10px"}
     >
       <Typography variant={"h2"}>Icha</Typography>
       <LabeledText label={"contact"} text={"contact@kigawa.net"} marginTop={"5px"}/>
+      <LabeledItem label={"source"} marginTop={"5px"}>
+        <Link color={"text.primary"} href={"https://github.com/kigawa01/icha"}>https://github.com/kigawa01/icha</Link>
+      </LabeledItem>
     </Box>
 
     <Box
       borderTop={"2px solid"}
       borderColor={"grey"}
-      width={"500px"}
+      width={"520px"}
       textAlign={"center"}
       padding={"10px"}
     >

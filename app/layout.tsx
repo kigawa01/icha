@@ -1,6 +1,6 @@
 import {ReactNode} from "react";
 import {Header} from "./_header/Header";
-import {Theme} from "./_unit/Theme";
+import {Theme} from "./Theme";
 import {Footer} from "./_footer/Footer";
 import {Toolbar} from "@mui/material";
 import {Box} from "@mui/system";

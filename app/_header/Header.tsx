@@ -1,12 +1,14 @@
-import {HTMLAttributes} from "react";
 import {HeaderNav} from "./HeaderNav";
 import {AppBar, Link, Toolbar, Typography} from "@mui/material";
+import {OverrideProps} from "@mui/material/OverridableComponent";
+import {AppBarTypeMap} from "@mui/material/AppBar/AppBar";
 
-export interface HeaderPageProps extends HTMLAttributes<any> {
+export interface HeaderPageProps extends OverrideProps<AppBarTypeMap, any> {
 }
 
-export function Header({...parentProps}: HeaderPageProps) {
+export function Header({...props}: HeaderPageProps) {
   return <AppBar
+    {...props}
     component={"header"}
     sx={{alignContent: "center"}}
   >

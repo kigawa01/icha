@@ -16,7 +16,6 @@ export function TextSection(
   return (
     <Section
       {...props}
-      component={"section"}
     >
       <Typography>{content}</Typography>
     </Section>

@@ -16,9 +16,10 @@ export function Section(
     <Box
       {...props}
       component={"section"}
+      margin={"40px 10px"}
     >
       <Typography variant={"h2"}>{sectionTitle}</Typography>
-      {children}
+      <Box padding={"10px"}>{children}</Box>
     </Box>
   );
 }
