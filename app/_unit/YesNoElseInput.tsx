@@ -5,12 +5,15 @@ import RadioGroup from "@mui/material/RadioGroup";
 import Radio from "@mui/material/Radio";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import {FormControlTypeMap} from "@mui/material/FormControl/FormControl";
+import * as React from "react";
 
 
 export function YesNoElse(
   {
     name,
     label,
+    value,
+    onChange,
     ...props
   }: YesNoElseProps,
 ) {
@@ -18,11 +21,12 @@ export function YesNoElse(
 
   return (
     <FormControl
-      {...props} sx={{display: "block"}} color={"secondary"}
+      {...props} sx={{display: "block", padding: "5px"}} color={"secondary"}
     >
       <FormLabel color={"secondary"}>{label}</FormLabel>
       <RadioGroup
-        row name={name} color={"secondary"} defaultValue={"No"}
+        row name={name} color={"secondary"} defaultValue={"No"} value={value} onChange={onChange}
+        sx={{padding: "0 5px"}}
       >
         <FormControlLabel
           color={"secondary"} value="Yes" control={<Radio color={"secondary"}/>} label="Yes"
@@ -42,4 +46,6 @@ export function YesNoElse(
 export interface YesNoElseProps extends OverrideProps<FormControlTypeMap<any, any>, any> {
   name: string;
   label: string;
+  value?: any;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>, value: string) => void;
 }
