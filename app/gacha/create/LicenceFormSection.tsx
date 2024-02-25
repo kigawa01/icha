@@ -6,8 +6,7 @@ import {useState} from "react";
 import {useUserState} from "../../_manager/UserProvider";
 import {redirectLogin} from "../../_unit/RedirectLogin";
 import {LoadableButton} from "../../_unit/_loading/LoadableButton";
-import {TextareaAutosize} from "@mui/base";
-import {Box} from "@mui/system";
+import {Textarea} from "../../_unit/Textarea";
 
 export function LicenceFormSection(
   {
@@ -58,9 +57,8 @@ SOFTWARE.
         setMaterial("Yes");
       }}
       >テンプレート1</LoadableButton>
-      <Box
-        margin={"5px 0 10px 0"}
-        borderRadius={"5px"} overflow={"hidden"} boxSizing={"border-box"} padding={"5px"} sx={{
+      <Textarea
+        margin={"5px 0 10px 0"} borderRadius={"5px"} overflow={"hidden"} boxSizing={"border-box"} padding={"5px"} sx={{
         "textarea": {
           resize: "none",
           width: "100%",
@@ -70,12 +68,9 @@ SOFTWARE.
           boxSizing: "border-box",
         },
       }}
-      >
-        <TextareaAutosize
-          name={"licence_text"} value={text} placeholder={"本文"} maxRows={"20"}
-          onChange={event => setText(event.currentTarget.value)}
-        />
-      </Box>
+        name={"licence_text"} value={text} placeholder={"本文"} maxRows={"20"}
+        onChange={event => setText(event.currentTarget.value)}
+      />
       <YesNoElse
         name={"licence_business"} label={"商用利用"} value={business}
         onChange={event => setBusiness(event.currentTarget.value)}

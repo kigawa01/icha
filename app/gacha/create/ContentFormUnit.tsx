@@ -3,6 +3,7 @@ import {OverrideProps} from "@mui/types";
 import {ImageEdit} from "../../_unit/ImageEdit";
 import {TextInput} from "../../_unit/TextInput";
 import {Box} from "@mui/system";
+import {Textarea} from "../../_unit/Textarea";
 
 export function ContentFormUnit(
   {
@@ -13,23 +14,24 @@ export function ContentFormUnit(
 
 
   return (
-    <Box {...props} >
+    <Box {...props} display={"flex"}>
       <ImageEdit
-        textLabel={"結果"}
-        name={`content-thumbnail-${index}`}
+        flex={"none"} textLabel={"結果"} name={`content-thumbnail-${index}`} width={"300px"} height={"200px"}
       />
-      <TextInput
-        label={"タイトル"}
-        name={`content-title-${index}`}
-      />
-      <TextInput
-        label={"説明"}
-        name={`content-description-${index}`}
-      />
-      <TextInput
-        label={"比率"}
-        name={`content-rate-${index}`}
-      />
+      <Box flex={1} marginLeft={"10px"}>
+        <TextInput
+          label={"タイトル"}
+          name={`content-title-${index}`}
+        />
+        <Textarea
+          label={"説明"}
+          name={`content-description-${index}`}
+        />
+        <TextInput
+          label={"比率"}
+          name={`content-rate-${index}`}
+        />
+      </Box>
     </Box>
   );
 }

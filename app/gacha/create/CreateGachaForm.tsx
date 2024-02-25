@@ -16,6 +16,7 @@ import {GachaContentBody, ImageFileData, LicenceData} from "../../../api_clients
 import {fileToBase64} from "../../util";
 import {ErrorDataException, ErrorIds} from "../../_client/_error";
 import {redirectLogin} from "../../_unit/RedirectLogin";
+import {Textarea} from "../../_unit/Textarea";
 
 export function CreateGachaForm(
   {
@@ -71,9 +72,8 @@ export function CreateGachaForm(
           label={"ガチャ名"}
           name={"name"}
         />
-        <TextInput
-          label={"説明"}
-          name={"description"}
+        <Textarea
+          label={"説明"} name={"description"}
         />
       </Section>
 

@@ -15,7 +15,7 @@ export function ContentListFormSection(
   const [list, setList] = useState<ReactNode[]>([]);
 
   function addContent() {
-    list.push(<ContentFormUnit index={list.length} key={list.length}/>);
+    list.push(<ContentFormUnit index={list.length} key={list.length} margin={"25px 0"}/>);
     setList([...list]);
     onChangeSize(list.length);
   }
