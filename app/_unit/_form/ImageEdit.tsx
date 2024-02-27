@@ -13,6 +13,7 @@ export function ImageEdit(
     textLabel,
     name,
     accept,
+    required,
     ...props
   }: GachaTopImageEditProps,
 ) {
@@ -34,7 +35,7 @@ export function ImageEdit(
             ? event.currentTarget.files[0] : undefined;
           setImgUrl(url ? URL.createObjectURL(url) : "");
         }}
-        color={color || "secondary"}
+        color={color || "secondary"} required={required}
         inputProps={{accept: accept || "image/*"}}
       />
     </Box>
@@ -49,4 +50,5 @@ export interface GachaTopImageEditProps extends OverrideProps<BoxTypeMap, any> {
     InputBasePropsColorOverrides
   >;
   name: string
+  required?: boolean;
 }

@@ -13,7 +13,7 @@ import {ContentListFormSection} from "./ContentListFormSection";
 import {useClientState} from "../../_manager/AuthApiProvider";
 import {redirect} from "next/navigation";
 import {GachaContentBody, ImageFileData, LicenceData} from "../../../api_clients";
-import {fileToBase64} from "../../util";
+import {fileToBase64, useStateObjectDef} from "../../util";
 import {ErrorDataException, ErrorIds} from "../../_client/_error";
 import {redirectLogin} from "../../_unit/RedirectLogin";
 import {Textarea} from "../../_unit/_form/Textarea";
@@ -24,10 +24,10 @@ export function CreateGachaForm(
   }: CreateGachaFormProps,
 ) {
   const [err, setErr] = useState<string>();
-  const [contentsSize, setContentsSize] = useState(0);
   const clientState = useClientState();
   const [redirectPath, setRedirectPath] = useState<string>();
   const client = clientState?.client;
+  const contentsState = useStateObjectDef<number[]>([0]);
   if (clientState != undefined && client == undefined) return redirectLogin();
   if (redirectPath) redirect(redirectPath);
 
@@ -39,7 +39,7 @@ export function CreateGachaForm(
         if (client == undefined) return;
         const thumbnailFile = data.get("thumbnail") as File;
         const licence: LicenceData = createLicence(data);
-        const contents: Promise<GachaContentBody>[] = createContents(data, contentsSize);
+        const contents: Promise<GachaContentBody>[] = createContents(data, contentsState.value);
         Promise.all([
           fileToBase64(thumbnailFile),
           Promise.all(contents),
@@ -65,22 +65,22 @@ export function CreateGachaForm(
       <ErrorMessage error={err}/>
 
       <Section sectionTitle={"画像投稿"}>
-        <ImageEdit
-          textLabel={"サムネイル"} name={"thumbnail"} height={"450px"}
+        <ImageEdit required
+                   textLabel={"サムネイル"} name={"thumbnail"} height={"450px"}
         />
-        <TextInput
-          label={"ガチャ名"}
-          name={"name"}
+        <TextInput required
+                   label={"ガチャ名"}
+                   name={"name"}
         />
-        <Textarea
-          label={"説明"} name={"description"}
+        <Textarea required
+                  label={"説明"} name={"description"}
         />
       </Section>
 
 
       <LicenceFormSection/>
 
-      <ContentListFormSection onChangeSize={setContentsSize}/>
+      <ContentListFormSection contentsState={contentsState}/>
 
       <ErrorMessage error={err}/>
 
@@ -102,24 +102,25 @@ function createLicence(data: FormData): LicenceData {
   };
 }
 
-function createContents(data: FormData, contentsSize: number): Promise<GachaContentBody>[] {
+function createContents(data: FormData, contentsValue: number[]): Promise<GachaContentBody>[] {
   const contents: Promise<GachaContentBody>[] = [];
-  for (let i = 0; i < contentsSize; i++) {
-    const contentThumbnail = data.get(`content-thumbnail-${i}`) as File;
+  contentsValue.forEach(num => {
+    const contentThumbnail = data.get(`content-thumbnail-${num}`) as File;
     contents.push(fileToBase64(contentThumbnail).then(value => {
       const image: ImageFileData = {base64: value, name: contentThumbnail.name};
-      const rate = parseInt(data.get(`content-rate-${i}`) as string);
+      const rate = parseInt(data.get(`content-rate-${num}`) as string);
       if (isNaN(rate)) {
-        throw new ErrorDataException({error_id: ErrorIds.InvalidNumber.name, message: "rate is NaN"});
+        throw new ErrorDataException({error_id: ErrorIds.InvalidNumber.name, message: `rate is NaN. num: ${num}`});
       }
       return {
-        description: data.get(`content-description-${i}`) as string,
+        description: data.get(`content-description-${num}`) as string,
         image: image,
         rate: rate,
-        title: data.get(`content-title-${i}`) as string,
+        title: data.get(`content-title-${num}`) as string,
       };
     }));
-  }
+  });
+
   return contents;
 }
 

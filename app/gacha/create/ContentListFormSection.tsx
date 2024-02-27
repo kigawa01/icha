@@ -1,37 +1,31 @@
 "use client";
 import {BoxTypeMap} from "@mui/system/Box/Box";
 import {OverrideProps} from "@mui/types";
-import {ReactNode, useEffect, useState} from "react";
 import {ContentFormUnit} from "./ContentFormUnit";
 import {Button} from "@mui/material";
 import {Section} from "../../_unit/_section/Section";
+import {StateObject} from "../../util";
 
 export function ContentListFormSection(
   {
-    onChangeSize,
+    contentsState,
     ...props
   }: ContentFormSectionProps,
 ) {
-  const [list, setList] = useState<ReactNode[]>([]);
-
   function addContent() {
-    const element = <ContentFormUnit
-      index={list.length} key={list.length} margin={"25px 0"}
-      remove={() => setList(list.filter(value => value != element))}
-    />;
-    list.push(element);
-    setList([...list]);
-    onChangeSize(list.length);
+    const list = contentsState.value;
+    const newNum = contentsState.value.length == 0
+      ? 0 : contentsState.value[contentsState.value.length - 1] + 1;
+    list.push(newNum);
+    contentsState.setValue([...list]);
   }
-
-  useEffect(() => {
-    if (list.length != 0) return;
-    addContent();
-  }, []);
 
   return (
     <Section sectionTitle={"内容"} {...props}>
-      {list}
+      {contentsState.value.map(num => <ContentFormUnit
+        index={num} key={num} margin={"25px 0"}
+        remove={() => contentsState.setValue(contentsState.value.filter(value => value != num))}
+      />)}
       <Button
         onClick={_ => addContent()}
         variant={"contained"}
@@ -41,5 +35,5 @@ export function ContentListFormSection(
 }
 
 export interface ContentFormSectionProps extends OverrideProps<BoxTypeMap, any> {
-  onChangeSize(size: number): void;
+  contentsState: StateObject<number[]>;
 }
