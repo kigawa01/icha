@@ -82,6 +82,7 @@ export function CreateGachaForm(
 
       <ContentListFormSection onChangeSize={setContentsSize}/>
 
+      <ErrorMessage error={err}/>
 
       <Button
         sx={{margin: "10px"}} variant={"contained"} type={"submit"} disabled={clientState == undefined}

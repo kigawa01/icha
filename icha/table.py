@@ -80,7 +80,7 @@ class ThumbnailTable(BaseTable):
     __tablename__ = 'thumbnail'
     gacha_id: Mapped[int] = Column(ForeignKey("gacha.uid", ondelete="CASCADE"), primary_key=True)
     name: Mapped[str] = Column(String(64), nullable=False)
-    base64: Mapped[str] = Column(Text(16_000_000), nullable=False)
+    base64: Mapped[str] = Column(Text(32_000_000), nullable=False)
 
     def to_image_data(self):
         return data.ImageFileData(
@@ -92,7 +92,7 @@ class ThumbnailTable(BaseTable):
 class LicenceTable(BaseTable):
     __tablename__ = 'licence'
     gacha_id: Mapped[int] = Column(ForeignKey("gacha.uid", ondelete="CASCADE"), primary_key=True)
-    text: Mapped[str] = Column(String(255), nullable=False)
+    text: Mapped[str] = Column(Text(4096), nullable=False)
     business: Mapped[str] = Column(String(128), nullable=False)
     post: Mapped[str] = Column(String(128), nullable=False)
     credit: Mapped[str] = Column(String(128), nullable=False)
@@ -114,7 +114,7 @@ class ContentImageTable(BaseTable):
     __tablename__ = 'content_image'
     content_id: Mapped[int] = Column(ForeignKey("content.uid", ondelete="CASCADE"), primary_key=True)
     name: Mapped[str] = Column(String(64), nullable=False)
-    base64: Mapped[str] = Column(Text(16_000_000), nullable=False)
+    base64: Mapped[str] = Column(Text(32_000_000), nullable=False)
 
     def to_image_data(self):
         return data.ImageFileData(

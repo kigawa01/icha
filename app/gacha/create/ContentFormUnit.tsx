@@ -4,10 +4,12 @@ import {ImageEdit} from "../../_unit/ImageEdit";
 import {TextInput} from "../../_unit/TextInput";
 import {Box} from "@mui/system";
 import {Textarea} from "../../_unit/Textarea";
+import {Button} from "@mui/material";
 
 export function ContentFormUnit(
   {
     index,
+    remove,
     ...props
   }: ContentFormUnitProps,
 ) {
@@ -15,9 +17,12 @@ export function ContentFormUnit(
 
   return (
     <Box {...props} display={"flex"}>
-      <ImageEdit
-        flex={"none"} textLabel={"結果"} name={`content-thumbnail-${index}`} width={"300px"} height={"200px"}
-      />
+      <Box display={"flex"} flexDirection={"column"} justifyContent={"space-between"}>
+        <ImageEdit
+          flex={"none"} textLabel={"画像"} name={`content-thumbnail-${index}`} width={"300px"} height={"200px"}
+        />
+        <Button onClick={_ => remove()} variant={"contained"}>削除</Button>
+      </Box>
       <Box flex={1} marginLeft={"10px"}>
         <TextInput
           label={"タイトル"}
@@ -28,7 +33,7 @@ export function ContentFormUnit(
           name={`content-description-${index}`}
         />
         <TextInput
-          label={"比率"}
+          label={"比率"}  type={"number"}
           name={`content-rate-${index}`}
         />
       </Box>
@@ -38,4 +43,6 @@ export function ContentFormUnit(
 
 export interface ContentFormUnitProps extends OverrideProps<BoxTypeMap, any> {
   index: number;
+
+  remove(): void;
 }

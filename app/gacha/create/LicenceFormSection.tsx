@@ -56,7 +56,7 @@ SOFTWARE.
         setDistribution("Yes");
         setMaterial("Yes");
       }}
-      >テンプレート1</LoadableButton>
+      >MIT Lisense</LoadableButton>
       <Textarea
         margin={"5px 0 10px 0"} borderRadius={"5px"} overflow={"hidden"} boxSizing={"border-box"} padding={"5px"} sx={{
         "textarea": {

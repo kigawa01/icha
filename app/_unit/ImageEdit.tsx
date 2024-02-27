@@ -11,6 +11,7 @@ export function ImageEdit(
   {
     color,
     textLabel,
+    name,
     accept,
     ...props
   }: GachaTopImageEditProps,
@@ -27,7 +28,7 @@ export function ImageEdit(
         flex={1} fontSize={"2rem"} fontFamily={udevFont.style.fontFamily}
       />
       <Input
-        type={"file"} sx={{margin: "5px 10px"}}
+        type={"file"} sx={{margin: "5px 10px"}} name={name}
         onChange={(event: ChangeEvent<HTMLInputElement>) => {
           const url = event.currentTarget.files && event.currentTarget.files.length != 0
             ? event.currentTarget.files[0] : undefined;
@@ -47,4 +48,5 @@ export interface GachaTopImageEditProps extends OverrideProps<BoxTypeMap, any> {
     "primary" | "secondary" | "error" | "info" | "success" | "warning",
     InputBasePropsColorOverrides
   >;
+  name: string
 }
