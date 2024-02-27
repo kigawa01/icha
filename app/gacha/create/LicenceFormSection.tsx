@@ -1,12 +1,13 @@
 import {BoxTypeMap} from "@mui/system/Box/Box";
 import {OverrideProps} from "@mui/types";
-import {YesNoElse} from "../../_unit/YesNoElseInput";
+import {YesNoElse} from "../../_unit/_form/YesNoElseInput";
 import {Section} from "../../_unit/_section/Section";
+import * as React from "react";
 import {useState} from "react";
 import {useUserState} from "../../_manager/UserProvider";
 import {redirectLogin} from "../../_unit/RedirectLogin";
 import {LoadableButton} from "../../_unit/_loading/LoadableButton";
-import {Textarea} from "../../_unit/Textarea";
+import {Textarea} from "../../_unit/_form/Textarea";
 
 export function LicenceFormSection(
   {
@@ -67,29 +68,28 @@ SOFTWARE.
           boxShadow: "1",
           boxSizing: "border-box",
         },
-      }}
-        name={"licence_text"} value={text} placeholder={"本文"} maxRows={"20"}
+      }} name={"licence_text"} value={text} placeholder={"本文"} maxRows={"20"} required
         onChange={event => setText(event.currentTarget.value)}
       />
       <YesNoElse
         name={"licence_business"} label={"商用利用"} value={business}
-        onChange={event => setBusiness(event.currentTarget.value)}
+        onChange={value => setBusiness(value)} required
       />
       <YesNoElse
         label={"投稿"} name={"licence_post"} value={post}
-        onChange={event => setPost(event.currentTarget.value)}
+        onChange={value => setPost(value)} required
       />
       <YesNoElse
         label={"クレジットなし"} name={"licence_credit"} value={credit}
-        onChange={event => setCredit(event.currentTarget.value)}
+        onChange={value => setCredit(value)} required
       />
       <YesNoElse
         label={"二次配布"} name={"licence_distribution"} value={distribution}
-        onChange={event => setDistribution(event.currentTarget.value)}
+        onChange={value => setDistribution(value)} required
       />
       <YesNoElse
         label={"素材"} name={"licence_material"} value={material}
-        onChange={event => setMaterial(event.currentTarget.value)}
+        onChange={value => setMaterial(value)} required
       />
     </Section>
   );

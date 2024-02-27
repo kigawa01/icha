@@ -1,9 +1,9 @@
 import {BoxTypeMap} from "@mui/system/Box/Box";
 import {OverrideProps} from "@mui/types";
-import {ImageEdit} from "../../_unit/ImageEdit";
-import {TextInput} from "../../_unit/TextInput";
+import {ImageEdit} from "../../_unit/_form/ImageEdit";
+import {TextInput} from "../../_unit/_form/TextInput";
 import {Box} from "@mui/system";
-import {Textarea} from "../../_unit/Textarea";
+import {Textarea} from "../../_unit/_form/Textarea";
 import {Button} from "@mui/material";
 
 export function ContentFormUnit(

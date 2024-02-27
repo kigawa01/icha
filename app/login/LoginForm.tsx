@@ -2,8 +2,8 @@
 import {Box} from "@mui/system";
 import {BoxTypeMap} from "@mui/system/Box/Box";
 import {OverrideProps} from "@mui/types";
-import {TextInput} from "../_unit/TextInput";
-import {PasswordTextField} from "../_unit/PasswordTextField";
+import {TextInput} from "../_unit/_form/TextInput";
+import {PasswordTextField} from "../_unit/_form/PasswordTextField";
 import {Button} from "@mui/material";
 import {ErrorMessage} from "../_unit/ErrorMessage";
 

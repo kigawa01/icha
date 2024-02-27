@@ -1,11 +1,11 @@
 import {Box} from "@mui/system";
 import {ChangeEvent, useState} from "react";
 import {Input} from "@mui/material";
-import {Img} from "./Img";
+import {Img} from "../Img";
 import {OverridableStringUnion, OverrideProps} from "@mui/types";
 import {BoxTypeMap} from "@mui/system/Box/Box";
 import {InputBasePropsColorOverrides} from "@mui/material/InputBase/InputBase";
-import {udevFont} from "../Theme";
+import {udevFont} from "../../Theme";
 
 export function ImageEdit(
   {

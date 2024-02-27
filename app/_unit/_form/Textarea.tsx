@@ -10,6 +10,7 @@ export function Textarea(
     value,
     onChange,
     label,
+    required,
     name,
     ...props
   }: TextareaProps,
@@ -26,13 +27,12 @@ export function Textarea(
         padding: "3px",
         boxSizing: "border-box",
       },
-    }}
-      {...props}
+    }} {...props}
     >
       {label && <Typography padding={"3px 5px"}>{label}</Typography>}
       <TextareaAutosize
         name={name} value={value} placeholder={label} maxRows={"20"} minRows={2}
-        onChange={onChange}
+        onChange={onChange} required={required}
       />
     </Box>
   );
@@ -43,4 +43,5 @@ export interface TextareaProps extends OverrideProps<BoxTypeMap, any> {
   onChange?: ChangeEventHandler<any> | undefined;
   label?: string | undefined;
   name: string;
+  required?: boolean;
 }

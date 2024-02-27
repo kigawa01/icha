@@ -4,8 +4,8 @@ import {BoxTypeMap} from "@mui/system/Box/Box";
 import {OverrideProps} from "@mui/types";
 import {ErrorMessage} from "../../_unit/ErrorMessage";
 import {Section} from "../../_unit/_section/Section";
-import {ImageEdit} from "../../_unit/ImageEdit";
-import {TextInput} from "../../_unit/TextInput";
+import {ImageEdit} from "../../_unit/_form/ImageEdit";
+import {TextInput} from "../../_unit/_form/TextInput";
 import {Button} from "@mui/material";
 import {useState} from "react";
 import {LicenceFormSection} from "./LicenceFormSection";
@@ -16,7 +16,7 @@ import {GachaContentBody, ImageFileData, LicenceData} from "../../../api_clients
 import {fileToBase64} from "../../util";
 import {ErrorDataException, ErrorIds} from "../../_client/_error";
 import {redirectLogin} from "../../_unit/RedirectLogin";
-import {Textarea} from "../../_unit/Textarea";
+import {Textarea} from "../../_unit/_form/Textarea";
 
 export function CreateGachaForm(
   {
@@ -95,8 +95,8 @@ function createLicence(data: FormData): LicenceData {
   return {
     business: data.get("licence_business") as string,
     credit: data.get("licence_credit") as string,
-    distribution: data.get("licence_text") as string,
-    material: data.get("licence_distribution") as string,
+    distribution: data.get("licence_distribution") as string,
+    material: data.get("licence_material") as string,
     post: data.get("licence_post") as string,
     text: data.get("licence_text") as string,
   };
