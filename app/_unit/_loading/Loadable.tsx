@@ -1,6 +1,4 @@
-import {BoxTypeMap} from "@mui/system/Box/Box";
-import {OverrideProps} from "@mui/types";
-import {Loading} from "./Loading";
+import {Loading, LoadingProps} from "./Loading";
 import {ReactNode} from "react";
 
 export function Loadable(
@@ -8,18 +6,19 @@ export function Loadable(
     loading,
     children,
     loadingLabel,
+    ...props
   }: LoadableProps,
 ) {
 
 
   return (
     loading
-      ? loadingLabel || <Loading/>
+      ? loadingLabel || <Loading {...props}/>
       : children
   );
 }
 
-export interface LoadableProps extends OverrideProps<BoxTypeMap, any> {
+export interface LoadableProps extends LoadingProps {
   loading: boolean;
   loadingLabel?: ReactNode | undefined;
 }

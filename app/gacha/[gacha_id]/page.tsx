@@ -2,7 +2,6 @@
 import {TextSection} from "../../_unit/_section/TextSection";
 import {redirect, useRouter} from "next/navigation";
 import {useFetch} from "../../_hook/useFetch";
-import {Img} from "../../_unit/Img";
 import {ErrorMessage} from "../../_unit/ErrorMessage";
 import {Main} from "../../_unit/Main";
 import {LicenceSection} from "./LicenceSection";
@@ -14,6 +13,7 @@ import {LoadableButton} from "../../_unit/_loading/LoadableButton";
 import {useClientState} from "../../_manager/AuthApiProvider";
 import {Box} from "@mui/system";
 import {Button, Typography} from "@mui/material";
+import {LoadableImg} from "../../_unit/_loading/LoadableImg";
 
 export default function Page(
   {params}: { params: { gacha_id: string } },
@@ -32,12 +32,12 @@ export default function Page(
   const gacha = gachaRes?.result;
 
   return <Main>
-    <Typography variant={"h2"} margin={"10px"}>{gacha?.name}</Typography>
-    <Img
+    <Typography variant={"h2"} margin={"10px"}>{gacha?.name || "ロード中..."}</Typography>
+    <LoadableImg
       src={gacha?.thumbnail.base64} alt={gacha?.thumbnail.name} width={"100%"} height={"500px"} borderRadius={"5px"}
-      boxShadow={1} padding={"3px"}
+      boxShadow={1} padding={"3px"} loading={gachaRes == undefined} fontSize={50}
     />
-    <TextSection content={gacha?.name || ""} sectionTitle={gacha?.name || ""}/>
+    <TextSection content={gacha?.name || "ロード中..."} sectionTitle={gacha?.name || "ロード中..."}/>
     <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
       <Typography sx={{fontSize: "4.5rem"}}>&gt;&gt;</Typography>
       <LoadableButton
