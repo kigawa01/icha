@@ -56,7 +56,8 @@ async def create_gacha(
         session: AsyncSession = Depends(get_session),
         user: Coroutine[Any, Any, UserTable] = Depends(get_user),
 ) -> data.GachaRes:
-    gacha = gacha_repo.create_gacha(session, body, await user)
+    user = await user
+    gacha = gacha_repo.create_gacha(session, body, user)
     await session.flush([gacha])
     licence = licence_repo.create(session, body.licence, gacha)
     thumbnail = thumbnail_repo.create(session, body.thumbnail, gacha)
@@ -91,7 +92,7 @@ async def create_gacha(
     for (content_table, content_image) in contents_tuples:
         content_table: table.ContentTable
         content_image: table.ContentImageTable
-        contents.append(content_table.to_content_res(content_image.to_image_data(), True))
+        contents.append(content_table.to_content_res(content_image.to_image_data(), True, user.uid))
     return gacha.to_gacha_res(thumbnail.to_image_data(), licence.to_licence_data(), contents)
 
 
@@ -108,16 +109,15 @@ async def get_gacha(
     content_tables_coroutine = content_repo.all_with_image_by_gacha(session, gacha)
     contents = list[data.GachaContentRes]()
     thumbnail = await thumbnail_coroutine
+    post_user = user_repo.by_uid(session, gacha.user_id)
     if user is not None:
         user = await user
+    post_user = await post_user
     for (content, image) in await content_tables_coroutine:
         content: table.ContentTable
         image: table.ContentImageTable
-        if user is None:
-            is_available = False
-        else:
-            is_available = await content_repo.is_content_available(session, content, user, gacha)
-        contents.append(content.to_content_res(image.to_image_data(), is_available))
+        is_pulled = await content_repo.is_content_pulled(session, content, user)
+        contents.append(content.to_content_res(image.to_image_data(), is_pulled, post_user.uid))
     licence = await licence_coroutine
     return gacha.to_gacha_res(thumbnail.to_image_data(), licence.to_licence_data(), contents)
 
@@ -182,7 +182,10 @@ async def get_contents(
 ) -> data.GachaContentRes:
     user = await user
     content = await content_repo.by_gacha_and_uid_and__pulled_or_user(session, gacha_id, content_id, user)
+    is_pulled = content_repo.is_content_pulled(session, content, user)
+    gacha = gacha_repo.by_id(session, gacha_id)
     image = content_image_repo.by_content(session, content)
-    is_available = await content_repo.is_content_available(session, content, user)
     image = await image
-    return content.to_content_res(image.to_image_data(), is_available)
+    gacha = await gacha
+    is_pulled = await is_pulled
+    return content.to_content_res(image.to_image_data(), is_pulled, gacha.user_id)

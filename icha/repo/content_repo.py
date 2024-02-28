@@ -70,6 +70,20 @@ async def by_gacha_and_uid_and__pulled_or_user(
     return res
 
 
+async def is_content_pulled(
+        session: AsyncSession,
+        content: table.ContentTable,
+        user: table.UserTable
+) -> bool:
+    res = await session.execute(
+        sqlalchemy.select(table.PulledContentTable).where(
+            table.PulledContentTable.content_id == content.uid,
+            table.PulledContentTable.user_id == user.uid
+        )
+    )
+    return res.scalar_one_or_none() is not None
+
+
 async def is_content_available(
         session: AsyncSession,
         content: table.ContentTable,

@@ -11,12 +11,13 @@ export function GachaContents(
     ...props
   }: GachaContentsProps,
 ) {
-
+  let rateSum = 0;
+  contents.filter(value => !value.pulled).forEach(value => rateSum += value.rate);
 
   return (
     <Section {...props} sectionTitle={"内容"}>
       {contents.map(value => {
-        return <GachaContent gachaId={gachaId} content={value} key={value.uid}/>;
+        return <GachaContent rateSum={rateSum} gachaId={gachaId} content={value} key={value.uid}/>;
       })}
     </Section>
   );
@@ -24,5 +25,5 @@ export function GachaContents(
 
 export interface GachaContentsProps extends OverrideProps<BoxTypeMap, any> {
   contents: GachaContentRes[];
-  gachaId: number
+  gachaId: number;
 }
