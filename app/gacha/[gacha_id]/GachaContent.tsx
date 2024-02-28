@@ -20,6 +20,8 @@ export function GachaContent(
   const user = userState?.userRes;
   if (userState != undefined && user == undefined) redirectLogin();
 
+  const probability = rateSum == 0 ? 0 : Math.floor((content.rate / rateSum) * 100);
+
   return (
     <Box
       {...props} display={"flex"}
@@ -39,7 +41,7 @@ export function GachaContent(
       <Box marginLeft={"15px"}>
         <Typography variant={"h3"}>{content.title}</Typography>
         <Typography margin={"10px 5px"}>{content.description}</Typography>
-        <LabeledText margin={"5px"} label={"確率"} text={`約${Math.floor((content.rate / rateSum) * 100)}%`}/>
+        <LabeledText margin={"5px"} label={"確率"} text={`約${probability}%`}/>
         <LabeledText margin={"5px"} text={content.pulled ? "はい" : "いいえ"} label={"取得済み"}/>
       </Box>
     </Box>

@@ -28,7 +28,9 @@ export function Footer(
       <Typography variant={"h2"}>Icha</Typography>
       <LabeledText label={"contact"} text={"contact@kigawa.net"} marginTop={"5px"}/>
       <LabeledItem label={"source"} marginTop={"5px"}>
-        <Link color={"text.primary"} href={"https://github.com/kigawa01/icha"}>https://github.com/kigawa01/icha</Link>
+        <Link color={"text.primary"} href={"https://github.com/kigawa01/icha"} target={"_blank"}>
+          https://github.com/kigawa01/icha
+        </Link>
       </LabeledItem>
     </Box>
 

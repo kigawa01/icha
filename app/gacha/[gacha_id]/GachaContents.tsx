@@ -8,12 +8,10 @@ export function GachaContents(
   {
     gachaId,
     contents,
+    rateSum,
     ...props
   }: GachaContentsProps,
 ) {
-  let rateSum = 0;
-  contents.filter(value => !value.pulled).forEach(value => rateSum += value.rate);
-
   return (
     <Section {...props} sectionTitle={"内容"}>
       {contents.map(value => {
@@ -26,4 +24,5 @@ export function GachaContents(
 export interface GachaContentsProps extends OverrideProps<BoxTypeMap, any> {
   contents: GachaContentRes[];
   gachaId: number;
+  rateSum: number
 }

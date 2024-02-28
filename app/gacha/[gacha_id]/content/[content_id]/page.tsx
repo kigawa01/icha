@@ -34,9 +34,10 @@ export default function Page(
     <TextSection content={content?.result?.description || ""} sectionTitle={"説明"}/>
     <LoadableButton
       download={content?.result?.image.name} loading={content == undefined} href={content?.result?.image.base64}
+      fontSize={15}
     >ダウンロード</LoadableButton>
-    <Button variant={"contained"} onClick={_ => router.push("../run")}>
-      もう一度引く
-    </Button>
+    <Button
+      onClick={_ => router.push("../")} variant={"contained"}
+    >ガチャトップへ</Button>
   </Main>;
 }

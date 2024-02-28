@@ -14,13 +14,12 @@ export function LoadableButton(
   }: LoadableButtonProps,
 ) {
 
-
   return (
     <Button
       variant={"contained"} disabled={loading}
       {...props}
     >
-      <Loadable loading={loading} loadingLabel={loadingLabel}>{children}</Loadable>
+      <Loadable loading={loading} loadingLabel={loadingLabel} fontSize={props.fontSize}>{children}</Loadable>
     </Button>
   );
 }
@@ -29,4 +28,5 @@ export interface LoadableButtonProps extends OverrideProps<ExtendButtonBaseTypeM
   onClick?: MouseEventHandler<any> | undefined;
   loading: boolean;
   loadingLabel?: ReactNode | undefined;
+  fontSize?: number;
 }

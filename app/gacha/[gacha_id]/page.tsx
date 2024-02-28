@@ -30,6 +30,11 @@ export default function Page(
 
   if (gachaRes && gachaRes.error != undefined) return <ErrorMessage error={gachaRes.error || "Error"}/>;
   const gacha = gachaRes?.result;
+  let rateSum = 0;
+  if (gacha == undefined) rateSum = -1;
+  else gacha.contents.filter(value => !value.pulled)
+    .forEach(value => rateSum += value.rate);
+
 
   return <Main>
     <Typography variant={"h2"} margin={"10px"}>{gacha?.name || "ロード中..."}</Typography>
@@ -45,15 +50,19 @@ export default function Page(
         if (userState == undefined) return;
         if (userState.userRes == undefined) redirectLoginRouter(router, `/gacha/${uid}/run`);
         else router.push(`/gacha/${uid}/run`);
-      }} disabled={userState == undefined} sx={{fontSize: "2rem", height: "fit-content", margin: "0 10px"}}
+      }} disabled={userState == undefined || rateSum == 0}
+        sx={{fontSize: "2rem", height: "fit-content", margin: "0 10px"}}
       >
         {userState?.userRes ? "ガチャを引く" : "ログインしてガチャを引く"}
       </LoadableButton>
       <Typography sx={{fontSize: "4.5rem"}}>&lt;&lt;</Typography>
     </Box>
+    {rateSum == 0 && <Typography
+      margin={"0 0 70px 0"} textAlign={"center"} variant={"h2"} display={"block"}
+    >ガチャガチャをコンプリートしました！！</Typography>}
     <LicenceSection licence={gacha?.licence}/>
-    <GachaContents gachaId={gacha?.uid || 0} contents={gacha?.contents || []}/>
-    <Box display={"flex"} justifyContent={"right"} margin={"30px 0 0 0"}>
+    <GachaContents rateSum={rateSum} gachaId={gacha?.uid || 0} contents={gacha?.contents || []}/>
+    <Box display={"flex"} justifyContent={"right"} margin={"50px 0 0 0"}>
       <Button variant={"contained"} onClick={_ => router.back()}>前に戻る</Button>
     </Box>
   </Main>;
