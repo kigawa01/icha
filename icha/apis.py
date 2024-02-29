@@ -116,7 +116,10 @@ async def get_gacha(
     for (content, image) in await content_tables_coroutine:
         content: table.ContentTable
         image: table.ContentImageTable
-        is_pulled = await content_repo.is_content_pulled(session, content, user)
+        if user is None:
+            is_pulled = False
+        else:
+            is_pulled = await content_repo.is_content_pulled(session, content, user)
         contents.append(content.to_content_res(image.to_image_data(), is_pulled, post_user.uid))
     licence = await licence_coroutine
     return gacha.to_gacha_res(thumbnail.to_image_data(), licence.to_licence_data(), contents)
