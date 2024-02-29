@@ -25,7 +25,7 @@ jobs:
           docker build -t harbor.kigawa.net/private/icha-front:${{ github.ref_name }}-${{ github.run_number }} \
            -f Dockerfile_front \
           --build-arg baseUrl=https://icha-api.kigawa.net \
-          --build-arg gtagId=${{ secret.GA_MEASUREMENT_ID }} \
+          --build-arg gtagId=${{ secrets.GA_MEASUREMENT_ID }} \
           ./ 
           docker push harbor.kigawa.net/private/icha-front:${{ github.ref_name }}-${{ github.run_number }}
       # argo
