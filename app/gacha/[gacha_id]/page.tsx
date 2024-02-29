@@ -37,21 +37,26 @@ export default function Page(
 
 
   return <Main>
+
     <Typography variant={"h2"} margin={"10px"}>{gacha?.name || "ロード中..."}</Typography>
     <LoadableImg
       src={gacha?.thumbnail.base64} alt={gacha?.thumbnail.name} width={"100%"} height={"500px"} borderRadius={"5px"}
       boxShadow={1} padding={"3px"} loading={gachaRes == undefined} fontSize={50}
     />
-    <TextSection content={gacha?.name || "ロード中..."} sectionTitle={gacha?.name || "ロード中..."}/>
+    <TextSection
+      content={gacha?.name || "ロード中..."}
+      sectionTitle={gacha?.name  || "ロード中..."}
+    />
     <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
       <Typography sx={{fontSize: "4.5rem"}}>&gt;&gt;</Typography>
       <LoadableButton
-        loading={userState == undefined} variant={"contained"} onClick={() => {
-        if (userState == undefined) return;
-        if (userState.userRes == undefined) redirectLoginRouter(router, `/gacha/${uid}/run`);
-        else router.push(`/gacha/${uid}/run`);
-      }} disabled={userState == undefined || rateSum == 0}
-        sx={{fontSize: "2rem", height: "fit-content", margin: "0 10px"}}
+        loading={userState == undefined} variant={"contained"}
+        onClick={() => {
+          if (userState == undefined) return;
+          if (userState.userRes == undefined) redirectLoginRouter(router, `/gacha/${uid}/run`);
+          else router.push(`/gacha/${uid}/run`);
+        }} disabled={userState == undefined || rateSum == 0}
+        sx={{ height:  "fit-content", margin: "0 10px"}} fontSize={30}
       >
         {userState?.userRes ? "ガチャを引く" : "ログインしてガチャを引く"}
       </LoadableButton>

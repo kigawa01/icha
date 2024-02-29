@@ -10,16 +10,17 @@ export function LoadableButton(
     loading,
     children,
     loadingLabel,
+    fontSize,
+    sx,
     ...props
   }: LoadableButtonProps,
 ) {
-
   return (
     <Button
-      variant={"contained"} disabled={loading}
+      variant={"contained"} disabled={loading} sx={{fontSize: fontSize, ...sx}}
       {...props}
     >
-      <Loadable loading={loading} loadingLabel={loadingLabel} fontSize={props.fontSize}>{children}</Loadable>
+      <Loadable loading={loading} loadingLabel={loadingLabel} fontSize={fontSize}>{children}</Loadable>
     </Button>
   );
 }
