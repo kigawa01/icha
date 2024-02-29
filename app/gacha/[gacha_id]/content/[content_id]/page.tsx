@@ -9,6 +9,7 @@ import {useFetch} from "../../../../_hook/useFetch";
 import {Img} from "../../../../_unit/Img";
 import {ErrorMessage} from "../../../../_unit/ErrorMessage";
 import {LoadableButton} from "../../../../_unit/_loading/LoadableButton";
+import {Box} from "@mui/system";
 
 export default function Page(
   {params}: { params: { gacha_id: string, content_id: string } },
@@ -26,18 +27,23 @@ export default function Page(
   const router = useRouter();
 
   return <Main>
-    <Typography variant={"h2"}>ガチャ結果</Typography>
+    <Typography variant={"h2"} margin={"10px 0"}>{content?.result?.title || "ロード中..."}</Typography>
     <ErrorMessage error={content?.error}/>
-    <Typography variant={"h2"}>{content?.result?.title}</Typography>
-    <Img width={"100%"} height={"300px"} src={content?.result?.image.base64} alt={content?.result?.image.name}/>
-    <Typography variant={"h2"}>{content?.result?.title}</Typography>
-    <TextSection content={content?.result?.description || ""} sectionTitle={"説明"}/>
-    <LoadableButton
-      download={content?.result?.image.name} loading={content == undefined} href={content?.result?.image.base64}
-      fontSize={15}
-    >ダウンロード</LoadableButton>
-    <Button
-      onClick={_ => router.push("../")} variant={"contained"}
-    >ガチャトップへ</Button>
+    <Img
+      width={"100%"} height={"500px"} src={content?.result?.image.base64} alt={content?.result?.image.name}
+      boxShadow={1} padding={"3px"} borderRadius={"5px"} margin={"10px 0"}
+    />
+    <TextSection content={content?.result?.description || "ロード中..."} sectionTitle={"説明"}/>
+    <Box display={"flex"} justifyContent={"center"} marginBottom={"50px"}>
+      <LoadableButton
+        download={content?.result?.image.name} loading={content == undefined} href={content?.result?.image.base64}
+        fontSize={20}
+      >ダウンロードする</LoadableButton>
+    </Box>
+    <Box display={"flex"} justifyContent={"right"} >
+      <Button
+        onClick={_ => router.push("../")} variant={"outlined"} sx={{color: "black"}}
+      >ガチャトップへ</Button>
+    </Box>
   </Main>;
 }

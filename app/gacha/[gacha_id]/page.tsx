@@ -45,7 +45,7 @@ export default function Page(
     />
     <TextSection
       content={gacha?.name || "ロード中..."}
-      sectionTitle={gacha?.name  || "ロード中..."}
+      sectionTitle={gacha?.name || "ロード中..."}
     />
     <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
       <Typography sx={{fontSize: "4.5rem"}}>&gt;&gt;</Typography>
@@ -56,7 +56,7 @@ export default function Page(
           if (userState.userRes == undefined) redirectLoginRouter(router, `/gacha/${uid}/run`);
           else router.push(`/gacha/${uid}/run`);
         }} disabled={userState == undefined || rateSum == 0}
-        sx={{ height:  "fit-content", margin: "0 10px"}} fontSize={30}
+        sx={{height: "fit-content", margin: "0 10px"}} fontSize={30}
       >
         {userState?.userRes ? "ガチャを引く" : "ログインしてガチャを引く"}
       </LoadableButton>
@@ -68,7 +68,10 @@ export default function Page(
     <LicenceSection licence={gacha?.licence}/>
     <GachaContents rateSum={rateSum} gachaId={gacha?.uid || 0} contents={gacha?.contents || []}/>
     <Box display={"flex"} justifyContent={"right"} margin={"50px 0 0 0"}>
-      <Button variant={"contained"} onClick={_ => router.back()}>前に戻る</Button>
+      <Button
+        variant={"outlined"} onClick={_ => router.back()}
+        sx={{color: "black"}}
+      >前に戻る</Button>
     </Box>
   </Main>;
 }
