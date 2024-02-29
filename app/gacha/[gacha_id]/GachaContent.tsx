@@ -6,7 +6,6 @@ import {Img} from "../../_unit/Img";
 import {Button, Typography} from "@mui/material";
 import {LabeledText} from "../../_unit/_labeled/LabeledText";
 import {useUserState} from "../../_manager/UserProvider";
-import {redirectLogin} from "../../_unit/RedirectLogin";
 
 export function GachaContent(
   {
@@ -18,7 +17,6 @@ export function GachaContent(
 ) {
   const userState = useUserState();
   const user = userState?.userRes;
-  if (userState != undefined && user == undefined) redirectLogin();
 
   const probability = rateSum == 0 ? 0 : Math.floor((content.rate / rateSum) * 100);
 
