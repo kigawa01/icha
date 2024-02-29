@@ -19,6 +19,18 @@ export default function RootLayout(
       <meta charSet="UTF-8"/>
       <meta content="width=device-width, initial-scale=1" name="viewport"/>
       <title>Icha</title>
+      {/* Google tag (gtag.js) */}
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-E2QSM2RBMZ"></script>
+      <script>
+        {`
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-E2QSM2RBMZ');        
+        `}
+      </script>
+
     </head>
     <Box
       component={"body"}
