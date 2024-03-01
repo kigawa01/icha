@@ -44,6 +44,24 @@ async def create_user(body: data.UserBody, session: AsyncSession = Depends(get_s
     return user.to_login_res()
 
 
+@app.put("/api/user/self")
+async def edit_user(
+        user_put_body: data.UserPutBody,
+        session: AsyncSession = Depends(get_session),
+        user: Coroutine[Any, Any, table.UserTable] = Depends(get_self_user)
+) -> data.UserRes:
+    user = await user
+    user.apply(
+        name=user_put_body.name,
+        email=user_put_body.email,
+        password=user_put_body.password,
+        self_produce=user_put_body.self_produce
+    )
+    await session.commit()
+    await session.refresh(user)
+    return user.to_user_res()
+
+
 @app.get("/api/user/self")
 async def get_self_user(
         user: Coroutine[Any, Any, UserTable] = Depends(get_self_user),

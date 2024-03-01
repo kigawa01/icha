@@ -14,7 +14,7 @@ export default function Page() {
     <Box paddingX={"50px"}>
       <TextSection
         sectionTitle={"Ichaとは？"}
-        content={"Icha(あいちゃ)とは、ユーザーによって投稿された画像のガチャガチャをプレイできるサービスです。"}
+        content={"Icha(あいちゃ)とは、ユーザーによって投稿された画像のガチャをプレイできるサービスです。"}
       />
 
       {/*<TextSection*/}

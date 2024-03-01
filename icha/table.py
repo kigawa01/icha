@@ -1,7 +1,6 @@
 import os
 from datetime import datetime
 
-import dotenv
 from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
@@ -9,7 +8,6 @@ from sqlalchemy.orm import Mapped
 
 from icha import data
 from icha.util import passwd
-
 
 db_url = os.getenv("DB_URL")
 db_user = os.getenv("DB_USER")
@@ -55,9 +53,20 @@ class UserTable(BaseTable):
     def create(
             name: str, email: str, password: str, self_produce: str | None
     ):
-        user = UserTable(name=name, email=email, self_produce=self_produce)
-        user.set_password(password)
+        user = UserTable()
+        user.apply(name=name, email=email, password=password, self_produce=self_produce)
         return user
+
+    # noinspection PyTypeChecker
+    def apply(
+            self, name: str, email: str, password: str | None, self_produce: str | None
+
+    ):
+        self.name = name
+        self.email = email
+        if password is not None:
+            self.set_password(password)
+        self.self_produce = self_produce
 
     def set_password(self, password: str):
         self.password = passwd.get_hash(password)

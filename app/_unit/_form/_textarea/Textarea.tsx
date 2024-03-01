@@ -1,7 +1,7 @@
 import {BoxTypeMap} from "@mui/system/Box/Box";
 import {OverrideProps} from "@mui/types";
 import {TextareaAutosize} from "@mui/base";
-import {ChangeEventHandler, useState} from "react";
+import {ChangeEventHandler, FocusEventHandler, useState} from "react";
 import {Typography} from "@mui/material";
 import {TextareaFieldSet} from "./TextareaFieldSet";
 import {Box} from "@mui/system";
@@ -14,6 +14,7 @@ export function Textarea(
     required,
     name,
     defaultValue,
+    onFocus,
     ...props
   }: TextareaProps,
 ) {
@@ -56,7 +57,10 @@ export function Textarea(
           onChange={event => {
             onChange && onChange(event);
             setValueState(event.currentTarget.value);
-          }} required={required} onFocus={_ => setFocused(true)}
+          }} required={required} onFocus={event => {
+          setFocused(true);
+          onFocus && onFocus(event);
+        }}
           onBlur={_ => setFocused(false)}
         />
       </Box>
@@ -75,4 +79,5 @@ export interface TextareaProps extends OverrideProps<BoxTypeMap, any> {
   name: string;
   defaultValue?: string | undefined;
   required?: boolean;
+  onFocus?: FocusEventHandler<HTMLTextAreaElement> | undefined;
 }

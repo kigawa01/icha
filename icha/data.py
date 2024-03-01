@@ -62,6 +62,13 @@ class UserBody(BaseModel):
         return UserBody(name=name, email=email, password=password, self_produce=self_produce)
 
 
+class UserPutBody(BaseModel):
+    name: str
+    email: str
+    password: str | None
+    self_produce: str | None
+
+
 class UserRes(BaseModel):
     uid: int
     name: str

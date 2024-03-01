@@ -1,4 +1,4 @@
-import type {GachaRes} from "../../api_clients";
+import type {GachaRes, UserPutBody} from "../../api_clients";
 import {
   Configuration,
   ConfigurationParameters,
@@ -78,6 +78,10 @@ export class AuthApiClient extends ApiClient {
 
   async getSelfUser(): Promise<ApiResult<UserRes>> {
     return await fetchApi(this.api.getSelfUserApiUserSelfGet());
+  }
+
+  async editUser(userPutBody: UserPutBody) {
+    return await fetchApi(this.api.editUserApiUserSelfPut({userPutBody}));
   }
 
   async createGacha(gachaBody: GachaBody): Promise<ApiResult<GachaRes>> {
