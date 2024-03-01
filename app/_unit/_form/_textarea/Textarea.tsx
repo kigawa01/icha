@@ -13,11 +13,12 @@ export function Textarea(
     label,
     required,
     name,
+    defaultValue,
     ...props
   }: TextareaProps,
 ) {
   const [focused, setFocused] = useState(false);
-  const [valueState, setValueState] = useState("");
+  const [valueState, setValueState] = useState(defaultValue);
   const moved: boolean = !!(focused || (value == undefined ? valueState : value));
   return (
     <Box
@@ -51,7 +52,7 @@ export function Textarea(
       </Typography>}
       <Box padding={"8px 0 8px 0"} overflow={"hidden"} maxHeight={"100%"} boxSizing={"border-box"}>
         <TextareaAutosize
-          name={name} value={value} maxRows={"20"} minRows={2}
+          name={name} value={value == undefined ? valueState : value} maxRows={"20"} minRows={2}
           onChange={event => {
             onChange && onChange(event);
             setValueState(event.currentTarget.value);
@@ -72,5 +73,6 @@ export interface TextareaProps extends OverrideProps<BoxTypeMap, any> {
   onChange?: ChangeEventHandler<any> | undefined;
   label?: string | undefined;
   name: string;
+  defaultValue?: string | undefined;
   required?: boolean;
 }

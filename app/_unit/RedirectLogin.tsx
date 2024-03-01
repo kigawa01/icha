@@ -10,11 +10,15 @@ export function RequireLogin() {
   redirectLogin();
 }
 
-export function redirectLogin(url: URL | string | undefined = undefined): never {
+export function createLoginUrl(url: URL | string | undefined = undefined) {
   url = createURL(url || "");
   const redirectParams = new URLSearchParams();
   redirectParams.set("url", url.toString());
-  redirect(`/login?${redirectParams.toString()}`);
+  return `/login?${redirectParams.toString()}`;
+}
+
+export function redirectLogin(url: URL | string | undefined = undefined): never {
+  redirect(createLoginUrl(url));
 }
 
 export function redirectLoginRouter(router: AppRouterInstance, url: URL | string | undefined = undefined) {

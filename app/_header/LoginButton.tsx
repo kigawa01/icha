@@ -3,6 +3,7 @@ import {OverrideProps} from "@mui/types";
 import {Link, Typography} from "@mui/material";
 import {LinkTypeMap} from "@mui/material/Link/Link";
 import {useUserState} from "../_manager/UserProvider";
+import {createLoginUrl} from "../_unit/RedirectLogin";
 
 export function LoginButton(
   {
@@ -15,7 +16,7 @@ export function LoginButton(
 
   return (
     <Link
-      href={"/login"}
+      href={createLoginUrl()}
       {...props}
     ><Typography>ログイン</Typography></Link>
   );

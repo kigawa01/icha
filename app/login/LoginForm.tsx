@@ -9,7 +9,7 @@ import {ErrorMessage} from "../_unit/ErrorMessage";
 
 import {useFormState} from "react-dom";
 import {apiClient} from "../_client/api";
-import {redirect, useSearchParams} from "next/navigation";
+import {redirect, RedirectType, useSearchParams} from "next/navigation";
 import {setTokensState} from "../_manager/TokenProvider";
 import {useUserState} from "../_manager/UserProvider";
 
@@ -32,9 +32,9 @@ export function LoginForm(
 
     setTokensState(authResponse.value.tokens);
 
-    redirect(searchParams.get("url") || "/");
+    redirect(searchParams.get("url") || "/", RedirectType.replace);
   }, undefined);
-  if (userState?.userRes) redirect(searchParams.get("url") || "/");
+  if (userState?.userRes) redirect(searchParams.get("url") || "/", RedirectType.replace);
   return (
     <Box
       {...props}

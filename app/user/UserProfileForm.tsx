@@ -7,23 +7,27 @@ import {useState} from "react";
 import {ErrorMessage} from "../_unit/ErrorMessage";
 import {TextInput} from "../_unit/_form/TextInput";
 import {redirect} from "next/navigation";
-import {useUserState} from "../_manager/UserProvider";
 import {apiClient} from "../_client/api";
 import {setTokensState} from "../_manager/TokenProvider";
 import {LoadableButton} from "../_unit/_loading/LoadableButton";
 import {Textarea} from "../_unit/_form/_textarea/Textarea";
+import {UserRes} from "../../api_clients";
 
 export interface LoginFormProps extends OverrideProps<BoxTypeMap, any> {
+  postButtonLabel: string;
+  loading: boolean;
+  user?: UserRes | undefined;
 }
 
-export function UserCreateForm(
+export function UserProfileForm(
   {
+    postButtonLabel,
+    loading,
+    user,
     ...props
   }: LoginFormProps,
 ) {
   const [error, setError] = useState<string>();
-  const userState = useUserState();
-  if (userState?.userRes) redirect("/");
 
   return (<Box
     {...props}
@@ -51,7 +55,7 @@ export function UserCreateForm(
       type={"email"}
       autoComplete={"email"}
       name={"identifier"}
-      required={true}
+      required={true} defaultValue={user?.email}
     />
     <PasswordTextField
       label={"パスワード"}
@@ -61,13 +65,13 @@ export function UserCreateForm(
     />
     <TextInput
       color={"secondary"}
-      label={"ユーザー名"}
+      label={`ユーザー名${user == undefined ? "" : "(変更する場合のみ入力してください)"}`}
       name={"username"}
-      required={true}
+      required={true} defaultValue={user?.name}
     />
-    <Textarea name={"selfProduce"} label={"自己紹介"} minHeight={"30px"}/>
+    <Textarea name={"selfProduce"} label={"自己紹介"} minHeight={"30px"} defaultValue={user?.selfProduce || ""}/>
     <LoadableButton
-      loading={userState == undefined} sx={{margin: "10px"}} variant={"contained"} type={"submit"}
-    >登録</LoadableButton>
+      loading={loading} sx={{margin: "10px"}} variant={"contained"} type={"submit"}
+    >{postButtonLabel}</LoadableButton>
   </Box>);
 }
