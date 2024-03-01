@@ -18,7 +18,7 @@ export function Main(
     <Box
       {...props}
       component={component || "main"}
-      padding={`30px ${paddingX || "50px"} 250px ${paddingX || "50px"}`}
+      padding={`60px ${paddingX || "50px"} 300px ${paddingX || "50px"}`}
       maxWidth={"1000px"}
       margin={"auto"}
       boxShadow={3}

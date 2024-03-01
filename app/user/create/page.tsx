@@ -1,6 +1,6 @@
 import {PageTitle} from "../../_unit/PageTitle";
 import {Main} from "../../_unit/Main";
-import {UserCreateForm} from "./UserCreateForm";
+import {UserCreateForm} from "../UserCreateForm";
 
 export default function Page(
   {}: {},

@@ -15,7 +15,7 @@ export function GachaContents(
   return (
     <Section {...props} sectionTitle={"内容"}>
       {contents.map(value => {
-        return <GachaContent rateSum={rateSum} gachaId={gachaId} content={value} key={value.uid}/>;
+        return <GachaContent rateSum={rateSum} gachaId={gachaId} content={value} key={value.uid} margin={"30px 0"}/>;
       })}
     </Section>
   );

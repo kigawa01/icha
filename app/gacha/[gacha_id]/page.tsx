@@ -8,12 +8,12 @@ import {LicenceSection} from "./LicenceSection";
 import {GachaContents} from "./GachaContents";
 import {apiClient} from "../../_client/api";
 import {useUserState} from "../../_manager/UserProvider";
-import {redirectLoginRouter} from "../../_unit/RedirectLogin";
-import {LoadableButton} from "../../_unit/_loading/LoadableButton";
 import {useClientState} from "../../_manager/AuthApiProvider";
 import {Box} from "@mui/system";
 import {Button, Typography} from "@mui/material";
 import {LoadableImg} from "../../_unit/_loading/LoadableImg";
+import {BigButton} from "../../_unit/BigButton";
+import {redirectLoginRouter} from "../../_unit/RedirectLogin";
 
 export default function Page(
   {params}: { params: { gacha_id: string } },
@@ -38,30 +38,27 @@ export default function Page(
 
   return <Main>
 
-    <Typography variant={"h2"} margin={"10px"}>{gacha?.name || "ロード中..."}</Typography>
+    <Typography variant={"h2"} margin={"10px"}
+                sx={{wordBreak: "break-word"}}>{gacha?.name || "ロード中..."}</Typography>
     <LoadableImg
       src={gacha?.thumbnail.base64} alt={gacha?.thumbnail.name} width={"100%"} height={"500px"} borderRadius={"5px"}
-      boxShadow={1} padding={"3px"} loading={gachaRes == undefined} fontSize={50}
+      boxShadow={1} padding={"3px"} loading={gachaRes == undefined} fontSize={50} margin={"30px 0"}
+      border={"1px solid grey"}
     />
     <TextSection
       content={gacha?.name || "ロード中..."}
       sectionTitle={gacha?.name || "ロード中..."}
     />
-    <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
-      <Typography sx={{fontSize: "4.5rem"}}>&gt;&gt;</Typography>
-      <LoadableButton
-        loading={userState == undefined} variant={"contained"}
-        onClick={() => {
-          if (userState == undefined) return;
-          if (userState.userRes == undefined) redirectLoginRouter(router, `/gacha/${uid}/run`);
-          else router.push(`/gacha/${uid}/run`);
-        }} disabled={userState == undefined || rateSum == 0}
-        sx={{height: "fit-content", margin: "0 10px"}} fontSize={30}
-      >
-        {userState?.userRes ? "ガチャを引く" : "ログインしてガチャを引く"}
-      </LoadableButton>
-      <Typography sx={{fontSize: "4.5rem"}}>&lt;&lt;</Typography>
-    </Box>
+    <BigButton
+      loading={userState == undefined} disabled={userState == undefined || rateSum == 0}
+      onClick={() => {
+        if (userState == undefined) return;
+        if (userState.userRes == undefined) redirectLoginRouter(router, `/gacha/${uid}/run`);
+        else router.push(`/gacha/${uid}/run`);
+      }}
+    >
+      {userState?.userRes ? "ガチャを引く" : "ログインしてガチャを引く"}
+    </BigButton>
     {rateSum == 0 && <Typography
       margin={"0 0 70px 0"} textAlign={"center"} variant={"h2"} display={"block"}
     >ガチャガチャをコンプリートしました！！</Typography>}

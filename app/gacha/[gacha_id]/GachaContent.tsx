@@ -27,7 +27,7 @@ export function GachaContent(
       <Box display={"flex"} flexDirection={"column"} justifyContent={"space-between"} flex={"none"}>
         <Img
           width={"300px"} height={"200px"} boxShadow={1} borderRadius={"5px"} src={content.image.base64}
-          alt={content.image.name} padding={"3px"} flex={"none"} marginBottom={"15px"}
+          alt={content.image.name} padding={"2px"} flex={"none"} marginBottom={"15px"} border={"1px solid grey"}
         />
         {
           (content.pulled || content.postUserId == user?.uid) &&
@@ -36,11 +36,11 @@ export function GachaContent(
           </Button>
         }
       </Box>
-      <Box marginLeft={"15px"}>
+      <Box marginLeft={"20px"}>
         <Typography variant={"h3"}>{content.title}</Typography>
-        <Typography margin={"10px 5px"}>{content.description}</Typography>
-        <LabeledText margin={"5px"} label={"確率"} text={`約${probability}%`}/>
-        <LabeledText margin={"5px"} text={content.pulled ? "はい" : "いいえ"} label={"取得済み"}/>
+        <Typography margin={"15px 5px"}>{content.description}</Typography>
+        <LabeledText margin={"8px"} label={"確率"} text={`約${probability}%`}/>
+        <LabeledText margin={"8px"} text={content.pulled ? "はい" : "いいえ"} label={"取得済み"}/>
       </Box>
     </Box>
   );

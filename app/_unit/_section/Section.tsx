@@ -7,6 +7,7 @@ export function Section(
   {
     children,
     sectionTitle,
+    marginTop,
     ...props
   }: SectionProps,
 ) {
@@ -16,10 +17,10 @@ export function Section(
     <Box
       {...props}
       component={"section"}
-      margin={"40px 10px"}
+      margin={`${marginTop || "60px"} 10px 60px 10px`}
     >
-      <Typography variant={"h2"}>{sectionTitle}</Typography>
-      <Box padding={"20px 10px"}>{children}</Box>
+      <Typography sx={{wordBreak: "break-word"}} variant={"h2"}>{sectionTitle}</Typography>
+      <Box padding={"30px 10px"}>{children}</Box>
     </Box>
   );
 }

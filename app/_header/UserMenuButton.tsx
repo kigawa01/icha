@@ -6,6 +6,7 @@ import {useUserState} from "../_manager/UserProvider";
 import {Box} from "@mui/system";
 import {setTokensState} from "../_manager/TokenProvider";
 import {useState} from "react";
+import {useRouter} from "next/navigation";
 
 export function UserMenuButton(
   {
@@ -13,9 +14,11 @@ export function UserMenuButton(
   }: UserMenuButtonProps,
 ) {
   const userState = useUserState();
+  const router = useRouter()
   const [menuAnchorElement, setMenuAnchorElement] = useState<HTMLElement>();
+  const user = userState?.userRes
   if (userState == undefined) return undefined;
-  if (userState.userRes == undefined) return undefined;
+  if (user == undefined) return undefined;
 
   return (
     <Box
@@ -35,13 +38,17 @@ export function UserMenuButton(
         aria-expanded={menuAnchorElement ? "true" : undefined}
         sx={{color: "black"}}
       >
-        <Typography>{userState.userRes.name}</Typography>
+        <Typography>{user.name}</Typography>
       </Button>
       <Menu
         open={menuAnchorElement != undefined}
         anchorEl={menuAnchorElement}
         onClose={_ => setMenuAnchorElement(undefined)}
       >
+        <MenuItem onClick={_=>{
+          router.push(`/user/${user.uid}`)
+        }}
+        >プロフィール</MenuItem>
         <MenuItem onClick={_ => {
           setTokensState(undefined);
           setMenuAnchorElement(undefined);

@@ -10,7 +10,7 @@ export interface PageProps extends HTMLAttributes<any> {
 export default function Page() {
   return <Main paddingX={"0"}>
 
-    <GachaCarousel width={"100%"} height={"500px"}/>
+    <GachaCarousel margin={"10px 0"} width={"100%"} height={"500px"}/>
     <Box paddingX={"50px"}>
       <TextSection
         sectionTitle={"Ichaとは？"}

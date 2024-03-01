@@ -46,16 +46,20 @@ export class ApiClient {
     }));
   }
 
-  async createUser(email: string, password: string, username: string): Promise<ApiResult<LoginRes>> {
+  async createUser(email: string, password: string, username: string, selfProduce: string | null): Promise<ApiResult<LoginRes>> {
     return await fetchApi(this.api.createUserApiUserPost({
       userBody: {
-        email: email, name: username, password: password,
+        email: email, name: username, password: password, selfProduce: selfProduce,
       },
     }));
   }
 
   async getGacha(uid: number): Promise<ApiResult<GachaRes>> {
     return await fetchApi(this.api.getGachaApiGachaUidGet({uid}));
+  }
+
+  async getUser(userId: number): Promise<ApiResult<UserRes>> {
+    return await fetchApi(this.api.getUserApiUserUserIdGet({userId}));
   }
 
   async getGachaList(): Promise<ApiResult<GachaListRes[]>> {

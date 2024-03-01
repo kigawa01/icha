@@ -15,7 +15,7 @@ export function LoadableImg(
     <Loadable
       loading={loading}      {...props}
     >
-      <Img src={src} alt={alt} {...props}/>
+      <Img src={src} alt={alt} {...props} />
     </Loadable>
   );
 }
