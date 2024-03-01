@@ -10,6 +10,7 @@ from sqlalchemy.orm import Mapped
 from icha import data
 from icha.util import passwd
 
+dotenv.load_dotenv("./.env.local")
 dotenv.load_dotenv()
 
 db_url = os.getenv("DB_URL")
