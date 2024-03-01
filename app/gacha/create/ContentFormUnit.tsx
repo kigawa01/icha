@@ -3,7 +3,7 @@ import {OverrideProps} from "@mui/types";
 import {ImageEdit} from "../../_unit/_form/ImageEdit";
 import {TextInput} from "../../_unit/_form/TextInput";
 import {Box} from "@mui/system";
-import {Textarea} from "../../_unit/_form/Textarea";
+import {Textarea} from "../../_unit/_form/_textarea/Textarea";
 import {Button} from "@mui/material";
 
 export function ContentFormUnit(

@@ -11,7 +11,7 @@ import {useUserState} from "../_manager/UserProvider";
 import {apiClient} from "../_client/api";
 import {setTokensState} from "../_manager/TokenProvider";
 import {LoadableButton} from "../_unit/_loading/LoadableButton";
-import {Textarea} from "../_unit/_form/Textarea";
+import {Textarea} from "../_unit/_form/_textarea/Textarea";
 
 export interface LoginFormProps extends OverrideProps<BoxTypeMap, any> {
 }
@@ -47,12 +47,6 @@ export function UserCreateForm(
   >
     <ErrorMessage error={error}/>
     <TextInput
-      color={"secondary"}
-      label={"ユーザー名"}
-      name={"username"}
-      required={true}
-    />
-    <TextInput
       label={"Eメール"}
       type={"email"}
       autoComplete={"email"}
@@ -65,7 +59,13 @@ export function UserCreateForm(
       autoComplete={"password"}
       required={true}
     />
-    <Textarea name={"selfProduce"} label={"自己紹介"}/>
+    <TextInput
+      color={"secondary"}
+      label={"ユーザー名"}
+      name={"username"}
+      required={true}
+    />
+    <Textarea name={"selfProduce"} label={"自己紹介"} minHeight={"30px"}/>
     <LoadableButton
       loading={userState == undefined} sx={{margin: "10px"}} variant={"contained"} type={"submit"}
     >登録</LoadableButton>

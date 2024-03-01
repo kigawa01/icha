@@ -16,7 +16,7 @@ import {GachaContentBody, ImageFileData, LicenceData} from "../../../api_clients
 import {fileToBase64, useStateObjectDef} from "../../util";
 import {ErrorDataException, ErrorIds} from "../../_client/_error";
 import {redirectLogin} from "../../_unit/RedirectLogin";
-import {Textarea} from "../../_unit/_form/Textarea";
+import {Textarea} from "../../_unit/_form/_textarea/Textarea";
 
 export function CreateGachaForm(
   {

@@ -7,7 +7,7 @@ import {useState} from "react";
 import {useUserState} from "../../_manager/UserProvider";
 import {redirectLogin} from "../../_unit/RedirectLogin";
 import {LoadableButton} from "../../_unit/_loading/LoadableButton";
-import {Textarea} from "../../_unit/_form/Textarea";
+import {Textarea} from "../../_unit/_form/_textarea/Textarea";
 
 export function LicenceFormSection(
   {
