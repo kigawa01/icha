@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler())
 logger.setLevel("INFO")
 
+dotenv.load_dotenv("./.env.local")
 dotenv.load_dotenv()
 app = FastAPI()
 
