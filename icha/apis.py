@@ -11,7 +11,7 @@ from icha.data import LoginRes, TokensRes, GachaListRes
 from icha.error import ErrorIdException, ErrorIds
 from icha.repo import user_repo, gacha_repo, thumbnail_repo, licence_repo, content_repo, pulled_repo, content_image_repo
 from icha.table import get_session, UserTable
-from icha.tokens import get_user, get_token, get_user_or_none
+from icha.tokens import get_self_user, get_token, get_self_user_or_none
 
 
 @app.get("/api/health")
@@ -46,7 +46,7 @@ async def create_user(body: data.UserBody, session: AsyncSession = Depends(get_s
 
 @app.get("/api/user/self")
 async def get_self_user(
-        user: Coroutine[Any, Any, UserTable] = Depends(get_user),
+        user: Coroutine[Any, Any, UserTable] = Depends(get_self_user),
 ) -> data.UserRes:
     return await user
 
@@ -55,7 +55,7 @@ async def get_self_user(
 async def get_user(
         user_id: int,
         session: AsyncSession = Depends(get_session),
-        user: Coroutine[Any, Any, UserTable] | None = Depends(get_user_or_none)
+        user: Coroutine[Any, Any, UserTable] | None = Depends(get_self_user_or_none)
 ) -> data.UserRes:
     if user is not None:
         user = await user
@@ -74,7 +74,7 @@ async def get_user(
 async def create_gacha(
         body: data.GachaBody,
         session: AsyncSession = Depends(get_session),
-        user: Coroutine[Any, Any, UserTable] = Depends(get_user),
+        user: Coroutine[Any, Any, UserTable] = Depends(get_self_user),
 ) -> data.GachaRes:
     user = await user
     gacha = gacha_repo.create_gacha(session, body, user)
@@ -120,7 +120,7 @@ async def create_gacha(
 async def get_gacha(
         uid: int,
         session: AsyncSession = Depends(get_session),
-        user: Coroutine[Any, Any, UserTable] | None = Depends(get_user_or_none),
+        user: Coroutine[Any, Any, UserTable] | None = Depends(get_self_user_or_none),
 ) -> data.GachaRes:
     gacha_coroutine = gacha_repo.by_id(session, uid)
     gacha = await gacha_coroutine
@@ -178,7 +178,7 @@ async def get_gacha_list(
 async def pull_gacha(
         uid: int,
         session: AsyncSession = Depends(get_session),
-        user: Coroutine[Any, Any, UserTable] = Depends(get_user),
+        user: Coroutine[Any, Any, UserTable] = Depends(get_self_user),
 ) -> data.PullGachaRes:
     user = await user
     sources = await content_repo.all_by_non_pulled(session, uid, user)
@@ -201,7 +201,7 @@ async def get_contents(
         gacha_id: int,
         content_id: int,
         session: AsyncSession = Depends(get_session),
-        user: Coroutine[Any, Any, UserTable] = Depends(get_user),
+        user: Coroutine[Any, Any, UserTable] = Depends(get_self_user),
 ) -> data.GachaContentRes:
     user = await user
     content = await content_repo.by_gacha_and_uid_and__pulled_or_user(session, gacha_id, content_id, user)

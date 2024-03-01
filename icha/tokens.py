@@ -61,7 +61,7 @@ def access_token_or_none(token: data.JwtTokenData | None = Depends(get_token_or_
     return token
 
 
-def get_user_or_none(
+def get_self_user_or_none(
         session: AsyncSession = Depends(get_session),
         token: data.JwtTokenData | None = Depends(access_token_or_none)
 ):
@@ -70,8 +70,8 @@ def get_user_or_none(
     return user_repo.by_token(session, token)
 
 
-def get_user(
-        user: Coroutine[Any, Any, UserTable] | None = Depends(get_user_or_none)
+def get_self_user(
+        user: Coroutine[Any, Any, UserTable] | None = Depends(get_self_user_or_none)
 ) -> Coroutine[Any, Any, UserTable]:
     if user is None:
         raise ErrorIdException(ErrorIds.UNAUTHORIZED)
