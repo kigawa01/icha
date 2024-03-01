@@ -51,7 +51,8 @@ def post_user_body():
     return data.UserBody.from_args(
         name="userName",
         email="user@example.com",
-        password="password"
+        password="password",
+        self_produce=None
     )
 
 

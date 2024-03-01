@@ -1,6 +1,7 @@
 import secrets
 from typing import Any, Coroutine
 
+import sqlalchemy
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -48,6 +49,25 @@ async def get_self_user(
         user: Coroutine[Any, Any, UserTable] = Depends(get_user),
 ) -> data.UserRes:
     return await user
+
+
+@app.get("/api/user/{user_id}")
+async def get_user(
+        user_id: int,
+        session: AsyncSession = Depends(get_session),
+        user: Coroutine[Any, Any, UserTable] | None = Depends(get_user_or_none)
+) -> data.UserRes:
+    if user is not None:
+        user = await user
+        if user.uid == user_id:
+            return user.to_user_res()
+    res = await session.execute(
+        sqlalchemy.select(table.UserTable).where(table.UserTable.uid == user_id)
+    )
+    res = res.scalar_one()
+    if res is None:
+        raise ErrorIdException(ErrorIds.USER_NOT_FOUND)
+    return res
 
 
 @app.post("/api/gacha")

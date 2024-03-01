@@ -11,7 +11,8 @@ def new_post_user_body():
     return UserBody.from_args(
         name="newUserName",
         email="newUser@example.com",
-        password="new password"
+        password="new password",
+        self_produce=None
     )
 
 

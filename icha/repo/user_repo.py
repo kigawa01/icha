@@ -33,9 +33,11 @@ async def by_email(session: AsyncSession, email: str) -> UserTable:
 
 
 def create_user(session: AsyncSession, post_user: data.UserBody) -> UserTable:
-    user = UserTable()
-    user.name = post_user.name
-    user.email = post_user.email
-    user.set_password(post_user.password)
+    user = UserTable.create(
+        name=post_user.name,
+        email=post_user.email,
+        password=post_user.password,
+        self_produce=post_user.self_produce
+    )
     session.add(user)
     return user

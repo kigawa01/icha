@@ -55,20 +55,32 @@ class UserBody(BaseModel):
     name: str
     email: str
     password: str
+    self_produce: str | None
 
     @staticmethod
-    def from_args(name: str, email: str, password: str) -> 'UserBody':
-        return UserBody(name=name, email=email, password=password)
+    def from_args(name: str, email: str, password: str, self_produce: None) -> 'UserBody':
+        return UserBody(name=name, email=email, password=password, self_produce=self_produce)
 
 
 class UserRes(BaseModel):
     uid: int
     name: str
     email: str
+    self_produce: str | None
 
     @staticmethod
-    def from_args(uid: int, name: str, email: str):
-        return UserRes(uid=uid, name=name, email=email)
+    def from_args(
+            uid: int,
+            name: str,
+            email: str,
+            self_produce: str | None
+    ):
+        return UserRes(
+            uid=uid,
+            name=name,
+            email=email,
+            self_produce=self_produce
+        )
 
 
 class ImageFileData(BaseModel):

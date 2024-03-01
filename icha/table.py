@@ -50,6 +50,15 @@ class UserTable(BaseTable):
     name: Mapped[str] = Column(String(32), nullable=False)
     email: Mapped[str] = Column(String(32), nullable=False, unique=True)
     password: Mapped[str] = Column(String(128), nullable=False)
+    self_produce: Mapped[str] = Column(String(255))
+
+    @staticmethod
+    def create(
+            name: str, email: str, password: str, self_produce: str | None
+    ):
+        user = UserTable(name=name, email=email, self_produce=self_produce)
+        user.set_password(password)
+        return user
 
     def set_password(self, password: str):
         self.password = passwd.get_hash(password)
@@ -72,6 +81,7 @@ class UserTable(BaseTable):
             uid=self.uid,
             name=self.name,
             email=self.email,
+            self_produce=self.self_produce
         )
         return res
 
