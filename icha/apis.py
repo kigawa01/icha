@@ -168,9 +168,16 @@ async def get_gacha_list(
         order: str = "new",
         size: int = 16,
         page: int = 0,
+        pulled: bool = False,
+        search: str = "",
         session: AsyncSession = Depends(get_session),
+        user: Coroutine[Any, Any, table.UserTable] = Depends(get_self_user_or_none)
 ) -> list[GachaListRes]:
-    gacha_list_coroutine = gacha_repo.all_by_id(session, order, size, page)
+    if user is not None:
+        user = await user
+    gacha_list_coroutine = gacha_repo.all(
+        session=session, order=order, size=size, page=page, search=search, pulled=pulled, user=user
+    )
     table_temp = list[tuple[
         table.GachaTable,
         Coroutine[Any, Any, table.ThumbnailTable],

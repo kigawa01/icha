@@ -27,15 +27,45 @@ async def by_id(session: AsyncSession, uid: int) -> table.GachaTable:
     return result
 
 
-async def all_by_id(
+async def all(
         session: AsyncSession,
-        order: str = "new",
-        size: int = 16,
-        page: int = 0,
+        order: str,
+        size: int,
+        page: int,
+        search: str,
+        pulled: bool,
+        user: table.UserTable | None
 ) -> Sequence[GachaTable]:
     query = sqlalchemy.select(table.GachaTable)
+    where: list[sqlalchemy.ColumnElement] = []
+    orders: list[sqlalchemy.ColumnElement] = []
+    joins: list[tuple[type[sqlalchemy.Column], *sqlalchemy.ColumnElement]] = []
     if order == "new":
-        query = query.order_by(sqlalchemy.desc(table.GachaTable.create_at))
+        orders.append(sqlalchemy.desc(table.GachaTable.create_at))
+    if search != "" or pulled:
+        joins.append((table.ContentTable, table.ContentTable.gacha_id == table.GachaTable.uid))
+    if search != "":
+        where.append(table.GachaTable.name.like(f"%{search}%"))
+        orders.append(table.GachaTable.name.like(f"%{search}%"))
+
+        where.append(table.GachaTable.description.like(f"%{search}%"))
+        orders.append(table.GachaTable.description.like(f"%{search}%"))
+
+        where.append(table.ContentTable.title.like(f"%{search}%"))
+        orders.append(table.ContentTable.title.like(f"%{search}%"))
+
+        where.append(table.ContentTable.description.like(f"%{search}%"))
+        orders.append(table.ContentTable.description.like(f"%{search}%"))
+    if pulled and user is not None:
+        joins.append((table.PulledContentTable, table.PulledContentTable.content_id == table.ContentTable.uid))
+        where.append(table.PulledContentTable.user_id == user.uid)
+
+    for join in joins:
+        query = query.join(*join)
+    if len(where) != 0:
+        query = query.where(*where)
+    if len(orders) != 0:
+        query = query.order_by(*orders)
     query = query.offset(page * size).limit(size)
     result = await session.execute(query)
     result = result.scalars().all()
