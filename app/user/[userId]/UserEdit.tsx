@@ -26,9 +26,9 @@ export function UserEdit(
       <ErrorMessage error={err}/>
       <UserProfileForm
         loading={false} postButtonLabel={"保存"} user={user} {...props} onFocus={() => setRes(undefined)}
-        action={async (email, username, password, selfProduce) => {
+        action={async (email: string, username: string, password: string, selfProduce: string) => {
           const body: UserPutBody = {
-            email, name: username, password: password ? null : password, selfProduce,
+            email, name: username, password: password ? null : password, selfProduce: (selfProduce as string),
           };
           await client?.editUser(body)
             .then(value => {
