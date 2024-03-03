@@ -28,7 +28,7 @@ export function UserEdit(
         loading={false} postButtonLabel={"保存"} user={user} {...props} onFocus={() => setRes(undefined)}
         action={async (email: string, username: string, password: string, selfProduce: string) => {
           const body: UserPutBody = {
-            email, name: username, password: password ? null : password, selfProduce: (selfProduce as string),
+            email, name: username, password: password ? null : password as string, selfProduce: (selfProduce as string),
           };
           await client?.editUser(body)
             .then(value => {
