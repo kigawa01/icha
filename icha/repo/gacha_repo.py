@@ -45,16 +45,15 @@ async def all(
     if search != "" or pulled:
         joins.append((table.ContentTable, table.ContentTable.gacha_id == table.GachaTable.uid))
     if search != "":
-        where.append(table.GachaTable.name.like(f"%{search}%"))
+        where.append(sqlalchemy.or_(
+            table.GachaTable.name.like(f"%{search}%"),
+            table.GachaTable.description.like(f"%{search}%"),
+            table.ContentTable.title.like(f"%{search}%"),
+            table.ContentTable.description.like(f"%{search}%")
+        ))
         orders.append(table.GachaTable.name.like(f"%{search}%"))
-
-        where.append(table.GachaTable.description.like(f"%{search}%"))
         orders.append(table.GachaTable.description.like(f"%{search}%"))
-
-        where.append(table.ContentTable.title.like(f"%{search}%"))
         orders.append(table.ContentTable.title.like(f"%{search}%"))
-
-        where.append(table.ContentTable.description.like(f"%{search}%"))
         orders.append(table.ContentTable.description.like(f"%{search}%"))
     if pulled and user is not None:
         joins.append((table.PulledContentTable, table.PulledContentTable.content_id == table.ContentTable.uid))

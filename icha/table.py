@@ -190,13 +190,15 @@ class GachaTable(BaseTable):
             self,
             thumbnail: data.ImageFileData,
             licence: data.LicenceData,
+            creator: data.UserRes
     ):
         return data.GachaListRes.create(
             uid=self.uid,
             name=self.name,
             description=self.description,
             thumbnail=thumbnail,
-            licence=licence
+            licence=licence,
+            creator=creator
         )
 
 

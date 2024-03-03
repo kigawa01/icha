@@ -62,8 +62,10 @@ export class ApiClient {
     return await fetchApi(this.api.getUserApiUserUserIdGet({userId}));
   }
 
-  async getGachaList(): Promise<ApiResult<GachaListRes[]>> {
-    return await fetchApi(this.api.getGachaListApiGachaGet({}));
+  async getGachaList(
+    order?: string, size?: number, page?: number, pulled?: boolean, search?: string,
+  ): Promise<ApiResult<GachaListRes[]>> {
+    return await fetchApi(this.api.getGachaListApiGachaGet({order, size, page, pulled, search}));
   }
 }
 

@@ -204,6 +204,7 @@ class GachaListRes(BaseModel):
     name: str
     description: str
     licence: LicenceData
+    creator: UserRes
 
     @staticmethod
     def create(
@@ -212,6 +213,7 @@ class GachaListRes(BaseModel):
             name: str,
             description: str,
             licence: LicenceData,
+            creator: UserRes
     ):
         return GachaListRes(
             uid=uid,
@@ -219,6 +221,7 @@ class GachaListRes(BaseModel):
             name=name,
             description=description,
             licence=licence,
+            creator=creator
         )
 
 

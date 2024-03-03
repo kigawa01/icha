@@ -38,6 +38,9 @@ export function Theme(
       h2: {
         fontSize: "2.5rem",
       },
+      h3: {
+        fontSize: "2rem",
+      },
     },
   });
 

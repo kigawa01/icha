@@ -177,20 +177,27 @@ async def get_gacha_list(
     table_temp = list[tuple[
         table.GachaTable,
         Coroutine[Any, Any, table.ThumbnailTable],
-        Coroutine[Any, Any, table.LicenceTable]
+        Coroutine[Any, Any, table.LicenceTable],
+        Coroutine[Any, Any, table.UserTable],
     ]]()
     for gacha_table in await gacha_list_coroutine:
         table_temp.append((
             gacha_table,
             thumbnail_repo.by_gacha(session, gacha_table),
             licence_repo.by_gacha(session, gacha_table),
+            user_repo.by_uid(session, gacha_table.user_id),
         ))
     gacha_list = list[data.GachaListRes]()
-    for (gacha_table, thumbnail_coroutine, licence_coroutine) in table_temp:
-        thumbnail_table: table.ThumbnailTable = await thumbnail_coroutine
-        licence_table: table.LicenceTable = await licence_coroutine
+    for (gacha_table, thumbnail_table, licence_table, creator_table) in table_temp:
+        thumbnail_table: table.ThumbnailTable = await thumbnail_table
+        licence_table: table.LicenceTable = await licence_table
+        creator_table: table.UserTable = await creator_table
         gacha_list.append(
-            gacha_table.to_gacha_list_res(thumbnail_table.to_image_data(), licence_table.to_licence_data())
+            gacha_table.to_gacha_list_res(
+                thumbnail=thumbnail_table.to_image_data(),
+                licence=licence_table.to_licence_data(),
+                creator=creator_table.to_user_res()
+            )
         )
     return gacha_list
 

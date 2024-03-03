@@ -4,11 +4,7 @@ import {OverrideProps} from "@mui/types";
 
 export function Img(
   {
-    src,
-    img,
-    alt,
-    margin,
-    marginBottom,
+    src, img, alt, margin, marginBottom, sx, justifyContent, alignItems,
     ...props
   }: ImgProps,
 ) {
@@ -16,8 +12,8 @@ export function Img(
 
   return (
     <Box
-      {...props} margin={margin} component={"figure"} display={"flex"} justifyContent={"center"}
-      alignItems={"center"} overflow={"hidden"}
+      {...props} margin={margin} component={"figure"} display={"flex"} justifyContent={justifyContent || "center"}
+      alignItems={alignItems || "center"} overflow={"hidden"}
       sx={{
         "img": {
           maxWidth: "100%",
@@ -25,6 +21,7 @@ export function Img(
           display: "block",
           flex: "none",
         },
+        ...sx,
       }}
     >
       <img
