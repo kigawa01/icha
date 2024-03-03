@@ -62,7 +62,7 @@ export function UserProfileForm(
     />
     <Textarea
       name={"selfProduce"} label={"自己紹介"} minHeight={"30px"}
-      defaultValue={user?.selfProduce == undefined ? "" : user.selfProduce}
+      defaultValue={user?.selfProduce == undefined ? "" : (user.selfProduce as string)}
       onFocus={onFocus}
     />
     <LoadableButton
