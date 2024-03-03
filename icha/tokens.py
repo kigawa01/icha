@@ -1,14 +1,14 @@
 from datetime import timedelta, datetime, timezone
-from typing import Coroutine, Any
 
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app import ACCESS_TOKEN_EXPIRE_MINUTES, SECRET_KEY, ALGORITHM, REFRESH_TOKEN_EXPIRE_MINUTES
+from app import ACCESS_TOKEN_EXPIRE_MINUTES, ALGORITHM, REFRESH_TOKEN_EXPIRE_MINUTES
 from icha import data
 from icha.data import TokenData, TokensRes
+from icha.env import SECRET_KEY
 from icha.error import ErrorIdException, ErrorIds
 from icha.repo import user_repo
 from icha.table import UserTable, get_session
@@ -61,18 +61,20 @@ def access_token_or_none(token: data.JwtTokenData | None = Depends(get_token_or_
     return token
 
 
-def get_self_user_or_none(
+async def get_login_user_or_none(
         session: AsyncSession = Depends(get_session),
         token: data.JwtTokenData | None = Depends(access_token_or_none)
 ):
     if token is None:
         return None
-    return user_repo.by_token(session, token)
+    user = await user_repo.by_token(session, token)
+    await session.refresh(user)
+    return user
 
 
-def get_self_user(
-        user: Coroutine[Any, Any, UserTable] | None = Depends(get_self_user_or_none)
-) -> Coroutine[Any, Any, UserTable]:
+async def get_login_user(
+        user: UserTable | None = Depends(get_login_user_or_none)
+) -> UserTable:
     if user is None:
         raise ErrorIdException(ErrorIds.UNAUTHORIZED)
     return user
