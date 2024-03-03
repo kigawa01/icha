@@ -18,7 +18,7 @@ export function UserProfile(
     >
       <LabeledItem margin={"10px 0"} label={"ユーザー名"}>{user?.name || "ロード中..."}</LabeledItem>
       <LabeledItem margin={"10px 0"} label={"自己紹介"}>
-        {user?.selfProduce === undefined ? "ロード中..." : user.selfProduce || "なし"}
+        {user?.selfProduce === undefined ? "ロード中..." : user.selfProduce as string || "なし"}
       </LabeledItem>
     </Box>
   );
