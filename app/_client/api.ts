@@ -46,7 +46,7 @@ export class ApiClient {
     }));
   }
 
-  async createUser(email: string, password: string, username: string, selfProduce: string | null): Promise<ApiResult<LoginRes>> {
+  async createUser(email: string, password: string, username: string, selfProduce: string): Promise<ApiResult<LoginRes>> {
     return await fetchApi(this.api.createUserApiUserPost({
       userBody: {
         email: email, name: username, password: password, selfProduce: selfProduce,
