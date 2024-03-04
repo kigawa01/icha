@@ -30,8 +30,8 @@ export default function Page(
     <Typography variant={"h2"} margin={"10px 0"}>{content?.result?.title || "ロード中..."}</Typography>
     <ErrorMessage error={content?.error}/>
     <LoadableImg
-      width={"100%"} height={"500px"} src={content?.result?.image.base64} alt={content?.result?.image.name}
-      boxShadow={1} padding={"3px"} borderRadius={"5px"} margin={"30px 0"} loading={content == undefined}
+      width={"100%"} aspectRatio={"16 / 9"} src={content?.result?.image.base64} alt={content?.result?.image.name}
+      boxShadow={1} borderRadius={"5px"} margin={"30px 0"} loading={content == undefined}
       border={"1px solid grey"}
     />
     <TextSection content={content?.result?.description || "ロード中..."} sectionTitle={"説明"}/>
