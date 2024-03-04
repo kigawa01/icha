@@ -20,7 +20,7 @@ export function LicenceSection(
     >
       <Box
         padding={"10px"} component={"pre"} borderRadius={"5px"} boxShadow={1} bgcolor={"lightgrey"}
-        border={"1px solid grey"} margin={"30px 0"}
+        border={"1px solid grey"} margin={"30px 0"} whiteSpace={"pre-wrap"}
       >{licence?.text || "ロード中..."}</Box>
       <LabeledText
         labelProps={{width: "200px"}} borderBottom={"1px solid grey"} padding={"3px 10px"} margin={"15px 0"}

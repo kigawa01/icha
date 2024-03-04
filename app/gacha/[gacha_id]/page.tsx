@@ -41,9 +41,9 @@ export default function Page(
     <Typography variant={"h2"} margin={"10px"}
                 sx={{wordBreak: "break-word"}}>{gacha?.name || "ロード中..."}</Typography>
     <LoadableImg
-      src={gacha?.thumbnail.base64} alt={gacha?.thumbnail.name} width={"100%"} height={"500px"} borderRadius={"5px"}
-      boxShadow={1} padding={"3px"} loading={gachaRes == undefined} fontSize={50} margin={"30px 0"}
-      border={"1px solid grey"}
+      src={gacha?.thumbnail.base64} alt={gacha?.thumbnail.name} width={"100%"} maxHeight={"500px"} borderRadius={"5px"}
+      boxShadow={1} loading={gachaRes == undefined} fontSize={50} margin={"30px 0"}
+      aspectRatio={"16 / 9"} border={"1px solid grey"}
     />
     <TextSection
       content={gacha?.name || "ロード中..."}

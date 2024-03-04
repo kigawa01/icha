@@ -1,3 +1,4 @@
+"use client";
 import {Box} from "@mui/system";
 import {BoxTypeMap} from "@mui/system/Box/Box";
 import {OverrideProps} from "@mui/types";
@@ -6,6 +7,9 @@ import {Img} from "../../_unit/Img";
 import {Button, Typography} from "@mui/material";
 import {LabeledText} from "../../_unit/_labeled/LabeledText";
 import {useUserState} from "../../_manager/UserProvider";
+import {useResponsive} from "../../_hook/useMedia";
+import {Property} from "csstype";
+
 
 export function GachaContent(
   {
@@ -20,14 +24,21 @@ export function GachaContent(
 
   const probability = rateSum == 0 ? 0 : Math.floor((content.rate / rateSum) * 100);
 
+  const responsive = useResponsive<{
+    flexDirection: Property.FlexDirection, imgWidth: string
+  }>({
+    def: {flexDirection: "row", imgWidth: "300px"},
+    tablet: {flexDirection: "column", imgWidth: "100%"},
+  });
+
   return (
     <Box
-      {...props} display={"flex"}
+      {...props} display={"flex"} flexDirection={responsive.flexDirection}
     >
       <Box display={"flex"} flexDirection={"column"} justifyContent={"space-between"} flex={"none"}>
         <Img
-          width={"300px"} height={"200px"} boxShadow={1} borderRadius={"5px"} src={content.image.base64}
-          alt={content.image.name} padding={"2px"} flex={"none"} marginBottom={"15px"} border={"1px solid grey"}
+          width={responsive.imgWidth} aspectRatio={"16 / 9"} boxShadow={1} borderRadius={"5px"} src={content.image.base64}
+          alt={content.image.name} flex={"none"} marginBottom={"15px"} border={"1px solid grey"}
         />
         {
           (content.pulled || content.postUserId == user?.uid) &&
@@ -36,7 +47,7 @@ export function GachaContent(
           </Button>
         }
       </Box>
-      <Box marginLeft={"20px"}>
+      <Box marginLeft={"20px"} marginTop={"20px"}>
         <Typography variant={"h3"}>{content.title}</Typography>
         <Typography margin={"15px 5px"}>{content.description}</Typography>
         <LabeledText margin={"8px"} label={"確率"} text={`約${probability}%`}/>
