@@ -1,5 +1,6 @@
 import {Loadable, LoadableProps} from "./Loadable";
 import {Img} from "../Img";
+import {SystemCssProperties} from "@mui/system/styleFunctionSx/styleFunctionSx";
 
 export function LoadableImg(
   {
@@ -24,4 +25,5 @@ export interface LoadableImgProps extends LoadableProps {
   loading: boolean;
   src: string | undefined;
   alt: string | undefined;
+  sx?: SystemCssProperties;
 }

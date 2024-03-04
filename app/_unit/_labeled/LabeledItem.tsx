@@ -20,6 +20,7 @@ export function LabeledItem(
     label,
     multiline,
     labelProps,
+    wrap,
     ...props
   }: LabeledItemProps,
 ) {
@@ -31,13 +32,17 @@ export function LabeledItem(
       display={"flex"}
       flexDirection={multilineUse ? "column" : "row"}
     >
-      <Typography
-        component={"span"}
-        width={labelProps?.width || "100px"}
-        {...labelProps}
-      >{label}</Typography>
-      {!multilineUse && <Typography margin={"0 5px"} display={"block"}>:</Typography>}
-      {children}
+      <Box display={"flex"} margin={0}>
+        <Typography
+          component={"span"}
+          width={labelProps?.width || "100px"}
+          {...labelProps}
+        >{label}</Typography>
+        {<Typography margin={"0 10px"} display={"block"}>{":"}</Typography>}
+      </Box>
+      <Box margin={multilineUse ? "0 10px" : "0"}>
+        {children}
+      </Box>
     </Box>
   );
 }

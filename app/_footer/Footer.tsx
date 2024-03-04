@@ -1,11 +1,18 @@
+"use client";
 import {Box} from "@mui/system";
 import {Link, Typography} from "@mui/material";
 import {LabeledText} from "../_unit/_labeled/LabeledText";
 import {LabeledItem} from "../_unit/_labeled/LabeledItem";
+import {useResponsive} from "../_hook/useMedia";
 
 export function Footer(
   {}: {},
 ) {
+  const responsive = useResponsive({
+    def: {multiline: false},
+    smartphone: {multiline: true},
+  });
+
   return <Box
     component={"footer"}
     position={"absolute"}
@@ -13,7 +20,7 @@ export function Footer(
     bottom={0}
     width={"100%"}
     sx={{
-      div: {
+      "&>div": {
         margin: "0 auto",
       },
     }}
@@ -22,12 +29,13 @@ export function Footer(
     boxSizing={"border-box"}
   >
     <Box
-      width={"450px"}
+      maxWidth={"450px"}
       padding={"10px"}
     >
       <Typography variant={"h2"}>Icha</Typography>
-      <LabeledText label={"contact"} text={"contact@kigawa.net"} marginTop={"5px"}/>
-      <LabeledItem label={"source"} marginTop={"5px"}>
+      <LabeledText multiline={responsive.multiline} flexDirection={"row"} label={"contact"} text={"contact@kigawa.net"}
+                   marginTop={"5px"}/>
+      <LabeledItem multiline={responsive.multiline} flexDirection={"row"} label={"source"} marginTop={"5px"}>
         <Link color={"text.primary"} href={"https://github.com/kigawa01/icha"} target={"_blank"}>
           https://github.com/kigawa01/icha
         </Link>
@@ -37,7 +45,7 @@ export function Footer(
     <Box
       borderTop={"2px solid"}
       borderColor={"grey"}
-      width={"520px"}
+      maxWidth={"520px"}
       textAlign={"center"}
       padding={"10px"}
     >
