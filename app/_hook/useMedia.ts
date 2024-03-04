@@ -11,6 +11,7 @@ export function useMedia(query: string) {
     }
 
     media.onchange = onChange;
+    setIsMatch(media.matches)
     return () => {media.onchange = () => {};};
   }, [query]);
   return isMatch;

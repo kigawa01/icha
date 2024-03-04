@@ -171,7 +171,7 @@ async def get_gacha_list(
         session: AsyncSession = Depends(get_session),
         user: table.UserTable = Depends(get_login_user_or_none)
 ) -> list[GachaListRes]:
-    gacha_list_coroutine = gacha_repo.all(
+    gacha_list_coroutine = gacha_repo.all_by(
         session=session, order=order, size=size, page=page, search=search, pulled=pulled, user=user
     )
     table_temp = list[tuple[

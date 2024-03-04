@@ -32,20 +32,16 @@ export function GachaListSection(
   useEffect(() => {
     setGachaList(undefined);
     setPage(0);
-  }, [searchParams]);
-  useEffect(
-    () => {
-      if (clientState == undefined) return;
-      setLoading(true);
-      (client || apiClient).getGachaList("new", 16, page, false, searchValue)
-        .then(value => {
-          if (value.value) setGachaList([...gachaList || [], ...value.value]);
-          if (value.error) setErr(value.error.message);
-          setLoading(false);
-        });
-    },
-    [clientState, page],
-  );
+    if (clientState == undefined) return;
+    setLoading(true);
+    (client || apiClient).getGachaList("new", 16, 0, false, searchValue)
+      .then(value => {
+        console.debug(value);
+        if (value.value) setGachaList(value.value);
+        if (value.error) setErr(value.error.message);
+        setLoading(false);
+      });
+  }, [searchParams, clientState]);
   const responsive = useResponsive({
     def: {width: 100 / 4},
     pc: {width: 100 / 3},
@@ -80,7 +76,17 @@ export function GachaListSection(
         <Loadable loading={gachaList == undefined || loading} fontSize={30} margin={"80px auto 0 auto"}>
           <Button
             variant={"contained"} sx={{margin: "80px auto 0 auto", display: "block", fontSize: "1.5rem"}}
-            onClick={_ => setPage(page + 1)}
+            onClick={_ => {
+              if (clientState == undefined) return;
+              setPage(page + 1);
+              setLoading(true);
+              (client || apiClient).getGachaList("new", 16, page + 1, false, searchValue)
+                .then(value => {
+                  if (value.value) setGachaList([...gachaList || [], ...value.value]);
+                  if (value.error) setErr(value.error.message);
+                  setLoading(false);
+                });
+            }}
           >
             もっと見る
           </Button>

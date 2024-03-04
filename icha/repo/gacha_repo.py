@@ -27,7 +27,7 @@ async def by_id(session: AsyncSession, uid: int) -> table.GachaTable:
     return result
 
 
-async def all(
+async def all_by(
         session: AsyncSession,
         order: str,
         size: int,
@@ -36,7 +36,7 @@ async def all(
         pulled: bool,
         user: table.UserTable | None
 ) -> Sequence[GachaTable]:
-    query = sqlalchemy.select(table.GachaTable)
+    query = sqlalchemy.select(table.GachaTable).distinct()
     where: list[sqlalchemy.ColumnElement] = []
     orders: list[sqlalchemy.ColumnElement] = []
     joins: list[tuple[type[sqlalchemy.Column], *sqlalchemy.ColumnElement]] = []
