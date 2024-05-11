@@ -8,6 +8,7 @@ jobs:
       matrix:
         conf:
           - nodeVer: "21.x"
+            preTestCmd: docker compose -f generate-openapi.yml -p icha up --abort-on-container-exit
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -16,13 +17,15 @@ jobs:
         with:
           node-version: ${{ matrix.conf.nodeVer }}
       - run: npm ci
+      - name: pre test cmd
+        run: ${{ matrix.conf.preTestCmd }}
+        if: ${{ matrix.conf.preTestCmd }}
       - run: npm run build
   back:
     strategy:
       matrix:
         conf:
           - pythonVer: "3.12"
-            preTestCmd: docker compose -f generate-openapi.yml -p icha up --abort-on-container-exit
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -32,7 +35,4 @@ jobs:
           python-version: ${{ matrix.conf.pythonVer }}
       - run: pip install -r requirements.txt
       - run: python -c "import sys; print(sys.version)"
-      - name: pre test cmd
-        run: ${{ matrix.conf.preTestCmd }}
-        if: ${{ matrix.conf.preTestCmd }}
       - run: pytest
