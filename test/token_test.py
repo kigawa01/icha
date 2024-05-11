@@ -3,8 +3,9 @@ from datetime import datetime, timezone, timedelta
 import pytest
 from jose import jwt
 
-from app import SECRET_KEY, ALGORITHM
+from app import ALGORITHM
 from icha import data
+from icha.env import SECRET_KEY
 
 
 @pytest.fixture
