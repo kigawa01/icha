@@ -3,7 +3,7 @@ services:
   back:
     image: python:3.12
     volumes:
-      - ./requirements.lock:/srv/requirements.lock
+      - ./requirements-dev.lock:/srv/requirements-dev.lock
       - ./icha:/srv/icha
       - ./app.py:/srv/app.py
       - ./.env:/srv/.env
