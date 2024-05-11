@@ -10,11 +10,14 @@
 
 ## setup
 
-1. install python 3.12
-    * https://www.python.org/downloads/
+1. install package
+    * ```bash
+      sudo apt install -y python3.12 python3-clang clang
+      curl -sSf https://rye-up.com/get | bash
+      ```
 2. install depends
     ```shell
-    pip install -r requirements.txt
+    rye sync
     ```
 3. copy .env
 4. write .env
