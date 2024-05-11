@@ -14,7 +14,8 @@ services:
       - -c
       - |
         pip install --upgrade pip
-        pip install -r requirements-dev.lock
+        PYTHONDONTWRITEBYTECODE=1 
+        pip install --no-cache-dir -r requirements-dev.lock
         python -m uvicorn app:app --host 0.0.0.0 --reload
     healthcheck:
       test: [ "CMD-SHELL", "curl http://localhost:8000/health || exit 1" ] # exitコードは 0 or 1 に揃えておく。
