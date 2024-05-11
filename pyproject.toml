@@ -30,6 +30,7 @@ dev-dependencies = [
     "aiosqlite>=0.20.0",
     "uvicorn>=0.29.0",
 ]
+virtual = true
 
 [tool.hatch.metadata]
 allow-direct-references = true
