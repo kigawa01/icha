@@ -4,6 +4,7 @@ services:
     image: python:3.12
     volumes:
       - ./requirements-dev.lock:/srv/requirements-dev.lock
+      - ./pyproject.toml:/srv/pyproject.toml
       - ./icha:/srv/icha
       - ./app.py:/srv/app.py
       - ./.env:/srv/.env
