@@ -1,4 +1,4 @@
-name: back cd
+name: cd
 
 on:
   push:
@@ -16,8 +16,7 @@ jobs:
           - repo: icha-front
             dockerFile: Dockerfile_back
             dockerOpt: |-
-              --build-arg baseUrl=https://icha-api.kigawa.net \
-              --build-arg gtagId=${{ secrets.GA_MEASUREMENT_ID }}
+              --build-arg baseUrl=https://icha-api.kigawa.net 
             manifestFile: ./icha/front.yml
     runs-on: ubuntu-latest
 
