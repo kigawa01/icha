@@ -16,7 +16,9 @@ jobs:
           - repo: icha-front
             dockerFile: Dockerfile_back
             dockerOpt: |-
-              --build-arg baseUrl=https://icha-api.kigawa.net 
+              --build-arg baseUrl=https://icha-api.kigawa.net
+            preDockerBuildCmd: |
+              docker compose -f generate-openapi.yml -p icha up --abort-on-container-exit
             manifestFile: ./icha/front.yml
     runs-on: ubuntu-latest
 
@@ -32,6 +34,7 @@ jobs:
 
       - name: BuildAndPushImageOnHarbor
         run: |
+          ${{ matrix.conf.preDockerBuildCmd }}
           docker build -t harbor.kigawa.net/private/${{ matrix.conf.repo }}:${{ github.ref_name }}-${{ github.run_number }} \
            -f ${{ matrix.conf.dockerFile }} \
           ${{ matrix.conf.dockerOpt }} \

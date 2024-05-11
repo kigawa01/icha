@@ -10,10 +10,8 @@ COPY next-env.d.ts ./
 COPY tsconfig.json ./
 COPY next.config.js ./
 ARG baseUrl
-ARG gtagId
 
 RUN echo NEXT_PUBLIC_BASE_URL="$baseUrl" >> ./.env
-RUN echo GA_MEASUREMENT_ID="$gtagId" >> ./.env
 RUN npm run build
 
 
