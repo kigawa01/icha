@@ -14,7 +14,7 @@ jobs:
             dockerFile: Dockerfile_back
             manifestFile: ./icha/back.yml
           - repo: icha-front
-            dockerFile: Dockerfile_back
+            dockerFile: Dockerfile_front
             dockerOpt: |-
               --build-arg baseUrl=https://icha-api.kigawa.net
             preDockerBuildCmd: |
