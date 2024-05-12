@@ -41,7 +41,7 @@ export function GachaListSection(
         if (value.error) setErr(value.error.message);
         setLoading(false);
       });
-  }, [searchParams, clientState]);
+  }, [searchParams, clientState,page]);
   const responsive = useResponsive({
     def: {width: 100 / 4},
     pc: {width: 100 / 3},

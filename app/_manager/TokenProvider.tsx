@@ -73,6 +73,7 @@ export async function tokenRefresh(refreshToken: string) {
   if (res.error) throw new ErrorDataException(res.error);
   const tokens = res.value;
   if (tokens == undefined)
+
     throw new ErrorDataException(ErrorIds.UnknownError.createData("response is undefined"));
   setTokensState(tokens);
 
