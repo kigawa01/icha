@@ -1,5 +1,5 @@
 "use client";
-import {HTMLAttributes} from "react";
+import React, {HTMLAttributes} from "react";
 import {Main} from "./_unit/Main";
 import {GachaCarousel} from "./GachaCarousel";
 import {TextSection} from "./_unit/_section/TextSection";
