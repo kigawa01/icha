@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.11.19",
-    "typescript": "^5.3.3"
+    "typescript": "^5.4.5"
   },
   "dependencies": {
     "@emotion/cache": "^11.11.0",
