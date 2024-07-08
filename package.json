@@ -9,27 +9,27 @@
     "lint": "next lint"
   },
   "devDependencies": {
-    "@types/node": "^20.11.19",
-    "typescript": "^5.3.3"
+    "@types/node": "^20.12.11",
+    "typescript": "^5.4.5"
   },
   "dependencies": {
     "@emotion/cache": "^11.11.0",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "5.15.9",
-    "@mui/material": "5.15.9",
-    "@mui/material-nextjs": "5.15.9",
+    "@mui/material": "5.15.17",
+    "@mui/material-nextjs": "5.15.11",
     "@mui/system": "5.15.9",
     "@types/react": "^18.2.55",
-    "@types/react-dom": "^18.2.19",
+    "@types/react-dom": "^18.3.0",
     "axios": "^1.6.7",
     "next": "^14.1.1",
     "react": "^17.0.0 || ^18.0.0",
-    "react-dom": "^17.0.0 || ^18.0.0"
+    "react-dom": "^18.3.1"
   },
   "peerDependencies": {
     "react": "^17.0.0 || ^18.0.0",
-    "react-dom": "^17.0.0 || ^18.0.0"
+    "react-dom": "^18.3.1"
   },
   "resolutions": {
     "@types/react": "^17.0.0"

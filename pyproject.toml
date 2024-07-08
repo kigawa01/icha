@@ -13,6 +13,7 @@ dependencies = [
     "passlib>=1.7.4",
     "asyncmy>=0.2.9",
     "python-dotenv>=1.0.1",
+    "alembic>=1.13.1",
 ]
 readme = "README.md"
 requires-python = ">= 3.12"
