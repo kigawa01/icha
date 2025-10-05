@@ -30,3 +30,7 @@
 ## コーディング規約
 
 * データベースへのクエリはrepositoryに書く
+
+## Links
+
+* [hosted site](https://icha.kigawa.net/)
