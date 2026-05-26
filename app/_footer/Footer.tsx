@@ -35,11 +35,30 @@ export function Footer(
       <Typography variant={"h2"}>Icha</Typography>
       <LabeledText multiline={responsive.multiline} flexDirection={"row"} label={"contact"} text={"contact@kigawa.net"}
                    marginTop={"5px"}/>
+      <LabeledItem multiline={responsive.multiline} flexDirection={"row"} label={"運営元"} marginTop={"5px"}>
+        <Link color={"text.primary"} href={"https://kigawa.net/"} target={"_blank"}>
+          kigawa.net
+        </Link>
+      </LabeledItem>
       <LabeledItem multiline={responsive.multiline} flexDirection={"row"} label={"source"} marginTop={"5px"}>
         <Link color={"text.primary"} href={"https://github.com/kigawa01/icha"} target={"_blank"}>
           https://github.com/kigawa01/icha
         </Link>
       </LabeledItem>
+    </Box>
+
+    <Box
+      display={"flex"}
+      gap={"16px"}
+      maxWidth={"520px"}
+      padding={"10px 10px 0 10px"}
+    >
+      <Link color={"text.primary"} href={"/terms"}>
+        利用規約
+      </Link>
+      <Link color={"text.primary"} href={"/privacy"}>
+        プライバシーポリシー
+      </Link>
     </Box>
 
     <Box
