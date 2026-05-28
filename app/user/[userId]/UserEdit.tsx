@@ -18,8 +18,7 @@ export function UserEdit(
   const [res, setRes] = useState<string>();
   const clientState = useClientState();
   const client = clientState?.client;
-  if (clientState != undefined && client == undefined) redirectLogin();
-
+  if (clientState != undefined && client == undefined) return redirectLogin();
 
   return (
     <>

@@ -1,11 +1,10 @@
-"use client";
+import {Navigate, useNavigate, useParams} from "react-router";
 import {TextSection} from "../../_unit/_section/TextSection";
-import {redirect, useRouter} from "next/navigation";
 import {useFetch} from "../../_hook/useFetch";
 import {ErrorMessage} from "../../_unit/ErrorMessage";
 import {Main} from "../../_unit/Main";
-import {LicenceSection} from "./LicenceSection";
-import {GachaContents} from "./GachaContents";
+import {LicenceSection} from "../../gacha/[gacha_id]/LicenceSection";
+import {GachaContents} from "../../gacha/[gacha_id]/GachaContents";
 import {apiClient} from "../../_client/api";
 import {useUserState} from "../../_manager/UserProvider";
 import {useClientState} from "../../_manager/AuthApiProvider";
@@ -13,20 +12,19 @@ import {Box} from "@mui/system";
 import {Button, Typography} from "@mui/material";
 import {LoadableImg} from "../../_unit/_loading/LoadableImg";
 import {BigButton} from "../../_unit/BigButton";
-import {redirectLoginRouter} from "../../_unit/RedirectLogin";
+import {createLoginUrl} from "../../_unit/RedirectLogin";
 
-export default function Page(
-  {params}: { params: { gacha_id: string } },
-) {
-  const uid = parseInt(params.gacha_id);
-  if (isNaN(uid)) redirect("/notfound");
+export default function GachaDetailPage() {
+  const {gacha_id} = useParams<{gacha_id: string}>();
+  const uid = parseInt(gacha_id || "NaN");
+  if (isNaN(uid)) return <Navigate to="/notfound" replace/>;
   const userState = useUserState();
   const clientState = useClientState();
   const client = clientState?.client;
   const gachaRes = useFetch(
     clientState && (() => (client || apiClient).getGacha(uid)), [uid, clientState],
   );
-  const router = useRouter();
+  const navigate = useNavigate();
 
   if (gachaRes && gachaRes.error != undefined) return <ErrorMessage error={gachaRes.error || "Error"}/>;
   const gacha = gachaRes?.result;
@@ -35,9 +33,7 @@ export default function Page(
   else gacha.contents.filter(value => !value.pulled)
     .forEach(value => rateSum += value.rate);
 
-
   return <Main>
-
     <Typography variant={"h2"} margin={"10px"}
                 sx={{wordBreak: "break-word"}}>{gacha?.name || "ロード中..."}</Typography>
     <LoadableImg
@@ -53,8 +49,8 @@ export default function Page(
       loading={userState == undefined} disabled={userState == undefined || rateSum == 0}
       onClick={() => {
         if (userState == undefined) return;
-        if (userState.userRes == undefined) redirectLoginRouter(router, `/gacha/${uid}/run`);
-        else router.push(`/gacha/${uid}/run`);
+        if (userState.userRes == undefined) navigate(createLoginUrl(`/gacha/${uid}/run`));
+        else navigate(`/gacha/${uid}/run`);
       }}
     >
       {userState?.userRes ? "ガチャを引く" : "ログインしてガチャを引く"}
@@ -66,7 +62,7 @@ export default function Page(
     <GachaContents rateSum={rateSum} gachaId={gacha?.uid || 0} contents={gacha?.contents || []}/>
     <Box display={"flex"} justifyContent={"right"} margin={"50px 0 0 0"}>
       <Button
-        variant={"outlined"} onClick={_ => router.back()}
+        variant={"outlined"} onClick={_ => navigate(-1)}
         sx={{color: "black"}}
       >前に戻る</Button>
     </Box>

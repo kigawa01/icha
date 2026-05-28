@@ -6,7 +6,7 @@ import {useUserState} from "../_manager/UserProvider";
 import {Box} from "@mui/system";
 import {setTokensState} from "../_manager/TokenProvider";
 import {useState} from "react";
-import {useRouter} from "next/navigation";
+import {useNavigate} from "react-router";
 
 export function UserMenuButton(
   {
@@ -14,9 +14,9 @@ export function UserMenuButton(
   }: UserMenuButtonProps,
 ) {
   const userState = useUserState();
-  const router = useRouter()
+  const navigate = useNavigate();
   const [menuAnchorElement, setMenuAnchorElement] = useState<HTMLElement>();
-  const user = userState?.userRes
+  const user = userState?.userRes;
   if (userState == undefined) return undefined;
   if (user == undefined) return undefined;
 
@@ -45,10 +45,9 @@ export function UserMenuButton(
         anchorEl={menuAnchorElement}
         onClose={_ => setMenuAnchorElement(undefined)}
       >
-        <MenuItem onClick={_=>{
-          router.push(`/user/${user.uid}`)
-        }}
-        >プロフィール</MenuItem>
+        <MenuItem onClick={_ => {
+          navigate(`/user/${user.uid}`);
+        }}>プロフィール</MenuItem>
         <MenuItem onClick={_ => {
           setTokensState(undefined);
           setMenuAnchorElement(undefined);

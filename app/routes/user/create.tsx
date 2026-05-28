@@ -1,20 +1,18 @@
-"use client";
+import {Navigate, useNavigate} from "react-router";
 import {PageTitle} from "../../_unit/PageTitle";
 import {Main} from "../../_unit/Main";
-import {UserProfileForm} from "../UserProfileForm";
+import {UserProfileForm} from "../../user/UserProfileForm";
 import {useUserState} from "../../_manager/UserProvider";
-import {redirect} from "next/navigation";
 import {apiClient} from "../../_client/api";
 import {setTokensState} from "../../_manager/TokenProvider";
 import {useState} from "react";
 import {ErrorMessage} from "../../_unit/ErrorMessage";
 
-export default function Page(
-  {}: {},
-) {
+export default function UserCreatePage() {
   const userState = useUserState();
+  const navigate = useNavigate();
   const [error, setError] = useState<string>();
-  if (userState?.userRes) redirect("/");
+  if (userState?.userRes) return <Navigate to="/" replace/>;
 
   return (
     <Main>
@@ -30,7 +28,7 @@ export default function Page(
                 return;
               } else setError(undefined);
               setTokensState(value.value?.tokens);
-              redirect("/");
+              navigate("/");
             });
         }}
       />
