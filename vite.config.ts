@@ -4,6 +4,6 @@ import {defineConfig} from "vite";
 export default defineConfig({
   plugins: [reactRouter()],
   ssr: {
-    noExternal: true,
+    noExternal: [/@mui\//, /@emotion\//],
   },
 });
