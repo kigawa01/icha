@@ -1,21 +1,19 @@
-"use client";
+import {Navigate, useParams} from "react-router";
 import {Main} from "../../_unit/Main";
 import {useFetch} from "../../_hook/useFetch";
 import {apiClient} from "../../_client/api";
-import {redirect} from "next/navigation";
 import {useUserState} from "../../_manager/UserProvider";
 import {Section} from "../../_unit/_section/Section";
-import {UserProfile} from "./UserProfile";
+import {UserProfile} from "../../user/[userId]/UserProfile";
 import {Loadable} from "../../_unit/_loading/Loadable";
 import {ErrorMessage} from "../../_unit/ErrorMessage";
-import {UserEdit} from "./UserEdit";
+import {UserEdit} from "../../user/[userId]/UserEdit";
 
-export default function Page(
-  {params}: { params: { userId: string } },
-) {
-  const userId = parseInt(params.userId);
-  if (isNaN(userId)) redirect("/notfound");
-  const user = useFetch(() => apiClient.getUser(userId));
+export default function UserProfilePage() {
+  const {userId} = useParams<{userId: string}>();
+  const userIdNum = parseInt(userId || "NaN");
+  if (isNaN(userIdNum)) return <Navigate to="/notfound" replace/>;
+  const user = useFetch(() => apiClient.getUser(userIdNum));
   const selfUserState = useUserState();
 
   return <Main>

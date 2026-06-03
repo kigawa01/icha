@@ -7,7 +7,7 @@ import {Button} from "@mui/material";
 import {ErrorMessage} from "../_unit/ErrorMessage";
 import {GachaListItem} from "./gachaListItem";
 import {Loadable} from "../_unit/_loading/Loadable";
-import {usePathname, useRouter, useSearchParams} from "next/navigation";
+import {useLocation, useNavigate, useSearchParams} from "react-router";
 import {useClientState} from "../_manager/AuthApiProvider";
 import {useEffect, useState} from "react";
 import {GachaListRes} from "../../api_clients";
@@ -19,9 +19,9 @@ export function GachaListSection(
     ...props
   }: GachaListSectionProps,
 ) {
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const router = useRouter();
+  const [searchParams] = useSearchParams();
+  const {pathname} = useLocation();
+  const navigate = useNavigate();
   const clientState = useClientState();
   const client = clientState?.client;
   const [gachaList, setGachaList] = useState<GachaListRes[]>();
@@ -41,7 +41,7 @@ export function GachaListSection(
         if (value.error) setErr(value.error.message);
         setLoading(false);
       });
-  }, [searchParams, clientState,page]);
+  }, [searchParams, clientState, page]);
   const responsive = useResponsive({
     def: {width: 100 / 4},
     pc: {width: 100 / 3},
@@ -55,7 +55,7 @@ export function GachaListSection(
         const search = data.get("search") as string;
         const newParams = new URLSearchParams(Array.from(searchParams.entries()));
         newParams.set("search", search);
-        router.replace(`${pathname}?${newParams.toString()}`);
+        navigate(`${pathname}?${newParams.toString()}`, {replace: true});
       }} display={"flex"} alignItems={"center"}>
         <TextInput
           label={"検索"} name={"search"} defaultValue={searchValue}

@@ -22,7 +22,7 @@ export function LicenceFormSection(
   const [material, setMaterial] = useState("No");
   const userState = useUserState();
   const user = userState?.userRes;
-  if (userState != undefined && user == undefined) redirectLogin();
+  if (userState != undefined && user == undefined) return redirectLogin();
 
   return (
     <Section {...props} sectionTitle={"ライセンス"}>

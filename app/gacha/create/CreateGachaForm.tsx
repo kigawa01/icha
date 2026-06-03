@@ -11,7 +11,7 @@ import {useState} from "react";
 import {LicenceFormSection} from "./LicenceFormSection";
 import {ContentListFormSection} from "./ContentListFormSection";
 import {useClientState} from "../../_manager/AuthApiProvider";
-import {redirect} from "next/navigation";
+import {useNavigate} from "react-router";
 import {GachaContentBody, ImageFileData, LicenceData} from "../../../api_clients";
 import {fileToBase64, useStateObjectDef} from "../../util";
 import {ErrorDataException, ErrorIds} from "../../_client/_error";
@@ -25,11 +25,10 @@ export function CreateGachaForm(
 ) {
   const [err, setErr] = useState<string>();
   const clientState = useClientState();
-  const [redirectPath, setRedirectPath] = useState<string>();
   const client = clientState?.client;
   const contentsState = useStateObjectDef<number[]>([0]);
+  const navigate = useNavigate();
   if (clientState != undefined && client == undefined) return redirectLogin();
-  if (redirectPath) redirect(redirectPath);
 
   return (
     <Box
@@ -53,8 +52,10 @@ export function CreateGachaForm(
             thumbnail: thumbnail,
           });
         }).then(value => {
-          if (value.value != undefined) return setRedirectPath(`${value.value.uid}`);
-          else if (value.error) setErr(value.error.message);
+          if (value.value != undefined) {
+            navigate(`/gacha/${value.value.uid}`);
+            return;
+          } else if (value.error) setErr(value.error.message);
           else setErr(`invalid result ${value}`);
         }).catch(reason => {
           setErr(reason.toString());
