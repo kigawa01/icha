@@ -5,3 +5,7 @@
 /.next/
 /api_clients/
 /.env.local
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
