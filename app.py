@@ -1,18 +1,29 @@
 import logging
+import uuid
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from starlette.middleware.cors import CORSMiddleware
 
 from icha.env import cors_list
 from icha.util.logger_filter import ExcludeFilter
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(name)s %(message)s",
+)
 logger = logging.getLogger(__name__)
-logger.addHandler(logging.StreamHandler())
-logger.setLevel("INFO")
 
 app = FastAPI()
 
 logging.getLogger("uvicorn.access").addFilter(ExcludeFilter(["/health"]))
+
+
+@app.middleware("http")
+async def request_id_middleware(request: Request, call_next):
+    request_id = request.headers.get("X-Request-ID", str(uuid.uuid4()))
+    response = await call_next(request)
+    response.headers["X-Request-ID"] = request_id
+    return response
 
 if cors_list is None:
     cors_list = "*"

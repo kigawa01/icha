@@ -1,9 +1,11 @@
+import logging
 import secrets
 from typing import Any, Coroutine
 
 import sqlalchemy
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
+from starlette.responses import JSONResponse
 
 from app import app
 from icha import data, tokens, table
@@ -13,10 +15,22 @@ from icha.repo import user_repo, gacha_repo, thumbnail_repo, licence_repo, conte
 from icha.table import get_session, UserTable
 from icha.tokens import get_login_user, get_token, get_login_user_or_none
 
+logger = logging.getLogger(__name__)
+
+_MAX_PAGE_SIZE = 100
+
 
 @app.get("/api/health")
-async def health():
-    return {"ok": True}
+async def health(session: AsyncSession = Depends(get_session)):
+    try:
+        await session.execute(sqlalchemy.text("SELECT 1"))
+        return {"ok": True, "db": "ok"}
+    except Exception:
+        logger.error("ヘルスチェック: DB接続に失敗しました")
+        return JSONResponse(
+            content={"ok": False, "db": "error"},
+            status_code=503
+        )
 
 
 @app.post("/api/login/refresh")
@@ -171,6 +185,10 @@ async def get_gacha_list(
         session: AsyncSession = Depends(get_session),
         user: table.UserTable = Depends(get_login_user_or_none)
 ) -> list[GachaListRes]:
+    if size > _MAX_PAGE_SIZE:
+        raise ErrorIdException(ErrorIds.NOT_FOUND, f"sizeは{_MAX_PAGE_SIZE}以下にしてください")
+    if page < 0:
+        raise ErrorIdException(ErrorIds.NOT_FOUND, "pageは0以上にしてください")
     gacha_list_coroutine = gacha_repo.all_by(
         session=session, order=order, size=size, page=page, search=search, pulled=pulled, user=user
     )

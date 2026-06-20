@@ -2,7 +2,7 @@ from datetime import timedelta, datetime, timezone
 
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
-from jose import jwt
+from jose import jwt, JWTError, ExpiredSignatureError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app import ACCESS_TOKEN_EXPIRE_MINUTES, ALGORITHM, REFRESH_TOKEN_EXPIRE_MINUTES
@@ -44,7 +44,12 @@ def create_tokens(user: UserTable):
 def get_token_or_none(token: str | None = Depends(oauth2_scheme)):
     if token is None:
         return None
-    return data.JwtTokenData(**jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM]))
+    try:
+        return data.JwtTokenData(**jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM]))
+    except ExpiredSignatureError:
+        raise ErrorIdException(ErrorIds.TOKEN_EXPIRED)
+    except JWTError:
+        raise ErrorIdException(ErrorIds.INVALID_TOKEN)
 
 
 def get_token(token: data.JwtTokenData | None = Depends(get_token_or_none)):

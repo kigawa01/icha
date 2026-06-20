@@ -1,3 +1,4 @@
+import logging
 import traceback
 from dataclasses import dataclass, asdict
 from enum import Enum
@@ -5,6 +6,8 @@ from enum import Enum
 from starlette.responses import JSONResponse
 
 from app import app
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -51,7 +54,7 @@ class ErrorRes:
 
 
 @app.exception_handler(ErrorIdException)
-async def exception_handler(request, exc: ErrorIdException):
+async def error_id_exception_handler(request, exc: ErrorIdException):
     return JSONResponse(
         content=asdict(ErrorRes(
             exc.error_id.name,
@@ -62,23 +65,23 @@ async def exception_handler(request, exc: ErrorIdException):
 
 
 @app.exception_handler(Exception)
-async def exception_handler(request, exc: Exception):
-    print(traceback.format_exc())
+async def generic_exception_handler(request, exc: Exception):
+    logger.error("予期しないエラーが発生しました: %s", traceback.format_exc())
     return JSONResponse(
         content=asdict(ErrorRes(
             ErrorIds.INTERNAL_ERROR.name,
-            exc.__str__()
+            ErrorIds.INTERNAL_ERROR.value.message
         )),
         status_code=ErrorIds.INTERNAL_ERROR.value.status_code
     )
 
 
 @app.exception_handler(401)
-async def exception_handler(request, exc: Exception):
+async def unauthorized_handler(request, exc: Exception):
     return JSONResponse(
         content=asdict(ErrorRes(
             ErrorIds.UNAUTHORIZED.name,
-            exc.__str__()
+            ErrorIds.UNAUTHORIZED.value.message
         )),
         status_code=ErrorIds.UNAUTHORIZED.value.status_code
     )

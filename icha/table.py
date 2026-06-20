@@ -39,7 +39,7 @@ class UserTable(BaseTable):
     __tablename__ = "user"
     uid: Mapped[int] = Column(Integer, primary_key=True, name="uid", autoincrement=True)
     name: Mapped[str] = Column(String(32), nullable=False)
-    email: Mapped[str] = Column(String(32), nullable=False, unique=True)
+    email: Mapped[str] = Column(String(254), nullable=False, unique=True)
     password: Mapped[str] = Column(String(128), nullable=False)
     self_produce: Mapped[str] = Column(String(255))
 
@@ -158,10 +158,10 @@ class ContentTable(BaseTable):
 class GachaTable(BaseTable):
     __tablename__ = "gacha"
     uid: Mapped[int] = Column(Integer, primary_key=True, name="uid", autoincrement=True)
-    user_id: Mapped[int] = Column(ForeignKey("user.uid"))
+    user_id: Mapped[int] = Column(ForeignKey("user.uid"), index=True)
     name: Mapped[str] = Column(String(64), nullable=False)
     description: Mapped[str] = Column(String(255), nullable=False)
-    create_at: Mapped[datetime] = Column(DateTime, default=datetime.now)
+    create_at: Mapped[datetime] = Column(DateTime, default=datetime.now, index=True)
 
     @staticmethod
     def create(user_id: int, name: str, description: str):
@@ -205,8 +205,8 @@ class GachaTable(BaseTable):
 class PulledContentTable(BaseTable):
     __tablename__ = "pulled_content"
     uid: Mapped[int] = Column(Integer, primary_key=True, name="uid", autoincrement=True)
-    user_id: Mapped[int] = Column(ForeignKey("user.uid"))
-    content_id: Mapped[int] = Column(ForeignKey("content.uid"))
+    user_id: Mapped[int] = Column(ForeignKey("user.uid"), index=True)
+    content_id: Mapped[int] = Column(ForeignKey("content.uid"), index=True)
 
     @staticmethod
     def create(

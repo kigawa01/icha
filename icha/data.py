@@ -1,6 +1,9 @@
+import re
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
+
+_EMAIL_PATTERN = re.compile(r'^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$')
 
 
 class JwtTokenData(BaseModel):
@@ -57,6 +60,38 @@ class UserBody(BaseModel):
     password: str
     self_produce: str | None
 
+    @field_validator('name')
+    @classmethod
+    def validate_name(cls, v: str) -> str:
+        if len(v.strip()) < 1:
+            raise ValueError('名前は1文字以上必要です')
+        if len(v) > 32:
+            raise ValueError('名前は32文字以内にしてください')
+        return v
+
+    @field_validator('email')
+    @classmethod
+    def validate_email(cls, v: str) -> str:
+        if len(v) > 254:
+            raise ValueError('メールアドレスは254文字以内にしてください')
+        if not _EMAIL_PATTERN.match(v):
+            raise ValueError('有効なメールアドレスを入力してください')
+        return v
+
+    @field_validator('password')
+    @classmethod
+    def validate_password(cls, v: str) -> str:
+        if len(v) < 8:
+            raise ValueError('パスワードは8文字以上必要です')
+        return v
+
+    @field_validator('self_produce')
+    @classmethod
+    def validate_self_produce(cls, v: str | None) -> str | None:
+        if v is not None and len(v) > 255:
+            raise ValueError('自己紹介は255文字以内にしてください')
+        return v
+
     @staticmethod
     def from_args(name: str, email: str, password: str, self_produce: None) -> 'UserBody':
         return UserBody(name=name, email=email, password=password, self_produce=self_produce)
@@ -67,6 +102,38 @@ class UserPutBody(BaseModel):
     email: str
     password: str | None
     self_produce: str | None
+
+    @field_validator('name')
+    @classmethod
+    def validate_name(cls, v: str) -> str:
+        if len(v.strip()) < 1:
+            raise ValueError('名前は1文字以上必要です')
+        if len(v) > 32:
+            raise ValueError('名前は32文字以内にしてください')
+        return v
+
+    @field_validator('email')
+    @classmethod
+    def validate_email(cls, v: str) -> str:
+        if len(v) > 254:
+            raise ValueError('メールアドレスは254文字以内にしてください')
+        if not _EMAIL_PATTERN.match(v):
+            raise ValueError('有効なメールアドレスを入力してください')
+        return v
+
+    @field_validator('password')
+    @classmethod
+    def validate_password(cls, v: str | None) -> str | None:
+        if v is not None and len(v) < 8:
+            raise ValueError('パスワードは8文字以上必要です')
+        return v
+
+    @field_validator('self_produce')
+    @classmethod
+    def validate_self_produce(cls, v: str | None) -> str | None:
+        if v is not None and len(v) > 255:
+            raise ValueError('自己紹介は255文字以内にしてください')
+        return v
 
 
 class UserRes(BaseModel):
