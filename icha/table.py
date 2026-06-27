@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, Index
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Mapped
@@ -143,6 +143,11 @@ class ContentTable(BaseTable):
     description: Mapped[str] = Column(String(255), nullable=False)
     rate: Mapped[int] = Column(Integer)
 
+    __table_args__ = (
+        # ガチャ別コンテンツ一覧・抽選処理で使用される
+        Index("ix_content_gacha_id", "gacha_id"),
+    )
+
     def to_content_res(self, content_image: data.ImageFileData, pulled: bool, post_user_id: int):
         return data.GachaContentRes.create(
             uid=self.uid,
@@ -162,6 +167,12 @@ class GachaTable(BaseTable):
     name: Mapped[str] = Column(String(64), nullable=False)
     description: Mapped[str] = Column(String(255), nullable=False)
     create_at: Mapped[datetime] = Column(DateTime, default=datetime.now)
+
+    __table_args__ = (
+        # 新着順取得・ユーザー別一覧で使用される
+        Index("ix_gacha_create_at", "create_at"),
+        Index("ix_gacha_user_id", "user_id"),
+    )
 
     @staticmethod
     def create(user_id: int, name: str, description: str):
@@ -207,6 +218,12 @@ class PulledContentTable(BaseTable):
     uid: Mapped[int] = Column(Integer, primary_key=True, name="uid", autoincrement=True)
     user_id: Mapped[int] = Column(ForeignKey("user.uid"))
     content_id: Mapped[int] = Column(ForeignKey("content.uid"))
+
+    __table_args__ = (
+        # ユーザー別取得済みコンテンツ確認・pulled一覧フィルタで使用される
+        Index("ix_pulled_content_user_id", "user_id"),
+        Index("ix_pulled_content_content_id", "content_id"),
+    )
 
     @staticmethod
     def create(

@@ -84,6 +84,23 @@ async def is_content_pulled(
     return res.scalar_one_or_none() is not None
 
 
+async def pulled_content_ids_by_gacha(
+        session: AsyncSession,
+        gacha: table.GachaTable,
+        user: table.UserTable,
+) -> frozenset[int]:
+    """ガチャ内のコンテンツのうちユーザーが取得済みのIDを一括取得する（N+1対策）"""
+    res = await session.execute(
+        sqlalchemy.select(table.PulledContentTable.content_id)
+        .join(table.ContentTable, table.ContentTable.uid == table.PulledContentTable.content_id)
+        .where(
+            table.ContentTable.gacha_id == gacha.uid,
+            table.PulledContentTable.user_id == user.uid,
+        )
+    )
+    return frozenset(res.scalars().all())
+
+
 async def is_content_available(
         session: AsyncSession,
         content: table.ContentTable,

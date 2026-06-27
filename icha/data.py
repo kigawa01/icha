@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator, EmailStr
 
 
 class JwtTokenData(BaseModel):
@@ -39,6 +39,13 @@ class LoginBody(BaseModel):
     def from_args(email: str, password: str):
         return LoginBody(email=email, password=password)
 
+    @field_validator("password")
+    @classmethod
+    def password_not_empty(cls, v: str) -> str:
+        if not v:
+            raise ValueError("パスワードは必須です")
+        return v
+
 
 class LoginRes(BaseModel):
     uid: int
@@ -60,6 +67,20 @@ class UserBody(BaseModel):
     @staticmethod
     def from_args(name: str, email: str, password: str, self_produce: None) -> 'UserBody':
         return UserBody(name=name, email=email, password=password, self_produce=self_produce)
+
+    @field_validator("password")
+    @classmethod
+    def password_min_length(cls, v: str) -> str:
+        if len(v) < 8:
+            raise ValueError("パスワードは8文字以上で設定してください")
+        return v
+
+    @field_validator("name")
+    @classmethod
+    def name_not_empty(cls, v: str) -> str:
+        if not v.strip():
+            raise ValueError("ユーザー名は必須です")
+        return v
 
 
 class UserPutBody(BaseModel):

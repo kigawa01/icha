@@ -1,3 +1,4 @@
+import logging
 import secrets
 from typing import Any, Coroutine
 
@@ -10,13 +11,22 @@ from icha import data, tokens, table
 from icha.data import LoginRes, TokensRes, GachaListRes
 from icha.error import ErrorIdException, ErrorIds
 from icha.repo import user_repo, gacha_repo, thumbnail_repo, licence_repo, content_repo, pulled_repo, content_image_repo
-from icha.table import get_session, UserTable
+from icha.table import get_session, UserTable, engine
 from icha.tokens import get_login_user, get_token, get_login_user_or_none
+
+logger = logging.getLogger(__name__)
 
 
 @app.get("/api/health")
 async def health():
-    return {"ok": True}
+    """サービスおよびDB接続の正常性確認"""
+    try:
+        async with engine.connect() as conn:
+            await conn.execute(sqlalchemy.text("SELECT 1"))
+        return {"ok": True, "db": "ok"}
+    except Exception as e:
+        logger.error("ヘルスチェック失敗: DB接続エラー", exc_info=e)
+        return {"ok": False, "db": "error"}
 
 
 @app.post("/api/login/refresh")
@@ -139,24 +149,29 @@ async def get_gacha(
         session: AsyncSession = Depends(get_session),
         user: table.UserTable | None = Depends(get_login_user_or_none),
 ) -> data.GachaRes:
-    gacha_coroutine = gacha_repo.by_id(session, uid)
-    gacha = await gacha_coroutine
+    gacha = await gacha_repo.by_id(session, uid)
     thumbnail_coroutine = thumbnail_repo.by_gacha(session, gacha)
     licence_coroutine = licence_repo.by_gacha(session, gacha)
     content_tables_coroutine = content_repo.all_with_image_by_gacha(session, gacha)
-    contents = list[data.GachaContentRes]()
-    thumbnail = await thumbnail_coroutine
-    post_user = user_repo.by_uid(session, gacha.user_id)
+    post_user_coroutine = user_repo.by_uid(session, gacha.user_id)
 
-    post_user = await post_user
-    for (content, image) in await content_tables_coroutine:
-        content: table.ContentTable
-        image: table.ContentImageTable
-        if user is None:
-            is_pulled = False
-        else:
-            is_pulled = await content_repo.is_content_pulled(session, content, user)
-        contents.append(content.to_content_res(image.to_image_data(), is_pulled, post_user.uid))
+    thumbnail, post_user, content_rows = (
+        await thumbnail_coroutine,
+        await post_user_coroutine,
+        await content_tables_coroutine,
+    )
+
+    # 取得済みコンテンツIDを一括取得してN+1クエリを回避する
+    pulled_ids: frozenset[int] = (
+        await content_repo.pulled_content_ids_by_gacha(session, gacha, user)
+        if user is not None
+        else frozenset()
+    )
+
+    contents = [
+        content.to_content_res(image.to_image_data(), content.uid in pulled_ids, post_user.uid)
+        for content, image in content_rows
+    ]
     licence = await licence_coroutine
     return gacha.to_gacha_res(thumbnail.to_image_data(), licence.to_licence_data(), contents)
 
