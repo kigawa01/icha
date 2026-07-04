@@ -1,10 +1,12 @@
-import traceback
+import logging
 from dataclasses import dataclass, asdict
 from enum import Enum
 
 from starlette.responses import JSONResponse
 
 from app import app
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -63,11 +65,12 @@ async def exception_handler(request, exc: ErrorIdException):
 
 @app.exception_handler(Exception)
 async def exception_handler(request, exc: Exception):
-    print(traceback.format_exc())
+    # 内部エラーの詳細はログにのみ記録し、クライアントには汎用メッセージのみ返す(情報漏洩防止)
+    logger.exception("unhandled exception on %s %s", request.method, request.url.path)
     return JSONResponse(
         content=asdict(ErrorRes(
             ErrorIds.INTERNAL_ERROR.name,
-            exc.__str__()
+            ErrorIds.INTERNAL_ERROR.value.message
         )),
         status_code=ErrorIds.INTERNAL_ERROR.value.status_code
     )
@@ -78,7 +81,7 @@ async def exception_handler(request, exc: Exception):
     return JSONResponse(
         content=asdict(ErrorRes(
             ErrorIds.UNAUTHORIZED.name,
-            exc.__str__()
+            ErrorIds.UNAUTHORIZED.value.message
         )),
         status_code=ErrorIds.UNAUTHORIZED.value.status_code
     )

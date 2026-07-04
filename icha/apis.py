@@ -1,8 +1,9 @@
+import logging
 import secrets
 from typing import Any, Coroutine
 
 import sqlalchemy
-from fastapi import Depends
+from fastapi import Depends, Query, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app import app
@@ -13,9 +14,19 @@ from icha.repo import user_repo, gacha_repo, thumbnail_repo, licence_repo, conte
 from icha.table import get_session, UserTable
 from icha.tokens import get_login_user, get_token, get_login_user_or_none
 
+logger = logging.getLogger(__name__)
+
+MAX_GACHA_LIST_SIZE = 100
+
 
 @app.get("/api/health")
-async def health():
+async def health(response: Response, session: AsyncSession = Depends(get_session)):
+    try:
+        await session.execute(sqlalchemy.text("SELECT 1"))
+    except Exception:
+        logger.exception("health check failed: database is unreachable")
+        response.status_code = 503
+        return {"ok": False}
     return {"ok": True}
 
 
@@ -30,7 +41,14 @@ async def refresh_token(
 
 @app.post("/api/login")
 async def login(req: data.LoginBody, session: AsyncSession = Depends(get_session)) -> LoginRes:
-    user = await user_repo.by_email(session, req.email)
+    # メールアドレスが存在しない場合とパスワードが誤っている場合を同一エラーにし、
+    # 登録済みメールアドレスの有無を外部から推測できないようにする(ユーザー列挙対策)
+    try:
+        user = await user_repo.by_email(session, req.email)
+    except ErrorIdException as exc:
+        if exc.error_id == ErrorIds.USER_NOT_FOUND:
+            raise ErrorIdException(ErrorIds.USER_LOGIN_FAILED)
+        raise
     if not user.check_password(req.password):
         raise ErrorIdException(ErrorIds.USER_LOGIN_FAILED)
     return user.to_login_res()
@@ -164,8 +182,8 @@ async def get_gacha(
 @app.get("/api/gacha")
 async def get_gacha_list(
         order: str = "new",
-        size: int = 16,
-        page: int = 0,
+        size: int = Query(default=16, gt=0, le=MAX_GACHA_LIST_SIZE),
+        page: int = Query(default=0, ge=0),
         pulled: bool = False,
         search: str = "",
         session: AsyncSession = Depends(get_session),

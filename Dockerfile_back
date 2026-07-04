@@ -6,4 +6,10 @@ COPY ./icha ./icha
 COPY ./migrations ./migrations
 COPY ./app.py ./app.py
 COPY ./alembic.ini ./alembic.ini
+RUN groupadd --system --gid 1001 icha \
+  && useradd --system --uid 1001 --gid icha icha \
+  && chown -R icha:icha /app
+USER icha
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:80/api/health', timeout=2)" || exit 1
 CMD ["bash", "-c","alembic upgrade head && uvicorn app:app --host 0.0.0.0 --port 80"]

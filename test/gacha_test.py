@@ -62,6 +62,12 @@ async def test_create_gacha(session_maker, new_post_gacha_body, client, access_t
 
 
 @pytest.mark.asyncio
+async def test_get_gacha_list_rejects_oversized_page_size(session_maker, client, access_token):
+    result = await client.get("/api/gacha?size=1000", token=access_token.token)
+    assert result.status_code == 422
+
+
+@pytest.mark.asyncio
 async def test_get_gacha(session_maker, new_post_gacha_body, client, access_token):
     result = await client.post(
         "/api/gacha",

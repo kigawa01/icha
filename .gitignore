@@ -1,7 +1,10 @@
 /venv/
+__pycache__/
+*.pyc
 /node_modules/
 /script/api_clients/
 /public/
 /.next/
 /api_clients/
+/.env
 /.env.local
